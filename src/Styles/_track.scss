@@ -1,0 +1,22 @@
+.AlbumArtArea img {
+  width: 80%;
+  border-radius: 50%;
+}
+@media (max-width: 800px) {
+  .AlbumArtArea img {
+    width: 60%;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.doRotation {
+  animation: rotate 20s linear forwards infinite;
+}

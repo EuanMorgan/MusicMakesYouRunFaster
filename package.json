@@ -1,0 +1,63 @@
+{
+  "name": "mmyrf-two",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.34",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@mdi/js": "^5.9.55",
+    "@mdi/react": "^1.4.0",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "firebase": "^8.2.9",
+    "framer-motion": "^3.10.5",
+    "mapbox-gl": "^2.1.1",
+    "node-sass": "^5.0.0",
+    "react": "^17.0.1",
+    "react-burger-menu": "^3.0.3",
+    "react-dom": "^17.0.1",
+    "react-loader-spinner": "^4.0.0",
+    "react-loading-overlay": "^1.0.1",
+    "react-mapbox-gl": "^4.8.6",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "react-scroll": "^1.8.1",
+    "react-scrollbars-custom": "^4.0.25",
+    "react-spinners": "^0.10.6",
+    "react-spotify-web-playback": "^0.8.1",
+    "react-toastify": "^7.0.3",
+    "reactjs-navbar": "^1.0.2",
+    "styled-components": "^5.2.1",
+    "tcx-js": "^1.0.1",
+    "web-vitals": "^1.0.1",
+    "worker-loader": "^3.0.8"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "_comment": "When deploying publically use https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app",
+  "_comment2": "When deploying locally use http://localhost:5000/musicmakesyourunfaster/europe-west2/app"
+}

@@ -1,0 +1,130 @@
+.Content {
+  color: whitesmoke;
+}
+
+body {
+  background: #111;
+  margin: 0;
+  animation: rattle 0.2s;
+  animation-delay: 1s;
+}
+
+/* https://codepen.io/loganfranken/pen/dPoWow */
+.slam {
+  animation: slam 1s;
+  animation-timing-function: ease-in;
+  color: #c41818;
+  display: block;
+  font-family: "Source Sans Pro", sans-serif;
+  font-size: 10vw;
+  font-weight: 900;
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  top: "-10%";
+}
+
+@media screen and (max-width: 800px) {
+  .slam {
+    min-height: 130vw;
+    font-size: 20vw;
+    padding-top: 20%;
+  }
+}
+
+@keyframes slam {
+  0% {
+    transform: scale(10, 10);
+    opacity: 0;
+  }
+
+  40% {
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+}
+
+@keyframes rattle {
+  0% {
+    margin-top: 0;
+    margin-left: 0;
+  }
+  10% {
+    margin-top: -5px;
+    margin-left: 0;
+  }
+  20% {
+    margin-top: 0;
+    margin-left: -5px;
+  }
+  30% {
+    margin-top: 5px;
+    margin-left: 0;
+  }
+  40% {
+    margin-top: 0;
+    margin-left: 5px;
+  }
+  50% {
+    margin-top: -2px;
+    margin-left: 0;
+  }
+  60% {
+    margin-top: 0;
+    margin-left: -2px;
+  }
+  70% {
+    margin-top: 2px;
+    margin-left: 0;
+  }
+  80% {
+    margin-top: 0;
+    margin-left: 2px;
+  }
+  90% {
+    margin-top: -1px;
+    margin-left: 0;
+  }
+  100% {
+    margin-top: 0;
+    margin-left: 0;
+  }
+}
+
+/* https://codepen.io/bitstarr/pen/XjaJGz */
+
+.bounce {
+  animation: bounce 3s infinite;
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .bounce {
+    margin-top: -10vh;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-30px);
+  }
+  60% {
+    transform: translateY(-15px);
+  }
+}
+
+.Buttons {
+  padding-bottom: 5vw;
+  padding-top: 1vw;
+}

@@ -1,0 +1,16 @@
+.faq p {
+  text-align: left;
+  @media (max-width: 800px) {
+    font-size: 5vw;
+  }
+}
+
+.faq .q {
+  color: #c41818;
+}
+
+.faq h1 {
+  @media (max-width: 800px) {
+    font-size: 10vw;
+  }
+}
