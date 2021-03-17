@@ -13,7 +13,6 @@ import LoadingSpinner from "./Components/ReusableComponents/LoadingSpinner";
 import RunsMap from "./Components/RunsMap/RunsMap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { mdiProgressUpload } from "@mdi/js";
 const App = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false); //passed down to other components as props, a boolean which toggles the loading spinner overlay
