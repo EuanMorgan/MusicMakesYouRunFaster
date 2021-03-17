@@ -75,34 +75,36 @@ const RunsMap = (props) => {
 
   const updatePointData = () => {
     setCurrentPointData({
-      heartRate: run[replayCounter].heart_rate_bpm,
-      distanceMeters: run[replayCounter].distance_meters.toFixed(2),
-      elapsed: run[replayCounter].elapsed_hhmmss,
-      pace: run[replayCounter].pace ? run[replayCounter].pace : null,
-      time: run[replayCounter].time,
+      heartRate: run.run_map[replayCounter].heart_rate_bpm,
+      distanceMeters: run.run_map[replayCounter].distance_meters.toFixed(2),
+      elapsed: run.run_map[replayCounter].elapsed_hhmmss,
+      pace: run.run_map[replayCounter].pace
+        ? run.run_map[replayCounter].pace
+        : null,
+      time: run.run_map[replayCounter].time,
       greenPoint: (
         <Feature
           coordinates={[
-            run[replayCounter]["longitude"],
-            run[replayCounter]["latitude"],
+            run.run_map[replayCounter]["longitude"],
+            run.run_map[replayCounter]["latitude"],
           ]}
           properties={{ name: Math.random() }}
           style={{ cursor: "default" }}
         />
       ),
     });
-    if (run[replayCounter].song_playing) {
-      if (run[replayCounter].song_playing.cover_art) {
+    if (run.run_map[replayCounter].song_playing) {
+      if (run.run_map[replayCounter].song_playing.cover_art) {
         stopRun();
-        setCurrentlyPlaying(run[replayCounter].song_playing);
-        console.log(run[replayCounter].song_playing.audio_features);
+        setCurrentlyPlaying(run.run_map[replayCounter].song_playing);
+        console.log(run.run_map[replayCounter].song_playing.audio_features);
         replayRun();
       }
     }
     clicked_point = null;
     replayCounter++;
     // console.log(replayCounter, run.length);
-    if (replayCounter == run.length) {
+    if (replayCounter == run.run_map.length) {
       replayCounter = 0;
       stopRun();
     }
@@ -128,6 +130,11 @@ const RunsMap = (props) => {
     return () => {
       console.log("cleaning up...");
       stopRun();
+      window.removeEventListener(
+        "resize",
+        setWindowWidth(window.innerWidth),
+        false
+      );
     };
   }, []);
 
@@ -186,7 +193,10 @@ const RunsMap = (props) => {
         center={
           !isFollowing
             ? center
-            : [run[replayCounter]["longitude"], run[replayCounter]["latitude"]]
+            : [
+                run.run_map[replayCounter]["longitude"],
+                run.run_map[replayCounter]["latitude"],
+              ]
         }
         zoom={[zoom]}
       >
@@ -202,7 +212,7 @@ const RunsMap = (props) => {
             "circle-stroke-opacity": 1,
           }}
         >
-          {run.map((p) => (
+          {run.run_map.map((p) => (
             <Feature
               key={p.seq}
               coordinates={[p["longitude"], p["latitude"]]}

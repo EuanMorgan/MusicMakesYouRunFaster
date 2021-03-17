@@ -55,11 +55,14 @@ export const retrieveRuns = async (props, setStates) => {
       console.log("0 index ", fix_index);
       if (!r.id.includes("part 0")) {
         let add_here = fix_index - parseInt(r.id.split(" ")[2]);
-        allRuns[add_here] = [...allRuns[add_here], ...r.data().run_map];
+        allRuns[add_here].run_map = [
+          ...allRuns[add_here].run_map,
+          ...r.data().run_map,
+        ];
         return;
       }
     }
-    allRuns.push(r.data().run_map);
+    allRuns.push(r.data());
     fix_index++;
   });
 
