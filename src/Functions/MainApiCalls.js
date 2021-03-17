@@ -157,19 +157,19 @@ export const parseSongsAndRun = async (songs, run, uid) => {
   //add curr song to every point and calculate speed
   let currSong;
   //get fastest points
-  let last_2_distances = [];
+  let last_5_distances = [];
 
   tempRoute = tempRoute.map((p) => {
     //keep only last 5 distances
-    if (last_2_distances.length >= 2) {
+    if (last_5_distances.length >= 5) {
       //remove oldest distance from list
-      last_2_distances.splice(0, 1);
+      last_5_distances.splice(0, 1);
     }
-    last_2_distances.push(p.distance_meters);
+    last_5_distances.push(p.distance_meters);
 
     let pace = (
-      (last_2_distances[last_2_distances.length - 1] - last_2_distances[0]) /
-      last_2_distances.length
+      (last_5_distances[last_5_distances.length - 1] - last_5_distances[0]) /
+      last_5_distances.length
     ).toFixed(2);
 
     //if the point already has a song, this will be a new song

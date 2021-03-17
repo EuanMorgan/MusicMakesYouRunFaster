@@ -64,7 +64,14 @@ const Dashboard = (props) => {
           history.push("/runs");
         }}
       >
-        View recent runs
+        Replay runs
+      </button>
+      <button
+        onClick={() => {
+          history.push("/results");
+        }}
+      >
+        View results
       </button>
     </div>
   );
