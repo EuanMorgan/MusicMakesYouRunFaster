@@ -246,8 +246,8 @@ export const parseSongsAndRun = async (songs, run, uid) => {
   }
   let final_id = tempRoute.length > 3000 ? fixed_id + " part 0" : fixed_id;
 
+  //TODO: this takes the top 10% of all points - instead loop through and only add points if they are more than x amount above the average for the run.
   findFastestPoints(tempRoute, uid, final_id);
-
   findHighestBPMPoints(tempRoute, uid, final_id);
 
   try {
