@@ -151,6 +151,10 @@ export const parseSongsAndRun = async (songs, run, uid) => {
           return { ...p };
         }
       });
+    } else {
+      spotifySongs = spotifySongs.filter(
+        (s) => s.rough_started_at != song["rough_started_at"]
+      );
     }
   }
   console.log(tempRoute);
@@ -171,7 +175,9 @@ export const parseSongsAndRun = async (songs, run, uid) => {
       (last_5_distances[last_5_distances.length - 1] - last_5_distances[0]) /
       last_5_distances.length
     ).toFixed(2);
-
+    if (parseInt(pace) < 0) {
+      pace = "0";
+    }
     //if the point already has a song, this will be a new song
     if (p.song_playing) {
       currSong = p.song_playing;
@@ -247,8 +253,23 @@ export const parseSongsAndRun = async (songs, run, uid) => {
   let final_id = tempRoute.length > 3000 ? fixed_id + " part 0" : fixed_id;
 
   //TODO: this takes the top 10% of all points - instead loop through and only add points if they are more than x amount above the average for the run.
-  findFastestPoints(tempRoute, uid, final_id);
-  findHighestBPMPoints(tempRoute, uid, final_id);
+
+  let all_speeds = [];
+  let all_heart_rates = [];
+  tempRoute.forEach((p) => {
+    all_heart_rates.push(p.heart_rate_bpm);
+    all_speeds.push(parseFloat(p.pace));
+  });
+
+  const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length;
+
+  const avg_pace = average(all_speeds);
+  const avg_bpm = average(all_heart_rates);
+
+  let fastest = tempRoute.filter((p) => p.pace > avg_pace);
+  let highest = tempRoute.filter((p) => p.heart_rate_bpm > avg_bpm);
+  findFastestPoints(fastest, uid, final_id);
+  findHighestBPMPoints(highest, uid, final_id);
 
   try {
     await db
@@ -256,7 +277,10 @@ export const parseSongsAndRun = async (songs, run, uid) => {
       .doc(uid)
       .collection("runs")
       .doc(final_id)
-      .set({ songs: spotifySongs }, { merge: true });
+      .set(
+        { songs: spotifySongs, avg_pace: avg_pace, avg_bpm: avg_bpm },
+        { merge: true }
+      );
   } catch (error) {
     console.log(error);
   }
@@ -317,4 +341,39 @@ const sort = (property) => {
       a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
     return result * sortOrder;
   };
+};
+
+export const deleteRun = async (id, uid, toast) => {
+  if (id.includes("part")) {
+    let part = 0;
+    while (true) {
+      try {
+        let ref = await db
+          .collection("users")
+          .doc(uid)
+          .collection("runs")
+          .doc(id.split(" ")[0] + " part " + part);
+        if ((await ref.get()).exists) {
+          console.log(id.split(" ")[0] + " part " + part);
+          ref.delete();
+        } else {
+          break;
+        }
+      } catch (error) {
+        toast.error("Error deleting!");
+        console.log(error);
+        return false;
+      }
+      part++;
+    }
+  } else {
+    try {
+      await db.collection("users").doc(uid).collection("runs").doc(id).delete();
+    } catch (error) {
+      toast.error("Error deleting!");
+      return false;
+    }
+  }
+
+  toast.success("Successfully deleted run!");
 };

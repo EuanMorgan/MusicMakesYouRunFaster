@@ -14,6 +14,7 @@ const Player = (props) => {
       autoPlay={props.play}
       play={props.play}
       styles={{ height: "2.2rem" }}
+      syncExternalDevice={true}
     />
   );
 };

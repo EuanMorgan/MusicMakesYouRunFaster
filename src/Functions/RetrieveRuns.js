@@ -51,12 +51,13 @@ export const retrieveRuns = async (props, setStates) => {
   //Add runs to list, if split into subparts, combine them.
   let fix_index = 0; //move this back one when we encounter any id with 'part' in it
   runRef.docs.forEach((r, index) => {
+    console.log(r.id);
     if (r.id.includes("part")) {
       console.log("0 index ", fix_index);
       if (!r.id.includes("part 0")) {
-        let add_here = fix_index - parseInt(r.id.split(" ")[2]);
-        allRuns[add_here].run_map = [
-          ...allRuns[add_here].run_map,
+        console.log(fix_index - 1);
+        allRuns[fix_index - 1].run_map = [
+          ...allRuns[fix_index - 1].run_map,
           ...r.data().run_map,
         ];
         return;

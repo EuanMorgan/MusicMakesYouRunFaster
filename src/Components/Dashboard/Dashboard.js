@@ -73,6 +73,13 @@ const Dashboard = (props) => {
       >
         View results
       </button>
+      <button
+        onClick={() => {
+          history.push("/delete");
+        }}
+      >
+        Delete runs
+      </button>
     </div>
   );
 };

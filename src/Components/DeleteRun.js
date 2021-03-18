@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { db, firebaseApp } from "../../firebase/firebase";
+import { db, firebaseApp } from "../firebase/firebase";
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 // import "./RunsMap.css";
-import "../../Styles/app.scss";
-import Player from "../Player/Player";
-import BurgerMenu from "../BurgerMenu/BurgerMenu";
+import "../Styles/app.scss";
+import Player from "./Player/Player";
+import BurgerMenu from "./BurgerMenu/BurgerMenu";
 import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl";
-import { retrieveRuns } from "../../Functions/RetrieveRuns";
-import { RunStats } from "./RunStats";
+import { retrieveRuns } from "../Functions/RetrieveRuns";
+import { deleteRun } from "../Functions/MainApiCalls";
 
 const M = ReactMapboxGl({
   //TODO: Hide api keys
   accessToken: process.env.REACT_APP_MAPBOX_KEY,
 });
 
-const Results = (props) => {
+const DeleteRun = (props) => {
   const [runIdList, setRunIdList] = useState();
   const [runList, setRunList] = useState();
   const [run, setRun] = useState();
@@ -30,7 +30,7 @@ const Results = (props) => {
     setRun(runData);
   };
 
-  useEffect(async () => {
+  const start = async () => {
     if (props.userData == null) {
       await props.fetchData(firebaseApp.auth().currentUser.uid);
 
@@ -38,6 +38,9 @@ const Results = (props) => {
     }
 
     await retrieveRuns(props, setStates);
+  };
+  useEffect(() => {
+    start();
   }, [props.userData]);
 
   const selectRunFromMenu = (id) => {
@@ -47,22 +50,29 @@ const Results = (props) => {
   if (run == undefined) {
     return <h1>Map</h1>;
   }
+
+  const attemptDelete = async (id) => {
+    props.setLoading(true);
+    await deleteRun(id, firebaseApp.auth().currentUser.uid, props.toast);
+    await start();
+    props.setLoading(false);
+  };
   return (
     <div>
-      <BurgerMenu items={runIdList} menuClicked={selectRunFromMenu} />
-      {run &&
-      run.run_map &&
-      run.songs &&
-      run.fastest_points &&
-      run.highest_heart_points &&
-      run.avg_pace &&
-      run.avg_bpm ? (
-        <RunStats run={run} />
-      ) : (
-        <h1>Please select a different run</h1>
-      )}
+      {runIdList.map((run) => (
+        <p
+          onClick={() => {
+            attemptDelete(run);
+          }}
+          style={{ background: "#282828", cursor: "pointer" }}
+        >
+          {run.split("T")[0]}
+          <br />
+          {run.split("T")[1].split(".")[0]}
+        </p>
+      ))}
     </div>
   );
 };
 
-export default Results;
+export default DeleteRun;

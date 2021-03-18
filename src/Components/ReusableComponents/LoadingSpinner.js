@@ -56,7 +56,9 @@ const LoadingSpinner = ({ active, children }) => {
   useEffect(() => {
     if (active) return;
     console.log("changing...");
-    choice = loaders[Math.floor(Math.random() * loaders.length)];
+    let c = Math.floor(Math.random() * loaders.length);
+    choice = loaders[c];
+    console.log(c);
   }, [active]);
   return (
     <LoadingOverlay
