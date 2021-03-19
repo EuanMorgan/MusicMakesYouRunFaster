@@ -48,7 +48,8 @@ export function CollapseMenu(props) {
               borderRadius: "1em",
             }}
           >
-            {props.data.map((d) => (
+            {console.log(props.data)}
+            {props.data.speed_sentences.map((d) => (
               <li>{d}</li>
             ))}
             <LineGraph
@@ -56,6 +57,17 @@ export function CollapseMenu(props) {
               labels={props.labels}
               notListeningData={props.notListeningData}
               show={isButtonCollapseOpen}
+              isHeartrate={false}
+            />
+            {props.data.heart_sentences.map((d) => (
+              <li>{d}</li>
+            ))}
+            <LineGraph
+              listeningData={props.heartrateData}
+              labels={props.labels}
+              notListeningData={props.notListeningHeartrates}
+              show={isButtonCollapseOpen}
+              isHeartrate={true}
             />
           </ul>
         </Collapse>

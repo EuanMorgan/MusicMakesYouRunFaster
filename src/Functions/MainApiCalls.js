@@ -364,7 +364,7 @@ const findHighestBPMPoints = async (points, uid, id, isTest) => {
   }
 };
 
-const sort = (property) => {
+export const sort = (property) => {
   var sortOrder = -1;
   if (property[0] === "-") {
     sortOrder = -1;

@@ -28,14 +28,18 @@ export const LineGraph = (props) => {
           ]
         : [
             {
-              label: "Speed (listening)",
+              label: props.isHeartrate
+                ? "Heartrate (listening)"
+                : "Speed (listening)",
               data: props.listeningData,
               fill: true,
               borderColor: "#742774",
               backgroundColor: "rgba(75,192,192,0.2)",
             },
             {
-              label: "Speed (not listening)",
+              label: props.isHeartrate
+                ? "Heartrate (not listening)"
+                : "Speed (not listening)",
               data: props.notListeningData,
               fill: true,
               backgroundColor: "rgba(75,192,192,0.2)",
@@ -56,7 +60,9 @@ export const LineGraph = (props) => {
         {
           scaleLabel: {
             display: true,
-            labelString: "Speed (metre per second)",
+            labelString: props.isHeartrate
+              ? "Heartrate (beats per minute)"
+              : "Speed (metre per second)",
             fontColor: "grey",
           },
         },

@@ -19,3 +19,9 @@ export const isProduction = () => {
     return true;
   }
 };
+
+export const calcPercentIncDec = (start, end) => {
+  return start > end
+    ? ((start - end) / start) * 100 //if decrease
+    : ((end - start) / start) * 100;
+};
