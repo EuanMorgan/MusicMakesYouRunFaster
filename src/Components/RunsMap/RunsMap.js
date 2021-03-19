@@ -8,8 +8,8 @@ import Player from "../Player/Player";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl";
-import { isProduction } from "../../Common/CommonFunctions";
 
+import { retrieveRuns } from "../../Functions/RetrieveRuns";
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -75,34 +75,36 @@ const RunsMap = (props) => {
 
   const updatePointData = () => {
     setCurrentPointData({
-      heartRate: run[replayCounter].heart_rate_bpm,
-      distanceMeters: run[replayCounter].distance_meters.toFixed(2),
-      elapsed: run[replayCounter].elapsed_hhmmss,
-      pace: run[replayCounter].pace ? run[replayCounter].pace : null,
-      time: run[replayCounter].time,
+      heartRate: run.run_map[replayCounter].heart_rate_bpm,
+      distanceMeters: run.run_map[replayCounter].distance_meters.toFixed(2),
+      elapsed: run.run_map[replayCounter].elapsed_hhmmss,
+      pace: run.run_map[replayCounter].pace
+        ? run.run_map[replayCounter].pace
+        : null,
+      time: run.run_map[replayCounter].time,
       greenPoint: (
         <Feature
           coordinates={[
-            run[replayCounter]["longitude"],
-            run[replayCounter]["latitude"],
+            run.run_map[replayCounter]["longitude"],
+            run.run_map[replayCounter]["latitude"],
           ]}
           properties={{ name: Math.random() }}
           style={{ cursor: "default" }}
         />
       ),
     });
-    if (run[replayCounter].song_playing) {
-      if (run[replayCounter].song_playing.cover_art) {
+    if (run.run_map[replayCounter].song_playing) {
+      if (run.run_map[replayCounter].song_playing.cover_art) {
         stopRun();
-        setCurrentlyPlaying(run[replayCounter].song_playing);
-        console.log(run[replayCounter].song_playing.audio_features);
+        setCurrentlyPlaying(run.run_map[replayCounter].song_playing);
+        console.log(run.run_map[replayCounter].song_playing.audio_features);
         replayRun();
       }
     }
     clicked_point = null;
     replayCounter++;
     // console.log(replayCounter, run.length);
-    if (replayCounter == run.length) {
+    if (replayCounter == run.run_map.length) {
       replayCounter = 0;
       stopRun();
     }
@@ -128,80 +130,37 @@ const RunsMap = (props) => {
     return () => {
       console.log("cleaning up...");
       stopRun();
+      window.removeEventListener(
+        "resize",
+        setWindowWidth(window.innerWidth),
+        false
+      );
     };
   }, []);
+
+  const setStates = (vals) => {
+    setRunIdList(vals[0]);
+    setRunList(vals[1]);
+    spotifyToken = vals[2];
+    let runData = vals[1][vals[1].length - 1];
+    console.log(runData);
+    setRun(runData);
+  };
+
   useEffect(async () => {
-    window.addEventListener("resize", function () {
-      setWindowWidth(window.innerWidth);
-    });
-    props.setLoading(true);
     if (props.userData == null) {
       await props.fetchData(firebaseApp.auth().currentUser.uid);
 
       return;
     }
-    console.log(props.userData.spotifyRefreshToken);
-    let uri = isProduction()
-      ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/spotify/refresh"
-      : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/spotify/refresh";
-    spotifyToken = await fetch(uri, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        refresh_token: props.userData.spotifyRefreshToken,
-      }),
+
+    window.addEventListener("resize", function () {
+      setWindowWidth(window.innerWidth);
     });
-    spotifyToken = await spotifyToken.text();
-    console.log(spotifyToken);
 
-    let runRef = await db
-      .collection("users")
-      .doc(props.userData.fitbitId)
-      .collection("runs")
-      .get();
-    console.log(runRef.docs);
-    if (runRef.empty) {
-      props.toast.error("❗ No runs found, please pull a recent run first. ❗");
-      props.setLoading(false);
-      history.push("/dashboard");
-      return;
-    }
+    await retrieveRuns(props, setStates);
 
-    let idList = [];
-    for (let i = 0; i < runRef.docs.length; i++) {
-      console.log(runRef.docs[i].id);
-      if (runRef.docs[i].id.includes("part")) {
-        if (!runRef.docs[i].id.includes("part 0")) {
-          //only use one part
-          continue;
-        }
-      }
-      idList.push(runRef.docs[i].id);
-    }
-    let allRuns = [];
-
-    //Add runs to list, if split into subparts, combine them.
-    let fix_index = 0; //move this back one when we encounter any id with 'part' in it
-    runRef.docs.forEach((r, index) => {
-      if (r.id.includes("part")) {
-        console.log("0 index ", fix_index);
-        if (!r.id.includes("part 0")) {
-          let add_here = fix_index - parseInt(r.id.split(" ")[2]);
-          allRuns[add_here] = [...allRuns[add_here], ...r.data().run_map];
-          return;
-        }
-      }
-      allRuns.push(r.data().run_map);
-      fix_index++;
-    });
-    setRunIdList(idList);
-    setRunList(allRuns);
-    let runData = allRuns[allRuns.length - 1];
-    setRun(runData);
     replayCounter = 0;
-    props.setLoading(false);
   }, [props.userData]);
 
   if (run == undefined) {
@@ -234,7 +193,10 @@ const RunsMap = (props) => {
         center={
           !isFollowing
             ? center
-            : [run[replayCounter]["longitude"], run[replayCounter]["latitude"]]
+            : [
+                run.run_map[replayCounter]["longitude"],
+                run.run_map[replayCounter]["latitude"],
+              ]
         }
         zoom={[zoom]}
       >
@@ -250,7 +212,7 @@ const RunsMap = (props) => {
             "circle-stroke-opacity": 1,
           }}
         >
-          {run.map((p) => (
+          {run.run_map.map((p) => (
             <Feature
               key={p.seq}
               coordinates={[p["longitude"], p["latitude"]]}
@@ -356,7 +318,11 @@ const RunsMap = (props) => {
             marginTop: "2rem",
           }}
         >
-          <Player uri={currentlyPlaying.uri} token={spotifyToken} play={play} />
+          <Player
+            uri={[currentlyPlaying.uri]}
+            token={spotifyToken}
+            play={play}
+          />
         </div>
       ) : null}
     </div>
