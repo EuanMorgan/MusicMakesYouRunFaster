@@ -5,7 +5,7 @@ import {
   pullSongs,
   parseSongsAndRun,
 } from "../../Functions/MainApiCalls";
-import { run, songs } from "../../TestData";
+// import { run, songs } from "../../TestData";
 import { useHistory } from "react-router-dom";
 const Dashboard = (props) => {
   const history = useHistory();
@@ -14,7 +14,7 @@ const Dashboard = (props) => {
   }
   if (props.userData == null) {
     props.fetchData(props.currentUser.uid);
-    return <h1>ummmmmm</h1>;
+    return <h1>fetching...</h1>;
   }
 
   if (props.userData.spotifyRefreshToken == "") {
@@ -82,7 +82,7 @@ const Dashboard = (props) => {
       >
         Delete runs
       </button>
-      <button
+      {/* <button
         onClick={async () => {
           console.log(
             await parseSongsAndRun(songs, run.run_map, "7LZHNM", true)
@@ -90,7 +90,7 @@ const Dashboard = (props) => {
         }}
       >
         TEST
-      </button>
+      </button> */}
     </div>
   );
 };
