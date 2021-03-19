@@ -11,3 +11,11 @@ test("Adds 3 + 2 to equal 5", () => {
 //   const linkElement = screen.getByText(/learn react/i);
 //   expect(linkElement).toBeInTheDocument();
 // });
+
+import { parseSongsAndRun } from "./Functions/MainApiCalls";
+import { run, songs, shouldBe } from "./TestData";
+test("Parsing run function", async () => {
+  let x = await parseSongsAndRun(songs, run.run_map, "7LZHNM", true);
+
+  expect(x).toStrictEqual(shouldBe);
+});

@@ -5,6 +5,7 @@ import {
   pullSongs,
   parseSongsAndRun,
 } from "../../Functions/MainApiCalls";
+import { run, songs } from "../../TestData";
 import { useHistory } from "react-router-dom";
 const Dashboard = (props) => {
   const history = useHistory();
@@ -31,6 +32,7 @@ const Dashboard = (props) => {
     console.log(songs);
     try {
       await parseSongsAndRun(songs, map, props.currentUser.uid);
+
       props.toast.success("🦄 run fetched successfully!");
     } catch (error) {
       console.log(error);
@@ -79,6 +81,15 @@ const Dashboard = (props) => {
         }}
       >
         Delete runs
+      </button>
+      <button
+        onClick={async () => {
+          console.log(
+            await parseSongsAndRun(songs, run.run_map, "7LZHNM", true)
+          );
+        }}
+      >
+        TEST
       </button>
     </div>
   );
