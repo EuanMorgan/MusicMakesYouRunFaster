@@ -49,7 +49,7 @@ export const LineGraph = (props) => {
       enabled: true,
     },
     animation: {
-      duration: 1000,
+      duration: 1500,
     },
     scales: {
       yAxes: [
