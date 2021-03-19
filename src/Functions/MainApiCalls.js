@@ -20,7 +20,7 @@ export const pullRuns = async (refreshToken) => {
     r = "oops";
   }
 
-  //console.log("MAPPYBOY", r);
+  console.log("MAPPYBOY", r);
   //TODO: -1 return
   return r.run_map;
 };
@@ -43,11 +43,12 @@ export const pullSongs = async (refreshToken) => {
   if (spotifySongs == "error") {
     alert("There has been an error fetching the map of your most recent run.");
   }
-  //console.log("SONGIES", spotifySongs);
+  console.log("SONGIES", spotifySongs);
   return spotifySongs;
 };
 
 export const parseSongsAndRun = async (songs, run, uid, isTest) => {
+  console.log(songs);
   let spotifySongs = songs.data.tracks;
 
   //console.log(run.trackpoints);
@@ -297,6 +298,14 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   }
 
   //console.log("returning this to be fair....");
+  // console.log([
+  //   tempRoute,
+  //   spotifySongs,
+  //   avg_pace,
+  //   avg_bpm,
+  //   fastest_points,
+  //   highest_points,
+  // ]);
   return [
     tempRoute,
     spotifySongs,
