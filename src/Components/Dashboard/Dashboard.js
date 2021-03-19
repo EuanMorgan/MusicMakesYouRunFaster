@@ -82,7 +82,7 @@ const Dashboard = (props) => {
       >
         Delete runs
       </button>
-      <button
+      {/* <button
         onClick={async () => {
           console.log(
             await parseSongsAndRun(songs, run.run_map, "7LZHNM", true)
@@ -90,7 +90,7 @@ const Dashboard = (props) => {
         }}
       >
         TEST
-      </button>
+      </button> */}
     </div>
   );
 };
