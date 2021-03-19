@@ -2,6 +2,8 @@ import React, { useState, useCallback } from "react";
 import { Collapse } from "react-collapse";
 import Icon from "@mdi/react";
 import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
+import { LineGraph } from "../Results/Graphs/Line";
+
 export function CollapseMenu(props) {
   const accessibilityIds = {
     checkbox: "accessible-marker-example1",
@@ -49,6 +51,12 @@ export function CollapseMenu(props) {
             {props.data.map((d) => (
               <li>{d}</li>
             ))}
+            <LineGraph
+              listeningData={props.listeningData}
+              labels={props.labels}
+              notListeningData={props.notListeningData}
+              show={isButtonCollapseOpen}
+            />
           </ul>
         </Collapse>
       </div>
