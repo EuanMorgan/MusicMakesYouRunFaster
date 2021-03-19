@@ -27,7 +27,7 @@ import { useEffect } from "react";
 // Overlay a random loader from react-spinners
 
 const loaders = [
-  <BarLoader color={"red"} />,
+  // <BarLoader color={"red"} />,
   <BeatLoader color={"red"} />,
   <BounceLoader color={"red"} />,
   <CircleLoader color={"red"} />,
@@ -57,6 +57,7 @@ const LoadingSpinner = ({ active, children }) => {
     if (active) return;
     console.log("changing...");
     let c = Math.floor(Math.random() * loaders.length);
+
     choice = loaders[c];
     console.log(c);
   }, [active]);
