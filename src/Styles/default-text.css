@@ -72,3 +72,18 @@ button {
 .results p {
   font-size: 1.8rem;
 }
+
+.data-list p {
+  font-size: 1.2rem;
+  text-align: left;
+  left: 27%;
+  color: grey;
+  margin: 0.2rem;
+}
+
+.data-list-top p {
+  font-size: 1.2rem;
+  text-align: center;
+
+  color: grey;
+}

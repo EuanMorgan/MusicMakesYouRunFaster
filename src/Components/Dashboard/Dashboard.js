@@ -82,6 +82,14 @@ const Dashboard = (props) => {
       >
         Delete runs
       </button>
+      <button
+        onClick={async () => {
+          let x = await pullSongs(props.userData.spotifyRefreshToken);
+          console.log(x);
+        }}
+      >
+        test pull
+      </button>
       {/* <button
         onClick={async () => {
           console.log(

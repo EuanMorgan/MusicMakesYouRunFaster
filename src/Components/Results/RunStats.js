@@ -1,6 +1,6 @@
 import { CollapseMenu } from "../ReusableComponents/Collapse";
 import { sort } from "../../Functions/MainApiCalls";
-import { calcPercentIncDec } from "../../Common/CommonFunctions";
+import { calcPercentIncDec, msToHMS } from "../../Common/CommonFunctions";
 export const RunStats = (props) => {
   // FIND LIST OF FASTEST SONGS
   let fastest_song_ids = [];
@@ -127,8 +127,23 @@ export const RunStats = (props) => {
           " " +
           props.run.fastest_points[0].time.split("T")[1].split(".")[0]}
       </h1>
-      <p>Average speed: {props.run.avg_pace.toFixed(2)} m/s</p>
-      <p>Average heartrate: {props.run.avg_bpm.toFixed(0)} BPM</p>
+      <div className="data-list-top">
+        <p>
+          You ran for{" "}
+          {msToHMS(
+            props.run.run_map[props.run.run_map.length - 1].epoch_ms -
+              props.run.run_map[0].epoch_ms
+          )}
+        </p>
+        <p>
+          You travelled{" "}
+          {props.run.run_map[props.run.run_map.length - 2].distance_meters}{" "}
+          metres
+        </p>
+        <p>Average speed: {props.run.avg_pace.toFixed(2)} m/s</p>
+        <p>Average heartrate: {props.run.avg_bpm.toFixed(0)} BPM</p>
+      </div>
+
       <h1>The songs that made you run the fastest were: </h1>
       {fastest_song_ids.map((id) => {
         let [
@@ -137,6 +152,7 @@ export const RunStats = (props) => {
           heartrates,
           notListeningHeartrates,
         ] = retrieveDataForSong(id);
+
         return (
           <div>
             <CollapseMenu
@@ -147,6 +163,9 @@ export const RunStats = (props) => {
               labels={labels}
               heartrateData={heartrates}
               notListeningHeartrates={notListeningHeartrates}
+              audioFeatures={
+                props.run.songs.filter((s) => s.id === id)[0]["audio_features"]
+              }
             />
           </div>
         );
