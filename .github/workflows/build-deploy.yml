@@ -5,11 +5,8 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build
+  vars:
     runs-on: ubuntu-latest
-    env:
-      CI: false
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
@@ -40,10 +37,33 @@ jobs:
               with:
                 name: build
                 path: build
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      CI: false
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: build
+          path: build
   deploy:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_FIREBASE_API_KEY: ${{ secrets.REACT_APP_FIREBASE_API_KEY }}
+      REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }}
+      REACT_APP_FIREBASE_DB_URL: ${{ secrets.REACT_APP_FIREBASE_DB_URL }}
+      REACT_APP_FIREBASE_PROJECT_ID: ${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}
+      REACT_APP_MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
