@@ -6,6 +6,7 @@ on:
 
 jobs:
   vars:
+    name: Vars
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -39,6 +40,7 @@ jobs:
                 path: build
   build:
     name: Build
+    needs: vars
     runs-on: ubuntu-latest
     env:
       CI: false
