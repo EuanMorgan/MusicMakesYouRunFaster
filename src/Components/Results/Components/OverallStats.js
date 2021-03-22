@@ -22,7 +22,7 @@ const OverallStats = (props) => {
             <span className="data-list-title">Average speed:</span>{" "}
             {props.run.avg_pace.toFixed(2)} m/s
           </p>
-          <p>
+          <p className="end">
             <span className="data-list-title">Average heartrate:</span>{" "}
             {props.run.avg_bpm.toFixed(0)} BPM
           </p>
@@ -41,7 +41,7 @@ const OverallStats = (props) => {
             <span className="data-list-title">Peak heartrate:</span>{" "}
             {props.bpm_order[0].heart_rate_bpm} BPM
           </p>
-          <p>
+          <p className="end">
             <span className="data-list-title">Slowest heartrate:</span>{" "}
             {props.bpm_order[props.bpm_order.length - 1].heart_rate_bpm} BPM
           </p>
