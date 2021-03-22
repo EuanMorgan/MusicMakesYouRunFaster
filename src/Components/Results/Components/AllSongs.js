@@ -4,6 +4,8 @@ import { BarChart } from "../Graphs/Bar";
 const AllSongs = (props) => {
   const [uniqueGenres, setUniqueGenres] = useState([]);
   const [genreCount, setGenreCount] = useState([]);
+
+  const [showChart, setShowChart] = useState(false);
   console.log(props.run.songs);
   useEffect(() => {
     let genres = [];
@@ -35,15 +37,32 @@ const AllSongs = (props) => {
           </p>
         </div>
       </div>
-
-      <div className="chart-container">
-        {" "}
-        <BarChart
-          show={true}
-          labels={uniqueGenres.sort()}
-          genreCount={genreCount}
-        />
-      </div>
+      <button
+        onClick={() => {
+          setShowChart(!showChart);
+        }}
+        style={{ marginTop: "1rem" }}
+      >
+        {showChart ? "Hide genres" : "Show genres"}
+      </button>
+      {showChart ? (
+        <div className="chart-container">
+          <BarChart
+            show={showChart}
+            labels={uniqueGenres.sort()}
+            genreCount={genreCount}
+          />
+        </div>
+      ) : null}
+      {showChart ? (
+        <div className="chart-container">
+          <BarChart
+            show={showChart}
+            labels={uniqueGenres.sort()}
+            genreCount={genreCount}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

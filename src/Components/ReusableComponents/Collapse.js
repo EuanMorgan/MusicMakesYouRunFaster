@@ -76,7 +76,7 @@ export function CollapseMenu(props) {
                 Key: {keys[x.key]} {mode[x.mode]}
               </p>
             </div>
-
+            <p className="subtitle">Audio features</p>
             <RadarChart
               songName={props.name}
               songData={
@@ -93,7 +93,11 @@ export function CollapseMenu(props) {
               show={isButtonCollapseOpen}
             />
             <button
-              style={{ fontSize: "0.7rem" }}
+              style={{
+                fontSize: "0.7rem",
+                padding: "0.1rem",
+                marginBottom: "0.2rem",
+              }}
               onClick={() => history.push("/more-info")}
             >
               Find out more about audio features

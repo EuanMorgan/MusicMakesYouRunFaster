@@ -84,11 +84,23 @@ button,
 
 .data-list p {
   font-size: 1.2rem;
-  text-align: left;
-  left: 27%;
+  text-align: center;
   color: grey;
   margin: 0.2rem;
 }
+
+.songs-ul .subtitle p {
+  font-size: 0.2rem;
+}
+
+.subtitle {
+  color: grey;
+}
+/* @media (max-width: 1000px) {
+  .data-list p {
+    left: 0;
+  }
+} */
 
 .data-list-top p {
   font-size: 1.2rem;
@@ -143,6 +155,7 @@ button,
 .songs-ul {
   text-align: left;
   list-style-position: inside;
+  margin: 0;
   font-size: 2rem;
   background: #282828;
   border-radius: 1rem;
