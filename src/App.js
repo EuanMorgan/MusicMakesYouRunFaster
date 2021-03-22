@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { mdiProgressUpload } from "@mdi/js";
 import Results from "./Components/Results/Results";
 import DeleteRun from "./Components/DeleteRun";
+import MoreInfo from "./Components/MoreInfo/MoreInfo";
 const App = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false); //passed down to other components as props, a boolean which toggles the loading spinner overlay
@@ -119,6 +120,7 @@ const App = () => {
                 setLoading={setLoading}
                 toast={toast}
               />
+              <Route path="/more-info" component={MoreInfo} />
             </Switch>
             <ToastContainer />
           </div>

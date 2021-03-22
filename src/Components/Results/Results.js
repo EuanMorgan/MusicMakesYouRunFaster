@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl";
 import { retrieveRuns } from "../../Functions/RetrieveRuns";
 import { RunStats } from "./RunStats";
+import { Overall } from "./Overall";
 
 const M = ReactMapboxGl({
   //TODO: Hide api keys
@@ -57,7 +58,10 @@ const Results = (props) => {
       run.highest_heart_points &&
       run.avg_pace &&
       run.avg_bpm ? (
-        <RunStats run={run} />
+        <div>
+          <RunStats run={run} />
+          {/* <Overall run={run} /> */}
+        </div>
       ) : (
         <h1>Please select a different run</h1>
       )}

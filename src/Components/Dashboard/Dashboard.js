@@ -31,9 +31,14 @@ const Dashboard = (props) => {
     let songs = await pullSongs(props.userData.spotifyRefreshToken);
     console.log(songs);
     try {
-      await parseSongsAndRun(songs, map, props.currentUser.uid);
-
-      props.toast.success("🦄 run fetched successfully!");
+      let x = await parseSongsAndRun(songs, map, props.currentUser.uid);
+      if (x === -255) {
+        props.toast.info(
+          "Most recent run not fetched because we already have it 😎"
+        );
+      } else {
+        props.toast.success("🦄 run fetched successfully!");
+      }
     } catch (error) {
       console.log(error);
       props.toast.error("😢 there has been an error");
@@ -82,6 +87,14 @@ const Dashboard = (props) => {
       >
         Delete runs
       </button>
+      {/* <button
+        onClick={async () => {
+          let x = await pullSongs(props.userData.spotifyRefreshToken);
+          console.log(x);
+        }}
+      >
+        test pull
+      </button> */}
       {/* <button
         onClick={async () => {
           console.log(
