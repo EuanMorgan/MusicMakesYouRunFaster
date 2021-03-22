@@ -54,6 +54,7 @@ const AllSongs = (props) => {
           />
         </div>
       ) : null}
+
       {/* {showChart ? (
         <div className="chart-container">
           <BarChart
