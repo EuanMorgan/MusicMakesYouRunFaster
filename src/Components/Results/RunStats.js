@@ -1,6 +1,7 @@
 import { CollapseMenu } from "../ReusableComponents/Collapse";
 import { sort } from "../../Functions/MainApiCalls";
 import { calcPercentIncDec, msToHMS } from "../../Common/CommonFunctions";
+import { Redirect, Link } from "react-router-dom";
 export const RunStats = (props) => {
   // FIND LIST OF FASTEST SONGS
   let fastest_song_ids = [];
@@ -23,6 +24,7 @@ export const RunStats = (props) => {
   let highest_hearts = {};
 
   let bpm_order = [...props.run.run_map].sort(sort("heart_rate_bpm"));
+  let speed_order = [...props.run.run_map].sort(sort("pace"));
   console.log(bpm_order);
   bpm_order.forEach((h) => {
     if (h.song_playing === undefined) {
@@ -122,21 +124,61 @@ export const RunStats = (props) => {
           " " +
           props.run.fastest_points[0].time.split("T")[1].split(".")[0]}
       </h1>
-      <div className="data-list-top">
-        <p>
-          You ran for{" "}
-          {msToHMS(
-            props.run.run_map[props.run.run_map.length - 1].epoch_ms -
-              props.run.run_map[0].epoch_ms
-          )}
-        </p>
-        <p>
-          You travelled{" "}
-          {props.run.run_map[props.run.run_map.length - 2].distance_meters}{" "}
-          metres
-        </p>
-        <p>Average speed: {props.run.avg_pace.toFixed(2)} m/s</p>
-        <p>Average heartrate: {props.run.avg_bpm.toFixed(0)} BPM</p>
+      <p>Overall Stats</p>
+      <div className="data-list-top-container">
+        <div className="data-list-top">
+          <p>
+            <span className="data-list-title">You ran for:</span>{" "}
+            {msToHMS(
+              props.run.run_map[props.run.run_map.length - 1].epoch_ms -
+                props.run.run_map[0].epoch_ms
+            )}
+          </p>
+          <p>
+            <span className="data-list-title">You travelled:</span>{" "}
+            {props.run.run_map[props.run.run_map.length - 2].distance_meters}{" "}
+            metres
+          </p>
+          <p>
+            <span className="data-list-title">Average speed:</span>{" "}
+            {props.run.avg_pace.toFixed(2)} m/s
+          </p>
+          <p>
+            <span className="data-list-title">Average heartrate:</span>{" "}
+            {props.run.avg_bpm.toFixed(0)} BPM
+          </p>
+        </div>
+
+        <div className="data-list-top">
+          <p>
+            <span className="data-list-title">Peak speed:</span>{" "}
+            {props.run.fastest_points[0].pace} m/s
+          </p>
+          <p>
+            <span className="data-list-title">Slowest speed:</span>{" "}
+            {speed_order[speed_order.length - 2].pace} m/s
+          </p>
+          <p>
+            <span className="data-list-title">Peak heartrate:</span>{" "}
+            {bpm_order[0].heart_rate_bpm} BPM
+          </p>
+          <p>
+            <span className="data-list-title">Slowest heartrate:</span>{" "}
+            {bpm_order[bpm_order.length - 1].heart_rate_bpm} BPM
+          </p>
+        </div>
+      </div>
+      <div style={{ paddingTop: "2rem" }}>
+        <Link
+          className="button"
+          to={{
+            pathname: "/runs",
+
+            state: { load_run: props.run },
+          }}
+        >
+          View run on map
+        </Link>
       </div>
 
       <h1>The songs that made you run the fastest were: </h1>
