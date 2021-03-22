@@ -8,6 +8,8 @@ jobs:
   vars:
     name: Vars
     runs-on: ubuntu-latest
+    env:
+      CI: false
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
@@ -29,22 +31,7 @@ jobs:
           git config user.name "Euan Morgan"
           git add .
           git commit -m "environment variables"
-            - name: Install Dependencies
-              run: npm install
-            - name: Build
-              run: npm run build
-            - name: Archive Production Artifact
-              uses: actions/upload-artifact@master
-              with:
-                name: build
-                path: build
-  build:
-    name: Build
-    needs: vars
-    runs-on: ubuntu-latest
-    env:
-      CI: false
-    steps:
+        
       - name: Checkout Repo
         uses: actions/checkout@master
       - name: Install Dependencies
@@ -58,7 +45,7 @@ jobs:
           path: build
   deploy:
     name: Deploy
-    needs: build
+    needs: vars
     runs-on: ubuntu-latest
     env:
       REACT_APP_FIREBASE_API_KEY: ${{ secrets.REACT_APP_FIREBASE_API_KEY }}
