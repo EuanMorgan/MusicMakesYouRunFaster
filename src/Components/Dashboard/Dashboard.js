@@ -4,9 +4,13 @@ import {
   pullRuns,
   pullSongs,
   parseSongsAndRun,
+  deleteAccount,
 } from "../../Functions/MainApiCalls";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 // import { run, songs } from "../../TestData";
 import { useHistory } from "react-router-dom";
+import { firebaseApp } from "../../firebase/firebase";
 const Dashboard = (props) => {
   const history = useHistory();
   if (props.currentUser == null) {
@@ -86,6 +90,30 @@ const Dashboard = (props) => {
         }}
       >
         Delete runs
+      </button>
+      <button
+        onClick={() => {
+          confirmAlert({
+            title: "Confirm to submit",
+            message:
+              "Are you sure to do this? Your account and all your data will be deleted, this cannot be undone.",
+            buttons: [
+              {
+                label: "Confirm Deletion",
+                onClick: () =>
+                  deleteAccount(
+                    firebaseApp.auth().currentUser.uid,
+                    props.toast
+                  ),
+              },
+              {
+                label: "Cancel",
+              },
+            ],
+          });
+        }}
+      >
+        Delete account
       </button>
       {/* <button
         onClick={async () => {

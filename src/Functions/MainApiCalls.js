@@ -1,6 +1,6 @@
 import { mdiProgressUpload } from "@mdi/js";
 import { isProduction } from "../Common/CommonFunctions";
-import { db } from "../firebase/firebase";
+import { db, firebaseApp } from "../firebase/firebase";
 let tcx = require("tcx-js");
 
 export const pullRuns = async (refreshToken) => {
@@ -392,6 +392,38 @@ export const sort = (property) => {
       a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
     return result * sortOrder;
   };
+};
+
+export const deleteAccount = async (uid, toast) => {
+  try {
+    let ref = db.collection("users").doc(uid);
+    deleteCollection(uid);
+    if ((await ref.get()).exists) {
+      ref.delete().then(() => {
+        firebaseApp.auth().signOut();
+        toast.success("Account deleted successfully, bon voyage! 👋");
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Error deleting account!");
+  }
+};
+
+const deleteCollection = (uid) => {
+  try {
+    db.collection("users")
+      .doc(uid)
+      .collection("runs")
+      .get()
+      .then((res) => {
+        res.docs.map((val) => {
+          val.ref.delete();
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const deleteRun = async (id, uid, toast) => {
