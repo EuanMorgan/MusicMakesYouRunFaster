@@ -57,14 +57,14 @@ button,
   .Buttons,
   .faq,
   .ContinueSetup {
-    width: 70%;
+    width: 90%;
     margin: auto;
   }
   .Buttons p {
-    font-size: 4rem;
+    font-size: 2rem;
   }
   .Buttons h1 {
-    font-size: 6vw;
+    font-size: 3rem;
   }
   button,
   .button {
@@ -165,7 +165,7 @@ button,
 @media (max-width: 800px) {
   .songs-ul {
     font-size: 1.3rem;
-    width: 80%;
+    width: 90%;
   }
 }
 
