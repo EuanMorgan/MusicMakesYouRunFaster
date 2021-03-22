@@ -15,7 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: false
-
+      REACT_APP_FIREBASE_API_KEY: ${{ secrets.REACT_APP_FIREBASE_API_KEY }}
+      REACT_APP_FIREBASE_AUTH_DOMAIN: ${{ REACT_APP_FIREBASE_AUTH_DOMAIN }}
+      REACT_APP_FIREBASE_DB_URL: ${{ REACT_APP_FIREBASE_DB_URL }}
+      REACT_APP_FIREBASE_PROJECT_ID: ${{ REACT_APP_FIREBASE_PROJECT_ID }}
+      REACT_APP_MAPBOX_KEY: ${{ REACT_APP_MAPBOX_KEY ]}
+      
     strategy:
       matrix:
         node-version: [10.x, 12.x, 14.x, 15.x]
