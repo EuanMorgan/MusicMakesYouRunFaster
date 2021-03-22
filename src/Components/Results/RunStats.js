@@ -43,11 +43,8 @@ export const RunStats = (props) => {
     }
   });
 
-  console.log(highest_hearts);
-
   let labels = [];
 
-  console.log(props);
   props.run.run_map.forEach((point) => {
     labels.push(point.elapsed_hhmmss);
   });
@@ -63,6 +60,7 @@ export const RunStats = (props) => {
         not_listening_data.push(p.pace);
         data.push(null);
         not_listening_heartrates.push(p.heart_rate_bpm);
+        heartrates.push(null);
         return;
       }
       if (typeof p.song_playing == "string" && p.song_playing == songid) {
@@ -86,9 +84,6 @@ export const RunStats = (props) => {
     return [data, not_listening_data, heartrates, not_listening_heartrates];
   };
 
-  console.log(fastest_song_ids);
-  console.log(props.run.songs);
-  console.log(props.run);
   const formatText = (id) => {
     let fastest_sentences = [
       "Wow! This song had you flying!",

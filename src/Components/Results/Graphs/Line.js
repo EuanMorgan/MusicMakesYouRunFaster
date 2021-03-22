@@ -44,7 +44,7 @@ export const LineGraph = (props) => {
                 : "Speed (not listening)",
               data: props.notListeningData,
               fill: true,
-              backgroundColor: "rgba(75,192,192,0.2)",
+              backgroundColor: "rgba(200,192,192,0.2)",
               borderColor: "rgba(75,192,192,1)",
             },
           ],
