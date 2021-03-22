@@ -114,7 +114,7 @@ const Home = (props) => {
           Music makes you run faster is my final year project. It is an
           application which analyses your FitBit activity data along with your
           music streaming data to see if the music has any impact on your
-          performance. Click here to view our FAQ.
+          performance.
         </p>
         <div>
           <h1>Step 1: Sign up / Sign in with FitBit</h1>

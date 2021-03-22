@@ -57,14 +57,14 @@ button,
   .Buttons,
   .faq,
   .ContinueSetup {
-    width: 70%;
+    width: 90%;
     margin: auto;
   }
   .Buttons p {
-    font-size: 4rem;
+    font-size: 2rem;
   }
   .Buttons h1 {
-    font-size: 6vw;
+    font-size: 3rem;
   }
   button,
   .button {
@@ -165,7 +165,23 @@ button,
 @media (max-width: 800px) {
   .songs-ul {
     font-size: 1.3rem;
-    width: 80%;
+    width: 90%;
+  }
+}
+
+.chart-container {
+  font-size: 2rem;
+  background: #282828;
+  border-radius: 1rem;
+  margin: auto;
+  width: 70%;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+@media (max-width: 800px) {
+  .chart-container {
+    font-size: 1.3rem;
+    width: 90%;
   }
 }
 
