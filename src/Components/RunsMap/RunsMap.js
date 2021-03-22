@@ -37,6 +37,7 @@ const mode = ["Minor", "Major"];
 let runInterval;
 let spotifyToken;
 const RunsMap = (props) => {
+  console.log("aahhhhhhh", props);
   const history = useHistory();
   const [currentlyPlaying, setCurrentlyPlaying] = useState({
     name: "",
@@ -144,7 +145,12 @@ const RunsMap = (props) => {
     spotifyToken = vals[2];
     let runData = vals[1][vals[1].length - 1];
     console.log(runData);
-    setRun(runData);
+    if (props.location.state) {
+      setRun(props.location.state.load_run);
+      console.log("set run to desired choice");
+    } else {
+      setRun(runData);
+    }
   };
 
   useEffect(async () => {
