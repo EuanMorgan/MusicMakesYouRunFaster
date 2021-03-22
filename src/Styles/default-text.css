@@ -33,7 +33,7 @@ p {
 button,
 .button {
   cursor: pointer;
-  font-size: 2vw;
+  font-size: 2rem;
   border-radius: 50vw;
   padding: 0.3vw;
   background-color: aliceblue;
@@ -66,7 +66,8 @@ button,
   .Buttons h1 {
     font-size: 6vw;
   }
-  button {
+  button,
+  .button {
     color: black;
     background-color: white;
     font-size: 1rem;
@@ -108,6 +109,7 @@ button,
   border-radius: 1rem;
   justify-content: center;
   border: 0.01rem solid grey;
+
 }
 
 .data-list-title {
@@ -115,3 +117,44 @@ button,
   float: left;
   padding-right: 2rem;
 }
+
+@media (max-width: 800px) {
+  .data-list-title {
+    padding-bottom: 0.2rem;
+    float: none;
+    display: block;
+  }
+  .data-list-top p {
+    text-align: left;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+.white {
+  color: white;
+}
+
+.songs-ul {
+  text-align: left;
+  list-style-position: inside;
+  font-size: 2rem;
+  background: #282828;
+  border-radius: 1rem;
+  margin: auto;
+  width: 55%;
+}
+@media (max-width: 800px) {
+  .songs-ul {
+    font-size: 1.3rem;
+    width: 80%;
+  }
+}
+
+/*       listStylePosition: "inside",
+              fontSize: "2em",
+              background: "#282828",
+              display: "inline-block",
+              margin: "auto",
+              padding: "1em",
+              borderRadius: "1em", */
