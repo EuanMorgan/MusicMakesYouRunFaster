@@ -1,5 +1,6 @@
+import { mdiProgressUpload } from "@mdi/js";
 import { isProduction } from "../Common/CommonFunctions";
-import { db } from "../firebase/firebase";
+import { db, firebaseApp } from "../firebase/firebase";
 let tcx = require("tcx-js");
 
 export const pullRuns = async (refreshToken) => {
@@ -53,6 +54,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
 
   //console.log(run.trackpoints);
   //filter out unneccasry things, too much data to store otherwise
+
   let tempRoute = run.trackpoints.map((point) => {
     return {
       heart_rate_bpm: point.heart_rate_bpm,
@@ -231,12 +233,17 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
     try {
       groups.forEach(async (g, index) => {
         if (isTest) return;
-        await db
+        let ref = await db
           .collection("users")
           .doc(uid)
           .collection("runs")
-          .doc(fixed_id + " part " + index)
-          .set({ run_map: g });
+          .doc(fixed_id + " part " + index);
+        let check_ref = await ref.get();
+        if (check_ref.exists) {
+          console.log("IT EXISTS");
+          return -255;
+        }
+        ref.set({ run_map: g });
       });
     } catch (error) {
       //console.log(error);
@@ -244,12 +251,19 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   } else {
     try {
       if (!isTest) {
-        await db
+        let ref = await db
           .collection("users")
           .doc(uid)
           .collection("runs")
-          .doc(fixed_id)
-          .set({ run_map: tempRoute });
+          .doc(fixed_id);
+
+        let check_ref = await ref.get();
+
+        if (check_ref.exists) {
+          console.log("it exists!");
+          return -255;
+        }
+        ref.set({ run_map: tempRoute });
       }
     } catch (error) {
       //console.log(error);
@@ -378,6 +392,38 @@ export const sort = (property) => {
       a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
     return result * sortOrder;
   };
+};
+
+export const deleteAccount = async (uid, toast) => {
+  try {
+    let ref = db.collection("users").doc(uid);
+    deleteCollection(uid);
+    if ((await ref.get()).exists) {
+      ref.delete().then(() => {
+        firebaseApp.auth().signOut();
+        toast.success("Account deleted successfully, bon voyage! 👋");
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    toast.error("Error deleting account!");
+  }
+};
+
+const deleteCollection = (uid) => {
+  try {
+    db.collection("users")
+      .doc(uid)
+      .collection("runs")
+      .get()
+      .then((res) => {
+        res.docs.map((val) => {
+          val.ref.delete();
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const deleteRun = async (id, uid, toast) => {

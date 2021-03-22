@@ -1,8 +1,10 @@
 import React from "react";
 
-import { Line } from "react-chartjs-2";
+import { Line, defaults } from "react-chartjs-2";
 
 export const LineGraph = (props) => {
+  // defaults.global.maintainAspectRatio = false;
+  defaults.global.responsive = true;
   console.log(props);
   const data = {
     labels:
@@ -42,7 +44,7 @@ export const LineGraph = (props) => {
                 : "Speed (not listening)",
               data: props.notListeningData,
               fill: true,
-              backgroundColor: "rgba(75,192,192,0.2)",
+              backgroundColor: "rgba(200,192,192,0.2)",
               borderColor: "rgba(75,192,192,1)",
             },
           ],
@@ -80,7 +82,7 @@ export const LineGraph = (props) => {
   };
   if (props.show) {
     return (
-      <div className="App">
+      <div className="chart-container">
         <Line data={data} options={options} />
       </div>
     );

@@ -4,9 +4,13 @@ import {
   pullRuns,
   pullSongs,
   parseSongsAndRun,
+  deleteAccount,
 } from "../../Functions/MainApiCalls";
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 // import { run, songs } from "../../TestData";
 import { useHistory } from "react-router-dom";
+import { firebaseApp } from "../../firebase/firebase";
 const Dashboard = (props) => {
   const history = useHistory();
   if (props.currentUser == null) {
@@ -31,9 +35,14 @@ const Dashboard = (props) => {
     let songs = await pullSongs(props.userData.spotifyRefreshToken);
     console.log(songs);
     try {
-      await parseSongsAndRun(songs, map, props.currentUser.uid);
-
-      props.toast.success("🦄 run fetched successfully!");
+      let x = await parseSongsAndRun(songs, map, props.currentUser.uid);
+      if (x === -255) {
+        props.toast.info(
+          "Most recent run not fetched because we already have it 😎"
+        );
+      } else {
+        props.toast.success("🦄 run fetched successfully!");
+      }
     } catch (error) {
       console.log(error);
       props.toast.error("😢 there has been an error");
@@ -82,6 +91,38 @@ const Dashboard = (props) => {
       >
         Delete runs
       </button>
+      <button
+        onClick={() => {
+          confirmAlert({
+            title: "Confirm to submit",
+            message:
+              "Are you sure to do this? Your account and all your data will be deleted, this cannot be undone.",
+            buttons: [
+              {
+                label: "Confirm Deletion",
+                onClick: () =>
+                  deleteAccount(
+                    firebaseApp.auth().currentUser.uid,
+                    props.toast
+                  ),
+              },
+              {
+                label: "Cancel",
+              },
+            ],
+          });
+        }}
+      >
+        Delete account
+      </button>
+      {/* <button
+        onClick={async () => {
+          let x = await pullSongs(props.userData.spotifyRefreshToken);
+          console.log(x);
+        }}
+      >
+        test pull
+      </button> */}
       {/* <button
         onClick={async () => {
           console.log(

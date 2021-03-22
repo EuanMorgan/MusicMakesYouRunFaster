@@ -10,7 +10,8 @@ import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl";
 import { retrieveRuns } from "../Functions/RetrieveRuns";
 import { deleteRun } from "../Functions/MainApiCalls";
-
+import { confirmAlert } from "react-confirm-alert"; // Import
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 const M = ReactMapboxGl({
   //TODO: Hide api keys
   accessToken: process.env.REACT_APP_MAPBOX_KEY,
@@ -18,13 +19,11 @@ const M = ReactMapboxGl({
 
 const DeleteRun = (props) => {
   const [runIdList, setRunIdList] = useState();
-  const [runList, setRunList] = useState();
+
   const [run, setRun] = useState();
-  let spotifyToken;
+
   const setStates = (vals) => {
     setRunIdList(vals[0]);
-    setRunList(vals[1]);
-    spotifyToken = vals[2];
     let runData = vals[1][vals[1].length - 1];
     console.log(runData);
     setRun(runData);
@@ -43,10 +42,6 @@ const DeleteRun = (props) => {
     start();
   }, [props.userData]);
 
-  const selectRunFromMenu = (id) => {
-    setRun(runList[id]);
-  };
-
   if (run == undefined) {
     return <h1>Map</h1>;
   }
@@ -62,7 +57,19 @@ const DeleteRun = (props) => {
       {runIdList.map((run) => (
         <p
           onClick={() => {
-            attemptDelete(run);
+            confirmAlert({
+              title: "Confirm to submit",
+              message: "Are you sure to do this.",
+              buttons: [
+                {
+                  label: "Yes",
+                  onClick: () => attemptDelete(run),
+                },
+                {
+                  label: "No",
+                },
+              ],
+            });
           }}
           style={{ background: "#282828", cursor: "pointer" }}
         >
