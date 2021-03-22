@@ -4,6 +4,8 @@ import "./continueSetup.css";
 import { getCodeFromURL, isProduction } from "../../Common/CommonFunctions";
 import { firebaseApp, db } from "../../firebase/firebase";
 import { useHistory } from "react-router-dom";
+import { deleteAccount } from "../../Functions/MainApiCalls";
+import { confirmAlert } from "react-confirm-alert";
 const ContinueSetup = (props) => {
   const history = useHistory();
 
@@ -82,6 +84,30 @@ const ContinueSetup = (props) => {
         }}
       >
         Authorise Spotify API
+      </button>
+      <button
+        onClick={() => {
+          confirmAlert({
+            title: "Confirm to submit",
+            message:
+              "Are you sure to do this? Your account and all your data will be deleted, this cannot be undone.",
+            buttons: [
+              {
+                label: "Confirm Deletion",
+                onClick: () =>
+                  deleteAccount(
+                    firebaseApp.auth().currentUser.uid,
+                    props.toast
+                  ),
+              },
+              {
+                label: "Cancel",
+              },
+            ],
+          });
+        }}
+      >
+        Delete account
       </button>
     </div>
   );
