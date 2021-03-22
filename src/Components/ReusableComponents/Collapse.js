@@ -43,18 +43,7 @@ export function CollapseMenu(props) {
           </p>
         </div>
         <Collapse isOpened={isButtonCollapseOpen} className="collapseMenu">
-          <ul
-            style={{
-              textAlign: "left",
-              listStylePosition: "inside",
-              fontSize: "2em",
-              background: "#282828",
-              display: "inline-block",
-              margin: "auto",
-              padding: "1em",
-              borderRadius: "1em",
-            }}
-          >
+          <ul className="songs-ul">
             {console.log(props.data)}
             {props.data.speed_sentences.map((d) => (
               <li>{d}</li>
