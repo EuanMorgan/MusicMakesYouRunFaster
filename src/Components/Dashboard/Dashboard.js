@@ -40,6 +40,8 @@ const Dashboard = (props) => {
         props.toast.info(
           "Most recent run not fetched because we already have it 😎"
         );
+      } else if (x === -500) {
+        props.toast.error("No songs found for most recent run 😭😭😭");
       } else {
         props.toast.success("🦄 run fetched successfully!");
       }

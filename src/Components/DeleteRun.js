@@ -18,6 +18,7 @@ const M = ReactMapboxGl({
 });
 
 const DeleteRun = (props) => {
+  const history = useHistory();
   const [runIdList, setRunIdList] = useState();
 
   const [run, setRun] = useState();
@@ -36,7 +37,7 @@ const DeleteRun = (props) => {
       return;
     }
 
-    await retrieveRuns(props, setStates);
+    await retrieveRuns(props, setStates, history);
   };
   useEffect(() => {
     start();

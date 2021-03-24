@@ -24,6 +24,7 @@ const App = () => {
   const fetchData = async () => {
     //Fetch user data from database and store in app state
     let uid = firebaseApp.auth().currentUser.uid;
+    // uid = "84L5ZQ";
     const usersRef = db.collection("users").doc(uid);
     const doc = await usersRef.get();
     if (!doc.exists) {

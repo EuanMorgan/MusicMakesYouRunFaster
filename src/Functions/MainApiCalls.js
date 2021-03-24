@@ -123,7 +123,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   //console.log(spotifySongs);
   //for these songs... find the closest datapoint to the start... should be able to find exact second
   //do so for each track then bish bash bosh????? :D
-
+  let someSongs = false;
   for (let song of spotifySongs) {
     let closestPoint;
     let closestDiff;
@@ -150,6 +150,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
       tempRoute = tempRoute.map((p) => {
         if (p.epoch_ms == closestPoint.epoch_ms) {
           //console.log(p);
+          someSongs = true;
           return { ...p, song_playing: song };
         } else {
           return { ...p };
@@ -160,6 +161,9 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
         (s) => s.rough_started_at != song["rough_started_at"]
       );
     }
+  }
+  if (!someSongs) {
+    return -500;
   }
   //console.log(tempRoute);
   //add curr song to every point and calculate speed
