@@ -18,6 +18,7 @@ const M = ReactMapboxGl({
 });
 
 const Results = (props) => {
+  const history = useHistory();
   const [runIdList, setRunIdList] = useState();
   const [runList, setRunList] = useState();
   const [run, setRun] = useState();
@@ -38,7 +39,7 @@ const Results = (props) => {
       return;
     }
 
-    await retrieveRuns(props, setStates);
+    await retrieveRuns(props, setStates, history);
   }, [props.userData]);
 
   const selectRunFromMenu = (id) => {

@@ -1,8 +1,7 @@
 import { isProduction } from "../Common/CommonFunctions";
 import { firebaseApp, db } from "../firebase/firebase";
-import { useHistory } from "react-router-dom";
-const history = { useHistory };
-export const retrieveRuns = async (props, setStates) => {
+
+export const retrieveRuns = async (props, setStates, history) => {
   props.setLoading(true);
 
   let spotifyToken;

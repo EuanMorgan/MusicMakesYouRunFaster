@@ -164,7 +164,7 @@ const RunsMap = (props) => {
       setWindowWidth(window.innerWidth);
     });
 
-    await retrieveRuns(props, setStates);
+    await retrieveRuns(props, setStates, history);
 
     replayCounter = 0;
   }, [props.userData]);
