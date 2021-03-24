@@ -185,6 +185,22 @@ button,
   }
 }
 
+.chart-container {
+  font-size: 2rem;
+  background: #282828;
+  border-radius: 1rem;
+  margin: auto;
+  width: 70%;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+@media (max-width: 800px) {
+  .chart-container {
+    font-size: 1.3rem;
+    width: 90%;
+  }
+}
+
 /*       listStylePosition: "inside",
               fontSize: "2em",
               background: "#282828",
