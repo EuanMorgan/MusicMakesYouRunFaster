@@ -90,14 +90,16 @@ const ContinueSetup = (props) => {
           confirmAlert({
             title: "Confirm to submit",
             message:
-              "Are you sure to do this? Your account and all your data will be deleted, this cannot be undone.",
+              "Are you sure to do this? Your account and all your data will be deleted, this cannot be undone. We will revoke Fitbit access for you automatically.",
             buttons: [
               {
                 label: "Confirm Deletion",
                 onClick: () =>
                   deleteAccount(
                     firebaseApp.auth().currentUser.uid,
-                    props.toast
+                    props.toast,
+                    props.userData.fitbitRefreshToken,
+                    true
                   ),
               },
               {

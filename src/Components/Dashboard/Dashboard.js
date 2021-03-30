@@ -30,6 +30,13 @@ const Dashboard = (props) => {
     //incase the refresh token has changed...
     await props.fetchData(props.currentUser.uid);
     let map = await pullRuns(props.userData.fitbitRefreshToken);
+    if (map === -1) {
+      props.toast.error(
+        "Unfortunately, we were unable to find a recent run 😭"
+      );
+      props.setLoading(false);
+      return;
+    }
     console.log(map);
 
     let songs = await pullSongs(props.userData.spotifyRefreshToken);
@@ -98,14 +105,16 @@ const Dashboard = (props) => {
           confirmAlert({
             title: "Confirm to submit",
             message:
-              "Are you sure to do this? Your account and all your data will be deleted, this cannot be undone.",
+              "Are you sure to do this? Your account and all your data will be deleted, this cannot be undone. NOTE: After deletion you will be redirected to Spotify, you will need to click 'revoke access' on Music Makes You Run Faster here because Spotify provides no way for us to do this for you. We will revoke Fitbit access for you automatically.",
             buttons: [
               {
                 label: "Confirm Deletion",
                 onClick: () =>
                   deleteAccount(
                     firebaseApp.auth().currentUser.uid,
-                    props.toast
+                    props.toast,
+                    props.userData.fitbitRefreshToken,
+                    false
                   ),
               },
               {
