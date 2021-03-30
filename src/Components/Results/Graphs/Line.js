@@ -10,7 +10,7 @@ export const LineGraph = (props) => {
     labels:
       props.labels == undefined
         ? ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
-        : props.labels,
+        : props.labels.filter((d, index) => (index + 1) % 2),
     datasets:
       props.listeningData == undefined || props.listeningData == undefined
         ? [
@@ -33,7 +33,7 @@ export const LineGraph = (props) => {
               label: props.isHeartrate
                 ? "Heartrate (listening)"
                 : "Speed (listening)",
-              data: props.listeningData,
+              data: props.listeningData.filter((d, index) => (index + 1) % 2),
               fill: true,
               borderColor: "#742774",
               backgroundColor: "rgba(75,192,192,0.2)",
@@ -42,7 +42,9 @@ export const LineGraph = (props) => {
               label: props.isHeartrate
                 ? "Heartrate (not listening)"
                 : "Speed (not listening)",
-              data: props.notListeningData,
+              data: props.notListeningData.filter(
+                (d, index) => (index + 1) % 2
+              ),
               fill: true,
               backgroundColor: "rgba(200,192,192,0.2)",
               borderColor: "rgba(75,192,192,1)",
