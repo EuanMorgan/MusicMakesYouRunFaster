@@ -398,14 +398,38 @@ export const sort = (property) => {
   };
 };
 
-export const deleteAccount = async (uid, toast) => {
+export const deleteAccount = async (uid, toast, refresh_token, noSpotify) => {
   try {
     let ref = db.collection("users").doc(uid);
     deleteCollection(uid);
     if ((await ref.get()).exists) {
-      ref.delete().then(() => {
-        firebaseApp.auth().signOut();
+      ref.delete().then(async () => {
+        let uri = isProduction()
+          ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/fitbit/revoke"
+          : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/fitbit/revoke";
+        console.log(refresh_token);
+        fetch(uri, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ refresh_token: refresh_token }),
+        });
         toast.success("Account deleted successfully, bon voyage! 👋");
+        if (!noSpotify) {
+          toast(
+            "You will be redirected to Spotify in 5 seconds. Please revoke access for Music Makes You Run Faster there"
+          );
+        }
+
+        firebaseApp.auth().signOut();
+        if (!noSpotify) {
+          setTimeout(
+            () =>
+              window.open("https://www.spotify.com/account/apps/", "_blank"),
+            5000
+          );
+        }
       });
     }
   } catch (error) {

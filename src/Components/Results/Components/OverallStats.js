@@ -15,7 +15,9 @@ const OverallStats = (props) => {
           </p>
           <p>
             <span className="data-list-title">You travelled:</span>{" "}
-            {props.run.run_map[props.run.run_map.length - 2].distance_meters}{" "}
+            {props.run.run_map[
+              props.run.run_map.length - 2
+            ].distance_meters.toFixed(2)}{" "}
             metres
           </p>
           <p>

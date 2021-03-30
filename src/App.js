@@ -24,9 +24,16 @@ const App = () => {
   const fetchData = async () => {
     //Fetch user data from database and store in app state
     let uid = firebaseApp.auth().currentUser.uid;
-    // uid = "84L5ZQ";
+
     const usersRef = db.collection("users").doc(uid);
-    const doc = await usersRef.get();
+    let doc;
+    try {
+      doc = await usersRef.get();
+    } catch (error) {
+      toast.error("YOU DO NOT HAVE PERMSISSION TO ACCESS THIS 😲");
+      return;
+    }
+
     if (!doc.exists) {
       toast.error("User data error: user not found");
       firebaseApp.auth().signOut();
