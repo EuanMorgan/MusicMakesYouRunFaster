@@ -53,25 +53,28 @@ const FastestSongs = (props) => {
 
     let heartrates = [];
     let not_listening_heartrates = [];
+    let listening_map = [];
     props.run.run_map.forEach((p) => {
       if (!p.song_playing) {
+        // NOT LISTENING
         not_listening_data.push(p.pace);
         data.push(null);
         not_listening_heartrates.push(p.heart_rate_bpm);
         heartrates.push(null);
         return;
       }
-      if (typeof p.song_playing == "string" && p.song_playing == songid) {
+      if (
+        (typeof p.song_playing == "string" && p.song_playing == songid) ||
+        p.song_playing.id == songid
+      ) {
+        // listening
         data.push(p.pace);
         not_listening_data.push(null);
         heartrates.push(p.heart_rate_bpm);
         not_listening_heartrates.push(null);
-      } else if (p.song_playing.id == songid) {
-        data.push(p.pace);
-        not_listening_data.push(null);
-        heartrates.push(p.heart_rate_bpm);
-        not_listening_heartrates.push(null);
+        listening_map.push([p.longitude, p.latitude]);
       } else {
+        // not listening
         not_listening_data.push(p.pace);
         data.push(null);
         not_listening_heartrates.push(p.heart_rate_bpm);
@@ -79,7 +82,13 @@ const FastestSongs = (props) => {
       }
     });
 
-    return [data, not_listening_data, heartrates, not_listening_heartrates];
+    return [
+      data,
+      not_listening_data,
+      heartrates,
+      not_listening_heartrates,
+      listening_map,
+    ];
   };
 
   const formatText = (id) => {
@@ -122,6 +131,7 @@ const FastestSongs = (props) => {
           notListeningData,
           heartrates,
           notListeningHeartrates,
+          listening_map,
         ] = retrieveDataForSong(id);
 
         return (
@@ -137,6 +147,7 @@ const FastestSongs = (props) => {
               audioFeatures={
                 props.run.songs.filter((s) => s.id === id)[0]["audio_features"]
               }
+              listeningMap={listening_map}
             />
           </div>
         );

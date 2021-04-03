@@ -7,6 +7,14 @@ import { RadarChart } from "../Results/Graphs/Radar";
 import { useHistory } from "react-router-dom";
 import { keys, mode } from "../../Common/Data";
 import "./collapse.css";
+import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import mapboxgl from "mapbox-gl/dist/mapbox-gl";
+// mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
+const M = ReactMapboxGl({
+  //TODO: Hide api keys
+  accessToken: process.env.REACT_APP_MAPBOX_KEY,
+});
 export function CollapseMenu(props) {
   const history = useHistory();
   const accessibilityIds = {
@@ -24,6 +32,9 @@ export function CollapseMenu(props) {
   if (props.audioFeatures) {
     x = props.audioFeatures[0];
   }
+
+  console.log(props.listeningMap);
+
   return (
     <div className="accessible" style={{ color: "white" }}>
       <div className="collapseMenu">
@@ -45,9 +56,11 @@ export function CollapseMenu(props) {
         <Collapse isOpened={isButtonCollapseOpen} className="collapseMenu">
           <ul className="songs-ul">
             {console.log(props.data)}
+
             {props.data.speed_sentences.map((d) => (
               <li>{d}</li>
             ))}
+
             <LineGraph
               listeningData={props.listeningData}
               labels={props.labels}
@@ -65,6 +78,46 @@ export function CollapseMenu(props) {
               show={isButtonCollapseOpen}
               isHeartrate={true}
             />
+            <p>Map whilst listening to song</p>
+            <M
+              style="mapbox://styles/mapbox/streets-v9"
+              containerStyle={{
+                height: "25rem",
+                textAlign: "center",
+                maxWidth: "50rem",
+                display: "flex",
+                margin: "auto",
+              }}
+              center={[
+                props.listeningMap[
+                  Math.ceil(props.listeningMap.length / 1.4)
+                ][0],
+                props.listeningMap[
+                  Math.ceil(props.listeningMap.length / 1.4)
+                ][1],
+              ]}
+              zoom={[18]}
+            >
+              <Layer
+                circle="circle"
+                type="circle"
+                paint={{
+                  "circle-color": "#ff5200",
+                  "circle-stroke-width": 1,
+                  "circle-stroke-color": "#fff",
+                  "circle-stroke-opacity": 1,
+                }}
+              >
+                {props.listeningMap.map((p) => (
+                  <Feature
+                    key={p.seq}
+                    coordinates={[p[0], p[1]]}
+                    style={{ cursor: "default" }}
+                  />
+                ))}
+              </Layer>
+            </M>
+
             <p>Advanced song analysis</p>
 
             <div className="data-list">
