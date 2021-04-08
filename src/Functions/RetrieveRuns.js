@@ -1,11 +1,11 @@
 import { isProduction } from "../Common/CommonFunctions";
-import { firebaseApp, db } from "../firebase/firebase";
+import { db } from "../firebase/firebase";
 
-export const retrieveRuns = async (props, setStates, history) => {
+export const retrieveRuns = async (props, userData, setStates, history) => {
   props.setLoading(true);
 
   let spotifyToken;
-  console.log(props.userData.spotifyRefreshToken);
+  console.log(userData.spotifyRefreshToken);
   let uri = isProduction()
     ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/spotify/refresh"
     : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/spotify/refresh";
@@ -15,7 +15,7 @@ export const retrieveRuns = async (props, setStates, history) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      refresh_token: props.userData.spotifyRefreshToken,
+      refresh_token: userData.spotifyRefreshToken,
     }),
   });
   spotifyToken = await spotifyToken.text();
@@ -23,7 +23,7 @@ export const retrieveRuns = async (props, setStates, history) => {
 
   let runRef = await db
     .collection("users")
-    .doc(props.userData.fitbitId)
+    .doc(userData.fitbitId)
     .collection("runs")
     .get();
   console.log(runRef.docs);

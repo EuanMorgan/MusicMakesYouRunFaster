@@ -1,204 +1,14 @@
-// import React, { useContext } from "react";
-// import { AuthContext } from "../Auth";
-// import Navbar from "reactjs-navbar";
-// //import logo from "./logo.png";
-// import Loader from "react-loader-spinner";
-// import {
-//   faCogs,
-//   faAnchor,
-//   faDizzy,
-//   faAdjust,
-//   faBell,
-//   faGhost,
-//   faFan,
-//   faCarSide,
-//   faJedi,
-//   faLaughBeam,
-//   faKey,
-//   faWater,
-//   faCheese,
-//   faHome,
-//   faQuestion,
-//   faSignOutAlt,
-//   faSignInAlt,
-// } from "@fortawesome/free-solid-svg-icons";
-// import { firebaseApp } from "../../firebase/firebase";
-// import "reactjs-navbar/dist/index.css";
-// import { isProduction } from "../../Common/CommonFunctions";
-
-// import { useHistory } from "react-router-dom";
-// import logo from "../../Assets/navlogo.png";
-// import { mdiProgressUpload } from "@mdi/js";
-// const Nav = (props) => {
-//   const { currentUser } = useContext(AuthContext);
-//   const history = useHistory();
-
-//   return (
-//     <Navbar
-//       loader={<Loader type="Puff" color="#D85B5B" height={25} width={25} />}
-//       helpCallback={() => {
-//         props.toast("I need help too... and a coffee ☕🥱");
-//       }}
-//       logo={logo}
-//       menuItems={[
-//         {
-//           title: "Home",
-//           icon: faHome,
-//           isAuth: true,
-//           onClick: () => {
-//             history.push("/");
-//           },
-//         },
-//         {
-//           title: "FAQ",
-//           icon: faQuestion,
-//           isAuth: true,
-//           onClick: () => {
-//             history.push("/faq");
-//           },
-//         },
-//         {
-//           title: "Settings",
-//           icon: faCogs,
-//           isAuth: true,
-//           subItems: [
-//             currentUser
-//               ? {
-//                   title: "Logout",
-//                   icon: faSignOutAlt,
-//                   isAuth: true,
-//                   onClick: () => {
-//                     // What you want to do...
-//                     firebaseApp
-//                       .auth()
-//                       .signOut()
-//                       .then(() => {
-//                         setTimeout(() => {
-//                           history.push("/");
-//                         }, 200);
-//                       });
-//                   },
-//                 }
-//               : {
-//                   title: "Login",
-//                   icon: faSignInAlt,
-//                   isAuth: true,
-//                   onClick: () => {
-//                     let uri = isProduction()
-//                       ? "https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22C8M7&redirect_uri=https://musicmakesyourunfaster.firebaseapp.com/fitbit&scope=activity%20heartrate%20location%20profile"
-//                       : "https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22C8M7&redirect_uri=http://localhost:3000/fitbit&scope=activity%20heartrate%20location%20profile";
-//                     console.log(uri);
-//                     window.open(uri, "_current");
-//                   },
-//                 },
-//             {
-//               title: "Subitem 2",
-//               icon: faDizzy,
-//               isAuth: true,
-//               subItems: [
-//                 { title: "Subitem 2-1", icon: faAdjust, isAuth: true },
-//                 {
-//                   title: "Subitem 2-2",
-//                   icon: faBell,
-//                   isAuth: true,
-//                   subItems: [
-//                     {
-//                       title: "Subitem 2-2-1",
-//                       icon: faGhost,
-//                       isAuth: true,
-//                       subItems: [
-//                         {
-//                           title: "Subitem 2-2-2-1",
-//                           icon: faFan,
-//                           isAuth: true,
-//                         },
-//                         {
-//                           title: "Subitem 2-2-2-2",
-//                           icon: faCarSide,
-//                           isAuth: true,
-//                         },
-//                         {
-//                           title: "Subitem 2-2-2-3",
-//                           icon: faJedi,
-//                           isAuth: true,
-//                         },
-//                         {
-//                           title: "Subitem 2-2-2-4",
-//                           icon: faLaughBeam,
-//                           isAuth: true,
-//                         },
-//                       ],
-//                     },
-//                     {
-//                       title: "Subitem 2-2-2",
-//                       icon: faKey,
-//                       isAuth: true,
-//                     },
-//                   ],
-//                 },
-//                 {
-//                   title: "Make request",
-//                   icon: faCheese,
-//                   isAuth: true,
-//                   onClick: () => {
-//                     // What you want to do...
-//                     this.setState({ isLoading: true }, () =>
-//                       setTimeout(() => {
-//                         this.setState({ isLoading: false });
-//                       }, 3000)
-//                     );
-//                   },
-//                 },
-//               ],
-//             },
-//             {
-//               title: "Subitem 3",
-//               icon: faWater,
-//               isAuth: () => {
-//                 // Claim authorization logic...
-//                 return false;
-//               },
-//             },
-//           ],
-//         },
-//       ]}
-//     />
-//   );
-// };
-
-// export default Nav;
-
-import { AuthContext } from "../Auth";
-import {
-  faCogs,
-  faAnchor,
-  faDizzy,
-  faAdjust,
-  faBell,
-  faGhost,
-  faFan,
-  faCarSide,
-  faJedi,
-  faLaughBeam,
-  faKey,
-  faWater,
-  faCheese,
-  faHome,
-  faQuestion,
-  faSignOutAlt,
-  faSignInAlt,
-} from "@fortawesome/free-solid-svg-icons";
-import { firebaseApp } from "../../firebase/firebase";
+import { useAuth } from "../../Contexts/Auth";
 import { isProduction } from "../../Common/CommonFunctions";
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLocation, useHistory } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-const Nav = () => {
-  const { currentUser } = useContext(AuthContext);
+import { API_AUTH } from "../../Constants/URLs";
+const Nav = (props) => {
+  const { currentUser, signOut } = useAuth();
   const { pathname } = useLocation();
   const [width, setWidth] = useState(window.innerWidth);
   const history = useHistory();
@@ -240,21 +50,18 @@ const Nav = () => {
         </li>
         <li>
           <Link
-            onClick={() => {
+            onClick={async () => {
               if (currentUser) {
-                firebaseApp
-                  .auth()
-                  .signOut()
-                  .then(() => {
-                    setTimeout(() => {
-                      history.push("/");
-                    }, 200);
-                  });
+                try {
+                  await signOut();
+                  history.push("/");
+                  props.toast("Bye bye 👋");
+                } catch (error) {
+                  props.toast("Error signing out");
+                }
               } else {
-                let uri = isProduction()
-                  ? "https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22C8M7&redirect_uri=https://musicmakesyourunfaster.firebaseapp.com/fitbit&scope=activity%20heartrate%20location%20profile"
-                  : "https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22C8M7&redirect_uri=http://localhost:3000/fitbit&scope=activity%20heartrate%20location%20profile";
-                console.log(uri);
+                let uri = isProduction() ? API_AUTH.PRODUCTION : API_AUTH.DEBUG;
+
                 window.open(uri, "_current");
               }
             }}
@@ -262,14 +69,6 @@ const Nav = () => {
             {currentUser ? "Logout" : "Login"}
           </Link>
         </li>
-        {/* <li>
-          <Link to="/time">Timer</Link>
-          <Line
-            transition={{ duration: 0.75 }}
-            initial={{ width: "0%" }}
-            animate={{ width: pathname === "/time" ? "50%" : "0%" }}
-          />
-        </li> */}
       </ul>
     </StyledNav>
   );
