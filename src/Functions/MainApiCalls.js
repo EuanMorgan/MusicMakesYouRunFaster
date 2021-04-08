@@ -1,7 +1,6 @@
-import { mdiProgressUpload } from "@mdi/js";
 import { isProduction } from "../Common/CommonFunctions";
-import { db, firebaseApp } from "../firebase/firebase";
-let tcx = require("tcx-js");
+import { db } from "../firebase/firebase";
+import { useAuth } from "../Contexts/Auth";
 
 export const pullRuns = async (refreshToken) => {
   let uri = isProduction()
@@ -162,9 +161,9 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
       );
     }
   }
-  if (!someSongs) {
-    return -500;
-  }
+  // if (!someSongs) {
+  //   return -500;
+  // }
   //console.log(tempRoute);
   //add curr song to every point and calculate speed
   let currSong;
@@ -398,7 +397,9 @@ export const sort = (property) => {
   };
 };
 
-export const deleteAccount = async (uid, toast, refresh_token, noSpotify) => {
+export const DeleteAccount = async (uid, toast, refresh_token, noSpotify) => {
+  const { signOut } = useAuth();
+
   try {
     let ref = db.collection("users").doc(uid);
     deleteCollection(uid);
@@ -422,7 +423,7 @@ export const deleteAccount = async (uid, toast, refresh_token, noSpotify) => {
           );
         }
 
-        firebaseApp.auth().signOut();
+        await signOut();
         if (!noSpotify) {
           setTimeout(
             () =>

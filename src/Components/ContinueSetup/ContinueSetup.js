@@ -4,7 +4,7 @@ import "./continueSetup.css";
 import { getCodeFromURL, isProduction } from "../../Common/CommonFunctions";
 import { firebaseApp, db } from "../../firebase/firebase";
 import { useHistory } from "react-router-dom";
-import { deleteAccount } from "../../Functions/MainApiCalls";
+import { DeleteAccount } from "../../Functions/MainApiCalls";
 import { confirmAlert } from "react-confirm-alert";
 import { useAuth } from "../../Contexts/Auth";
 const ContinueSetup = (props) => {
@@ -84,7 +84,7 @@ const ContinueSetup = (props) => {
               {
                 label: "Confirm Deletion",
                 onClick: () =>
-                  deleteAccount(
+                  DeleteAccount(
                     firebaseApp.auth().currentUser.uid,
                     props.toast,
                     userData.fitbitRefreshToken,

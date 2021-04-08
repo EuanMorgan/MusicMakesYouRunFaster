@@ -4,7 +4,7 @@ import {
   pullRuns,
   pullSongs,
   parseSongsAndRun,
-  deleteAccount,
+  DeleteAccount,
 } from "../../Functions/MainApiCalls";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
@@ -112,7 +112,7 @@ const Dashboard = (props) => {
               {
                 label: "Confirm Deletion",
                 onClick: () =>
-                  deleteAccount(
+                  DeleteAccount(
                     firebaseApp.auth().currentUser.uid,
                     props.toast,
                     userData.fitbitRefreshToken,
