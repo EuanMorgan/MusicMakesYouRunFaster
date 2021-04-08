@@ -1,6 +1,9 @@
 import React from "react";
 
 const Welcome = (props) => {
+  if (!props.currentData) {
+    return <div></div>;
+  }
   return (
     <div>
       <img
