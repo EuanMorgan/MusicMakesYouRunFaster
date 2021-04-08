@@ -1,6 +1,6 @@
 import { isProduction } from "../Common/CommonFunctions";
-import { db } from "../firebase/firebase";
-import { useAuth } from "../Contexts/Auth";
+import app, { db } from "../firebase/firebase";
+// import { useAuth } from "../Contexts/Auth";
 
 export const pullRuns = async (refreshToken) => {
   let uri = isProduction()
@@ -161,9 +161,9 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
       );
     }
   }
-  // if (!someSongs) {
-  //   return -500;
-  // }
+  if (!someSongs) {
+    return -500;
+  }
   //console.log(tempRoute);
   //add curr song to every point and calculate speed
   let currSong;
@@ -398,8 +398,6 @@ export const sort = (property) => {
 };
 
 export const DeleteAccount = async (uid, toast, refresh_token, noSpotify) => {
-  const { signOut } = useAuth();
-
   try {
     let ref = db.collection("users").doc(uid);
     deleteCollection(uid);
@@ -423,7 +421,7 @@ export const DeleteAccount = async (uid, toast, refresh_token, noSpotify) => {
           );
         }
 
-        await signOut();
+        await app.auth().signOut();
         if (!noSpotify) {
           setTimeout(
             () =>
