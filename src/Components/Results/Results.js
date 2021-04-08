@@ -11,6 +11,7 @@ import mapboxgl from "mapbox-gl/dist/mapbox-gl";
 import { retrieveRuns } from "../../Functions/RetrieveRuns";
 import { RunStats } from "./RunStats";
 import { Overall } from "./Overall";
+import { useAuth } from "../../Contexts/Auth";
 
 const M = ReactMapboxGl({
   //TODO: Hide api keys
@@ -18,6 +19,7 @@ const M = ReactMapboxGl({
 });
 
 const Results = (props) => {
+  const { userData, fetchUserData, currentUser } = useAuth();
   const history = useHistory();
   const [runIdList, setRunIdList] = useState();
   const [runList, setRunList] = useState();
@@ -33,13 +35,13 @@ const Results = (props) => {
   };
 
   useEffect(async () => {
-    if (props.userData == null) {
-      await props.fetchData(firebaseApp.auth().currentUser.uid);
+    if (userData == null) {
+      await fetchUserData(currentUser.uid);
 
       return;
     }
 
-    await retrieveRuns(props, setStates, history);
+    await retrieveRuns(props, userData, setStates, history);
   }, [props.userData]);
 
   const selectRunFromMenu = (id) => {

@@ -4,20 +4,13 @@ import "./continueSetup.css";
 import { getCodeFromURL, isProduction } from "../../Common/CommonFunctions";
 import { firebaseApp, db } from "../../firebase/firebase";
 import { useHistory } from "react-router-dom";
-import { deleteAccount } from "../../Functions/MainApiCalls";
+import { DeleteAccount } from "../../Functions/MainApiCalls";
 import { confirmAlert } from "react-confirm-alert";
+import { useAuth } from "../../Contexts/Auth";
 const ContinueSetup = (props) => {
   const history = useHistory();
+  const { userData, fetchUserData, currentUser } = useAuth();
 
-  console.log(props.currentUser);
-
-  const fetchUserData = async () => {
-    console.log("Trying it", props.currentUser);
-    if (!props.currentUser) return;
-    console.log("Attempting to retrieve user data...");
-    console.log(props);
-    props.fetchData(props.currentUser.uid);
-  };
   useEffect(async () => {
     let code = getCodeFromURL();
     if (code != null) {
@@ -25,9 +18,8 @@ const ContinueSetup = (props) => {
     }
   }, []);
 
-  if (props.userData) {
-    //may need changed
-    if (props.userData.spotifyRefreshToken != "") {
+  if (userData) {
+    if (userData.spotifyRefreshToken != "") {
       history.push("/dashboard");
     }
   }
@@ -42,7 +34,7 @@ const ContinueSetup = (props) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ code: code, userId: props.currentUser.uid }),
+      body: JSON.stringify({ code: code, userId: currentUser.uid }),
     });
     try {
       let x = await response.json();
@@ -57,18 +49,15 @@ const ContinueSetup = (props) => {
 
     props.toast.success("Spotify linked successfully! 🥳🎉");
 
-    props.fetchData(props.currentUser.uid);
+    fetchUserData(currentUser.uid);
   };
-  if (props.currentUser == null) {
+  if (currentUser == null) {
     return <h1>Hi There! Please sign in</h1>;
   }
-  if (props.userData == null) {
-    fetchUserData();
-    return <h1>Fetching user data...</h1>;
-  }
+
   return (
     <div className={"ContinueSetup"}>
-      <Welcome currentData={props.userData} />
+      <Welcome currentData={userData} />
       <p>
         In order to continue, please click the button to connect your music
         streaming service account.
@@ -95,10 +84,10 @@ const ContinueSetup = (props) => {
               {
                 label: "Confirm Deletion",
                 onClick: () =>
-                  deleteAccount(
+                  DeleteAccount(
                     firebaseApp.auth().currentUser.uid,
                     props.toast,
-                    props.userData.fitbitRefreshToken,
+                    userData.fitbitRefreshToken,
                     true
                   ),
               },

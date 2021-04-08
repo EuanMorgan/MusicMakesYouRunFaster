@@ -4,32 +4,34 @@ import {
   pullRuns,
   pullSongs,
   parseSongsAndRun,
-  deleteAccount,
+  DeleteAccount,
 } from "../../Functions/MainApiCalls";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 // import { run, songs } from "../../TestData";
 import { useHistory } from "react-router-dom";
+import { useAuth } from "../../Contexts/Auth";
 import { firebaseApp } from "../../firebase/firebase";
 const Dashboard = (props) => {
   const history = useHistory();
-  if (props.currentUser == null) {
+  const { currentUser, fetchUserData, userData } = useAuth();
+  if (currentUser == null) {
     return <h1>Hi There! Please sign in</h1>;
   }
-  if (props.userData == null) {
-    props.fetchData(props.currentUser.uid);
+  if (userData == null) {
+    fetchUserData(currentUser.uid);
     return <h1>fetching...</h1>;
   }
 
-  if (props.userData.spotifyRefreshToken == "") {
+  if (userData.spotifyRefreshToken == "") {
     history.push("/continue-setup");
   }
 
   const fetchRecentRun = async () => {
     props.setLoading(true);
     //incase the refresh token has changed...
-    await props.fetchData(props.currentUser.uid);
-    let map = await pullRuns(props.userData.fitbitRefreshToken);
+    await fetchUserData(currentUser.uid);
+    let map = await pullRuns(userData.fitbitRefreshToken);
     if (map === -1) {
       props.toast.error(
         "Unfortunately, we were unable to find a recent run 😭"
@@ -39,10 +41,10 @@ const Dashboard = (props) => {
     }
     console.log(map);
 
-    let songs = await pullSongs(props.userData.spotifyRefreshToken);
+    let songs = await pullSongs(userData.spotifyRefreshToken);
     console.log(songs);
     try {
-      let x = await parseSongsAndRun(songs, map, props.currentUser.uid);
+      let x = await parseSongsAndRun(songs, map, currentUser.uid);
       if (x === -255) {
         props.toast.info(
           "Most recent run not fetched because we already have it 😎"
@@ -61,7 +63,7 @@ const Dashboard = (props) => {
   };
   return (
     <div style={{ alignContent: "center", alignItems: "center" }}>
-      <Welcome currentData={props.userData} />
+      <Welcome currentData={userData} />
       <div className="dashboard-text">
         {" "}
         <p
@@ -110,10 +112,10 @@ const Dashboard = (props) => {
               {
                 label: "Confirm Deletion",
                 onClick: () =>
-                  deleteAccount(
+                  DeleteAccount(
                     firebaseApp.auth().currentUser.uid,
                     props.toast,
-                    props.userData.fitbitRefreshToken,
+                    userData.fitbitRefreshToken,
                     false
                   ),
               },

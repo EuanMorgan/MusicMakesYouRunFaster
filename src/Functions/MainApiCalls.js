@@ -1,7 +1,6 @@
-import { mdiProgressUpload } from "@mdi/js";
 import { isProduction } from "../Common/CommonFunctions";
-import { db, firebaseApp } from "../firebase/firebase";
-let tcx = require("tcx-js");
+import app, { db } from "../firebase/firebase";
+// import { useAuth } from "../Contexts/Auth";
 
 export const pullRuns = async (refreshToken) => {
   let uri = isProduction()
@@ -398,7 +397,7 @@ export const sort = (property) => {
   };
 };
 
-export const deleteAccount = async (uid, toast, refresh_token, noSpotify) => {
+export const DeleteAccount = async (uid, toast, refresh_token, noSpotify) => {
   try {
     let ref = db.collection("users").doc(uid);
     deleteCollection(uid);
@@ -422,7 +421,7 @@ export const deleteAccount = async (uid, toast, refresh_token, noSpotify) => {
           );
         }
 
-        firebaseApp.auth().signOut();
+        await app.auth().signOut();
         if (!noSpotify) {
           setTimeout(
             () =>

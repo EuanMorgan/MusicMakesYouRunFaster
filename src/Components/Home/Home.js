@@ -3,25 +3,22 @@ import React, { useContext, useEffect, useState } from "react";
 import Icon from "@mdi/react";
 import { mdiChevronDown } from "@mdi/js";
 import { scroller } from "react-scroll";
-import { firebaseApp, db } from "../../firebase/firebase";
+
 import "./Home.css";
 import "../../Styles/default-text.css";
 import { useHistory } from "react-router-dom";
 import { getCodeFromURL, isProduction } from "../../Common/CommonFunctions";
-import { AuthContext } from "../Auth";
+import { useAuth } from "../../Contexts/Auth";
+import { CODE_EXCHANGE } from "../../Constants/URLs";
+
 const Home = (props) => {
   const history = useHistory();
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser, signIn } = useAuth();
   if (currentUser) {
     console.log(currentUser);
     console.log("redirect from home");
     history.push("/dashboard");
   }
-
-  const fetchData = async () => {
-    await props.fetchData();
-  };
-
   const scrollToSection = (duration) => {
     scroller.scrollTo("Buttons", {
       duration: duration ? duration : 800,
@@ -33,16 +30,12 @@ const Home = (props) => {
     const newWindow = window.open(url, "_current");
     if (newWindow) newWindow.opener = null;
   };
-  const callApi = () => {};
-
   const getAccessToken = async () => {
     //Exchanges fitbit code for access token AND creates custom token for firebase auth
     props.setLoading(true);
-    console.log();
+
     let code = getCodeFromURL();
-    let uri = isProduction()
-      ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/fitbit/user-auth"
-      : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/fitbit/user-auth";
+    let uri = isProduction() ? CODE_EXCHANGE.PRODUCTION : CODE_EXCHANGE.DEBUG;
     const response = await fetch(uri, {
       method: "POST",
       headers: {
@@ -51,24 +44,14 @@ const Home = (props) => {
       body: JSON.stringify({ code: code }),
     });
     console.log(response);
-    let r = await response.text();
-    console.log(r);
+    let customToken = await response.text();
+    console.log(customToken);
     try {
-      firebaseApp
-        .auth()
-        .signInWithCustomToken(r)
-        .then(async (userCredential) => {
-          //signed in
-          console.log(userCredential);
-          console.log("Sign in successful, redirecting");
-          history.push("/continue-setup");
-        })
-        .catch((error) => {
-          props.toast.error("There has been an error signing in");
-          history.push("/");
-          return;
-          console.log(error.code, error.message);
-        });
+      await signIn(customToken);
+
+      //signed in
+      console.log("Sign in successful, redirecting");
+      history.push("/continue-setup");
       props.setLoading(false);
       props.toast("🌈 sign in successful! 🌈");
     } catch (error) {

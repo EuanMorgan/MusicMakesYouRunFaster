@@ -8,7 +8,7 @@ import Player from "../Player/Player";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl";
-
+import { useAuth } from "../../Contexts/Auth";
 import { retrieveRuns } from "../../Functions/RetrieveRuns";
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -37,7 +37,7 @@ const mode = ["Minor", "Major"];
 let runInterval;
 let spotifyToken;
 const RunsMap = (props) => {
-  console.log("aahhhhhhh", props);
+  const { currentUser, userData, fetchUserData } = useAuth();
   const history = useHistory();
   const [currentlyPlaying, setCurrentlyPlaying] = useState({
     name: "",
@@ -154,8 +154,8 @@ const RunsMap = (props) => {
   };
 
   useEffect(async () => {
-    if (props.userData == null) {
-      await props.fetchData(firebaseApp.auth().currentUser.uid);
+    if (userData == null) {
+      await fetchUserData(currentUser.uid);
 
       return;
     }
@@ -164,10 +164,10 @@ const RunsMap = (props) => {
       setWindowWidth(window.innerWidth);
     });
 
-    await retrieveRuns(props, setStates, history);
+    await retrieveRuns(props, userData, setStates, history);
 
     replayCounter = 0;
-  }, [props.userData]);
+  }, [userData]);
 
   if (run == undefined) {
     return <h1>Map</h1>;

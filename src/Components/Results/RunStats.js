@@ -5,6 +5,7 @@ import { Redirect, Link } from "react-router-dom";
 import OverallStats from "./Components/OverallStats";
 import FastestSongs from "./Components/FastestSongs";
 import AllSongs from "./Components/AllSongs";
+
 export const RunStats = (props) => {
   let bpm_order = [...props.run.run_map].sort(sort("heart_rate_bpm"));
   let speed_order = [...props.run.run_map].sort(sort("pace"));
