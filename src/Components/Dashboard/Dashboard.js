@@ -13,6 +13,7 @@ import { useHistory } from "react-router-dom";
 import { useAuth } from "../../Contexts/Auth";
 import { firebaseApp } from "../../firebase/firebase";
 const Dashboard = (props) => {
+  console.log(props);
   const history = useHistory();
   const { currentUser, fetchUserData, userData } = useAuth();
   if (currentUser == null) {
