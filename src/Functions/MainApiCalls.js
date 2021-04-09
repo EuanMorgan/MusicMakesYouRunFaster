@@ -77,38 +77,8 @@ const calculateSongPlayedTimes = (spotifySongs) => {
   });
 };
 
-export const parseSongsAndRun = async (songs, run, uid, isTest) => {
-  let spotifySongs = songs.data.tracks;
-
-  //filter out unneccasry things, too much data to store otherwise
-  // and get dates run occured
-  //dates plural because some nutcase might go for a run at like 5 to midnight?
-
-  let dates = [];
-  let tempRoute = run.trackpoints.map((point) => {
-    if (!dates.includes(point["time"].split("T")[0])) {
-      dates.push(point["time"].split("T")[0]);
-    }
-    return {
-      heart_rate_bpm: point.heart_rate_bpm,
-      seq: point.seq,
-      elapsed_sec: point.elapsed_sec,
-      elapsed_hhmmss: point.elapsed_hhmmss,
-      epoch_ms: point.epoch_ms,
-      distance_meters: point.distance_meters,
-      time: point.time,
-      latitude: point.latitude,
-      longitude: point.longitude,
-    };
-  });
-  console.log(`This run occured on the following date(s) ${dates.toString()}`);
-  //discard all songs not played on the same date as the exercise
-  spotifySongs = spotifySongs.filter((s) =>
-    dates.includes(s["played_at"].split("T")[0])
-  );
-
-  // Find starting song and remove any songs before it
-  let starting_song;
+const findStartingSong = (spotifySongs, tempRoute) => {
+  // Find starting song
   let currentDiff = 1000000;
   let currentSong;
   spotifySongs.forEach((s, index) => {
@@ -118,14 +88,10 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
       currentSong = s;
     }
   });
-  starting_song = currentSong;
-  spotifySongs = spotifySongs.splice(
-    0,
-    spotifySongs.indexOf(starting_song) + 1
-  );
+  return currentSong;
+};
 
-  spotifySongs = calculateSongPlayedTimes(spotifySongs);
-  //console.log(spotifySongs);
+const matchSongsToPoints = (spotifySongs, tempRoute) => {
   //for these songs... find the closest datapoint to the start... should be able to find exact second
   //do so for each track then bish bash bosh????? :D
   let someSongs = false;
@@ -144,17 +110,11 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
       }
     }
 
-    //console.log(
-    //   `Closest for ${song["name"]} is ${closestPoint.time} at ${closestDiff}`
-    // );
-    //console.log(closestDiff);
     if (closestDiff < 60000) {
       //discard any songs played over a minute ago
       //i.e. any other songs played on the day not while running
-
       tempRoute = tempRoute.map((p) => {
         if (p.epoch_ms == closestPoint.epoch_ms) {
-          //console.log(p);
           someSongs = true;
           return { ...p, song_playing: song };
         } else {
@@ -170,21 +130,25 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   if (!someSongs) {
     return -500;
   }
+  return tempRoute;
+};
 
+const removeDuplicatePoints = (tempRoute) => {
   /*
     Remove duplicate points, for some reason my fitbit occasionaly
     has duplicate points i.e. the same epoch ms
   */
 
   const all_ms = {};
-  tempRoute = tempRoute.filter((item) => {
+  return (tempRoute = tempRoute.filter((item) => {
     let value = item["epoch_ms"];
     let exists = all_ms[value];
     all_ms[value] = true;
     return !exists;
-  });
+  }));
+};
 
-  //console.log(tempRoute);
+const calcSpeedAndPopulateCurrentlyPlaying = (tempRoute) => {
   //add curr song to every point and calculate speed
   let currSong;
   //get fastest points
@@ -192,7 +156,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   let last_2_times = []; //calculate the time difference between last two points
   //we can't assume it's 1 sec because the user may pause the run etc...
 
-  tempRoute = tempRoute.map((p) => {
+  return (tempRoute = tempRoute.map((p) => {
     //keep only last 5 distances
 
     if (last_2_distances.length >= 2) {
@@ -240,37 +204,97 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
     }
 
     return { ...p, pace: pace };
+  }));
+};
+
+const changeIdFormat = (id) => {
+  return id.slice(8, 10) + id.slice(4, 7) + "-" + id.slice(0, 4) + id.slice(10);
+};
+
+const split = (tempRoute) => {
+  let chunk_size = 3000;
+
+  // split into groups of 3000 (after testing this value seemed to be good to avoid overflowing firestore max storage)
+  //example: if our chunk size was 5 and we had an array of 12 elements this function would return
+  //[[1,2,3,4,5],[6,7,8,9,10],[11,12]]
+  let groups = tempRoute
+    .map((e, i) =>
+      i % chunk_size === 0 ? tempRoute.slice(i, i + chunk_size) : null
+    )
+    .filter((e) => e);
+
+  return groups;
+};
+
+export const parseSongsAndRun = async (songs, run, uid, isTest) => {
+  let spotifySongs = songs.data.tracks;
+
+  //filter out unneccasry things, too much data to store otherwise
+  // and get dates run occured
+  //dates plural because some nutcase might go for a run at like 5 to midnight?
+
+  let dates = [];
+  let tempRoute = run.trackpoints.map((point) => {
+    if (!dates.includes(point["time"].split("T")[0])) {
+      dates.push(point["time"].split("T")[0]);
+    }
+    return {
+      heart_rate_bpm: point.heart_rate_bpm,
+      seq: point.seq,
+      elapsed_sec: point.elapsed_sec,
+      elapsed_hhmmss: point.elapsed_hhmmss,
+      epoch_ms: point.epoch_ms,
+      distance_meters: point.distance_meters,
+      time: point.time,
+      latitude: point.latitude,
+      longitude: point.longitude,
+    };
   });
+  console.log(`This run occured on the following date(s) ${dates.toString()}`);
+  //discard all songs not played on the same date as the exercise
+  spotifySongs = spotifySongs.filter((s) =>
+    dates.includes(s["played_at"].split("T")[0])
+  );
+
+  //find starting song (first played during run)
+  //remove any songs that come before it.
+  let starting_song = findStartingSong(spotifySongs, tempRoute);
+  spotifySongs = spotifySongs.splice(
+    0,
+    spotifySongs.indexOf(starting_song) + 1
+  );
+
+  //calculate 'rough' start times for each song.
+  //using my shift algorithm
+  spotifySongs = calculateSongPlayedTimes(spotifySongs);
+
+  tempRoute = matchSongsToPoints(spotifySongs, tempRoute);
+
+  if (tempRoute == -500) {
+    // NO SONGS
+    return -500;
+  }
+
+  tempRoute = removeDuplicatePoints(tempRoute);
+
+  tempRoute = calcSpeedAndPopulateCurrentlyPlaying(tempRoute);
 
   console.log(tempRoute);
 
   //we have now combined the songs with the points :D
   //https://tenor.com/qVqP.gif
-  //console.log("UPDATED ROUTE");
-  //console.log(tempRoute);
+
   //changed ID from YYYY-MM-DD (horrific) to DD-MM-YYYY (lovely and correct)
-  let fixed_id =
-    run.activityId.slice(8, 10) +
-    run.activityId.slice(4, 7) +
-    "-" +
-    run.activityId.slice(0, 4) +
-    run.activityId.slice(10);
-  //console.log(fixed_id);
+  // totally unnecessary but I find it more readable
+  let fixed_id = changeIdFormat(run.activityId);
 
   if (tempRoute.length > 3000) {
     //split up into subparts to avoid exceeding firestore limit
-    let chunk_size = 3000;
-    let groups = tempRoute
-      .map((e, i) =>
-        i % chunk_size === 0 ? tempRoute.slice(i, i + chunk_size) : null
-      )
-      .filter((e) => e);
-    //console.log(groups);
-
+    let groups = split(tempRoute);
     try {
       groups.forEach(async (g, index) => {
-        if (isTest) return;
-        let ref = await db
+        if (isTest) return; //don't write to db when testing
+        let ref = db
           .collection("users")
           .doc(uid)
           .collection("runs")
@@ -283,7 +307,8 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
         ref.set({ run_map: g });
       });
     } catch (error) {
-      //console.log(error);
+      // -5 means error with storing data, could be internet issues or firebase is down temporarily etc
+      return -5;
     }
   } else {
     try {
@@ -306,10 +331,13 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
       //console.log(error);
     }
   }
+
+  //if split into parts, use only the first ID
   let final_id = tempRoute.length > 3000 ? fixed_id + " part 0" : fixed_id;
 
   //TODO: this takes the top 10% of all points - instead loop through and only add points if they are more than x amount above the average for the run.
 
+  //Get array of all speeds and heart rates.
   let all_speeds = [];
   let all_heart_rates = [];
   tempRoute.forEach((p) => {
@@ -317,13 +345,13 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
     all_speeds.push(parseFloat(p.pace));
   });
 
-  console.log(all_speeds);
-
+  //get averages
   const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length;
-
   const avg_pace = average(all_speeds);
   const avg_bpm = average(all_heart_rates);
-  console.log(avg_pace);
+
+  // Get fastest and highest bpm points
+  // Top 10% of points get returned.
   let fastest = tempRoute.filter((p) => p.pace > avg_pace);
   let highest = tempRoute.filter((p) => p.heart_rate_bpm > avg_bpm);
   let fastest_points = await findFastestPoints(fastest, uid, final_id, isTest);
@@ -367,10 +395,6 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
     fastest_points,
     highest_points,
   ];
-
-  //   setRoute(tempRoute);
-
-  //   toggleShowMap(!showMap);
 };
 
 const findFastestPoints = async (points, uid, id, isTest) => {
