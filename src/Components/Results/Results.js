@@ -54,6 +54,7 @@ const Results = (props) => {
   return (
     <div>
       <BurgerMenu items={runIdList} menuClicked={selectRunFromMenu} />
+      {console.log(run)}
       {run &&
       run.run_map &&
       run.songs &&

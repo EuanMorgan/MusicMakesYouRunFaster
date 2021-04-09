@@ -3,6 +3,7 @@ import app, { db } from "../firebase/firebase";
 // import { useAuth } from "../Contexts/Auth";
 
 export const pullRuns = async (refreshToken) => {
+  // send request to backend which makes fitbit api request and finds the most recent run with a map
   let uri = isProduction()
     ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/fitbit/map"
     : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/fitbit/map";
@@ -27,6 +28,7 @@ export const pullRuns = async (refreshToken) => {
 
 export const pullSongs = async (refreshToken) => {
   //console.log("Using refresh token ", refreshToken);
+  // sends request to backend which makes spotify api requests and returns an array of last 50 songs, each with audio feature info
   let uri = isProduction()
     ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/spotify/grab-songs"
     : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/spotify/grab-songs";
@@ -47,14 +49,46 @@ export const pullSongs = async (refreshToken) => {
   return spotifySongs;
 };
 
+const calculateSongPlayedTimes = (spotifySongs) => {
+  /*
+    Spotify API returns a played_at time for each song, however this is actually the time
+    that the song started. Intuitively you might use this to calculate the speed by doing
+    rough_started_at = end time - duration of song 
+    however, this doesn't account for the user skipping the song for example.
+    Therefore I came up with the following algorithm
+
+    For each song:
+        If it's the first song: just keep its rough_started_at time
+        else:
+            Change its rough_started_at time to the played_at (finsished) time of the song before it
+            i.e. shift them all backwards, because the time that song A finsihed is also the time that song B started
+            in continous playback.
+  */
+  return spotifySongs.map((song, index) => {
+    if (index == spotifySongs.length - 1) {
+      delete song.played_at;
+      return { ...song };
+    }
+    return {
+      ...song,
+      played_at: spotifySongs[index + 1].played_at,
+      rough_started_at: new Date(spotifySongs[index + 1].played_at).getTime(),
+    };
+  });
+};
+
 export const parseSongsAndRun = async (songs, run, uid, isTest) => {
-  console.log(songs);
   let spotifySongs = songs.data.tracks;
 
-  //console.log(run.trackpoints);
   //filter out unneccasry things, too much data to store otherwise
+  // and get dates run occured
+  //dates plural because some nutcase might go for a run at like 5 to midnight?
 
+  let dates = [];
   let tempRoute = run.trackpoints.map((point) => {
+    if (!dates.includes(point["time"].split("T")[0])) {
+      dates.push(point["time"].split("T")[0]);
+    }
     return {
       heart_rate_bpm: point.heart_rate_bpm,
       seq: point.seq,
@@ -67,25 +101,14 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
       longitude: point.longitude,
     };
   });
-
-  //get dates run occured
-  let dates = [];
-
-  for (let i of tempRoute) {
-    if (!dates.includes(i["time"].split("T")[0]))
-      dates.push(i["time"].split("T")[0]);
-  }
-  //dates plural because some nutcase might go for a run at like 5 to midnight?
-  //console.log(`This run occured on the following date(s) ${dates.toString()}`);
-
+  console.log(`This run occured on the following date(s) ${dates.toString()}`);
   //discard all songs not played on the same date as the exercise
-
-  //console.log(spotifySongs);
   spotifySongs = spotifySongs.filter((s) =>
     dates.includes(s["played_at"].split("T")[0])
   );
-  let starting_song;
 
+  // Find starting song and remove any songs before it
+  let starting_song;
   let currentDiff = 1000000;
   let currentSong;
   spotifySongs.forEach((s, index) => {
@@ -95,30 +118,13 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
       currentSong = s;
     }
   });
-
   starting_song = currentSong;
-  //console.log("Starting song:", starting_song);
   spotifySongs = spotifySongs.splice(
     0,
     spotifySongs.indexOf(starting_song) + 1
   );
 
-  //console.log("The songs played on that date");
-  //console.log(spotifySongs);
-
-  spotifySongs = spotifySongs.map((song, index) => {
-    //console.log(index);
-    if (index == spotifySongs.length - 1) {
-      delete song.played_at;
-      //console.log(song);
-      return { ...song };
-    }
-    return {
-      ...song,
-      played_at: spotifySongs[index + 1].played_at,
-      rough_started_at: new Date(spotifySongs[index + 1].played_at).getTime(),
-    };
-  });
+  spotifySongs = calculateSongPlayedTimes(spotifySongs);
   //console.log(spotifySongs);
   //for these songs... find the closest datapoint to the start... should be able to find exact second
   //do so for each track then bish bash bosh????? :D
@@ -164,24 +170,52 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   if (!someSongs) {
     return -500;
   }
+
+  /*
+    Remove duplicate points, for some reason my fitbit occasionaly
+    has duplicate points i.e. the same epoch ms
+  */
+
+  const all_ms = {};
+  tempRoute = tempRoute.filter((item) => {
+    let value = item["epoch_ms"];
+    let exists = all_ms[value];
+    all_ms[value] = true;
+    return !exists;
+  });
+
   //console.log(tempRoute);
   //add curr song to every point and calculate speed
   let currSong;
   //get fastest points
-  let last_5_distances = [];
+  let last_2_distances = [];
+  let last_2_times = []; //calculate the time difference between last two points
+  //we can't assume it's 1 sec because the user may pause the run etc...
 
   tempRoute = tempRoute.map((p) => {
     //keep only last 5 distances
-    if (last_5_distances.length >= 5) {
-      //remove oldest distance from list
-      last_5_distances.splice(0, 1);
-    }
-    last_5_distances.push(p.distance_meters);
 
-    let pace = (
-      (last_5_distances[last_5_distances.length - 1] - last_5_distances[0]) /
-      last_5_distances.length
-    ).toFixed(2);
+    if (last_2_distances.length >= 2) {
+      //remove oldest distance from list
+      last_2_distances.splice(0, 1);
+    }
+    if (last_2_times.length >= 2) {
+      last_2_times.splice(0, 1);
+    }
+    last_2_distances.push(p.distance_meters);
+    last_2_times.push(p.epoch_ms / 1000);
+    if (last_2_distances.length == 1) {
+      // return 0 for first pace otherwise it will be NaN
+      return { ...p, pace: "0.00" };
+    }
+    // console.log(`Calculating m/s:`);
+    let distance_last_sec = last_2_distances[1] - last_2_distances[0];
+    // console.log(`Distance in last time interval = ${distance_last_sec}`);
+    let time_difference = last_2_times[1] - last_2_times[0];
+    // console.log(`Time difference between interval ${time_difference}`);
+    let pace = (distance_last_sec / time_difference).toFixed(2);
+    // console.log(`Speed = ${distance_last_sec} / ${time_difference}`);
+
     if (parseInt(pace) < 0) {
       pace = "0";
     }
@@ -208,7 +242,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
     return { ...p, pace: pace };
   });
 
-  //console.log(tempRoute);
+  console.log(tempRoute);
 
   //we have now combined the songs with the points :D
   //https://tenor.com/qVqP.gif
@@ -283,11 +317,13 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
     all_speeds.push(parseFloat(p.pace));
   });
 
+  console.log(all_speeds);
+
   const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length;
 
   const avg_pace = average(all_speeds);
   const avg_bpm = average(all_heart_rates);
-
+  console.log(avg_pace);
   let fastest = tempRoute.filter((p) => p.pace > avg_pace);
   let highest = tempRoute.filter((p) => p.heart_rate_bpm > avg_bpm);
   let fastest_points = await findFastestPoints(fastest, uid, final_id, isTest);

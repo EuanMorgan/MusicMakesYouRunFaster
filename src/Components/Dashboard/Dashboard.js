@@ -8,7 +8,7 @@ import {
 } from "../../Functions/MainApiCalls";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-// import { run, songs } from "../../TestData";
+import { run, songs } from "../../TestData";
 import { useHistory } from "react-router-dom";
 import { useAuth } from "../../Contexts/Auth";
 import { firebaseApp } from "../../firebase/firebase";
@@ -137,7 +137,7 @@ const Dashboard = (props) => {
       >
         test pull
       </button> */}
-      {/* <button
+      <button
         onClick={async () => {
           console.log(
             await parseSongsAndRun(songs, run.run_map, "7LZHNM", true)
@@ -145,7 +145,7 @@ const Dashboard = (props) => {
         }}
       >
         TEST
-      </button> */}
+      </button>
     </div>
   );
 };
