@@ -156,37 +156,37 @@ const calcSpeedAndPopulateCurrentlyPlaying = (tempRoute) => {
   //add curr song to every point and calculate speed
   let currSong;
   //get fastest points
-  let last_2_distances = [];
-  let last_2_times = []; //calculate the time difference between last two points
+  let last_5_distances = [];
+  let last_5_times = []; //calculate the time difference between last two points
   //we can't assume it's 1 sec because the user may pause the run etc...
 
   return (tempRoute = tempRoute.map((p) => {
     //keep only last 5 distances
 
-    if (last_2_distances.length >= 2) {
+    if (last_5_distances.length >= 5) {
       //remove oldest distance from list
-      last_2_distances.splice(0, 1);
+      last_5_distances.splice(0, 1);
     }
-    if (last_2_times.length >= 2) {
-      last_2_times.splice(0, 1);
+    if (last_5_times.length >= 5) {
+      last_5_times.splice(0, 1);
     }
-    last_2_distances.push(p.distance_meters);
-    last_2_times.push(p.epoch_ms / 1000);
+    last_5_distances.push(p.distance_meters);
+    last_5_times.push(p.epoch_ms / 1000);
 
     // console.log(`Calculating m/s:`);
-    let distance_last_sec = last_2_distances[1] - last_2_distances[0];
+    let distance_last_sec =
+      last_5_distances[last_5_distances.length - 1] - last_5_distances[0];
     // console.log(`Distance in last time interval = ${distance_last_sec}`);
-    let time_difference = last_2_times[1] - last_2_times[0];
+    let time_difference =
+      last_5_times[last_5_times.length - 1] - last_5_times[0];
     // console.log(`Time difference between interval ${time_difference}`);
-    let pace = (distance_last_sec / time_difference).toFixed(2);
+    let pace = Math.abs((distance_last_sec / time_difference).toFixed(2));
     // console.log(`Speed = ${distance_last_sec} / ${time_difference}`);
-    if (last_2_distances.length == 1) {
+    if (last_5_distances.length == 1) {
       // return 0 for first pace otherwise it will be NaN
-      pace = "0.00";
+      pace = 0;
     }
-    if (parseInt(pace) < 0) {
-      pace = "0";
-    }
+
     //if the point already has a song, this will be a new song
     if (p.song_playing) {
       currSong = p.song_playing;
@@ -215,6 +215,18 @@ const changeIdFormat = (id) => {
   return id.slice(8, 10) + id.slice(4, 7) + "-" + id.slice(0, 4) + id.slice(10);
 };
 
+const calcDistance = (lat1, lon1, lat2, lon2) => {
+  var p = 0.017453292519943295; // Math.PI / 180
+  var c = Math.cos;
+  var a =
+    0.5 -
+    c((lat2 - lat1) * p) / 2 +
+    (c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))) / 2;
+
+  let ans = 12742 * Math.asin(Math.sqrt(a));
+  return Math.abs(ans * 1000).toFixed(2); // 2 * R; R = 6371 km
+};
+
 const split = (tempRoute) => {
   let chunk_size = 3000;
 
@@ -238,7 +250,8 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   //dates plural because some nutcase might go for a run at like 5 to midnight?
 
   let dates = [];
-  let tempRoute = run.trackpoints.map((point) => {
+  let total_distance = 0;
+  let tempRoute = run.trackpoints.map((point, index) => {
     if (!dates.includes(point["time"].split("T")[0])) {
       dates.push(point["time"].split("T")[0]);
     }
@@ -248,12 +261,31 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
       elapsed_sec: point.elapsed_sec,
       elapsed_hhmmss: point.elapsed_hhmmss,
       epoch_ms: point.epoch_ms,
-      distance_meters: point.distance_meters,
+
+      // OCCASSIONALY POINTS IN THE TCX FILE ARE MISSING THE DISTANCE,
+      //THEREFORE I CALCULATE THE DISTANCE MYSELF USING HAVERSINE FORMULA
+
+      distance_meters: (total_distance += parseFloat(
+        calcDistance(
+          run.trackpoints[index === 0 ? 0 : index - 1].latitude,
+          run.trackpoints[index === 0 ? 0 : index - 1].longitude,
+          point.latitude,
+          point.longitude
+        )
+      )),
       time: point.time,
       latitude: point.latitude,
       longitude: point.longitude,
     };
   });
+
+  //REMOVE FIRST AND LAST 3 POINTS
+  //REASON IS BECAUSE SOMETIMES FITBIT GPS SEEMS TO ACT UP DURING THIS TIMES
+  //I.E. NOT RECORDING THE CORRECT POINTS WHICH MESSES UP SPEED AND DISTANCE CALCULATIONS
+
+  tempRoute.splice(0, 3);
+  tempRoute.splice(tempRoute.length - 3, 3);
+
   console.log(`This run occured on the following date(s) ${dates.toString()}`);
   //discard all songs not played on the same date as the exercise
   spotifySongs = spotifySongs.filter((s) =>
