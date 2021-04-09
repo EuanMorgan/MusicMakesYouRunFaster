@@ -109,10 +109,14 @@ const matchSongsToPoints = (spotifySongs, tempRoute) => {
         closestPoint = point;
       }
     }
-
+    console.log(
+      `Closest for ${song["name"]} is ${closestPoint.time} at ${closestDiff}`
+    );
+    console.log(closestDiff);
     if (closestDiff < 60000) {
       //discard any songs played over a minute ago
       //i.e. any other songs played on the day not while running
+
       tempRoute = tempRoute.map((p) => {
         if (p.epoch_ms == closestPoint.epoch_ms) {
           someSongs = true;
@@ -168,10 +172,7 @@ const calcSpeedAndPopulateCurrentlyPlaying = (tempRoute) => {
     }
     last_2_distances.push(p.distance_meters);
     last_2_times.push(p.epoch_ms / 1000);
-    if (last_2_distances.length == 1) {
-      // return 0 for first pace otherwise it will be NaN
-      return { ...p, pace: "0.00" };
-    }
+
     // console.log(`Calculating m/s:`);
     let distance_last_sec = last_2_distances[1] - last_2_distances[0];
     // console.log(`Distance in last time interval = ${distance_last_sec}`);
@@ -179,7 +180,10 @@ const calcSpeedAndPopulateCurrentlyPlaying = (tempRoute) => {
     // console.log(`Time difference between interval ${time_difference}`);
     let pace = (distance_last_sec / time_difference).toFixed(2);
     // console.log(`Speed = ${distance_last_sec} / ${time_difference}`);
-
+    if (last_2_distances.length == 1) {
+      // return 0 for first pace otherwise it will be NaN
+      pace = "0.00";
+    }
     if (parseInt(pace) < 0) {
       pace = "0";
     }
