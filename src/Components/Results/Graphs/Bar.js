@@ -11,7 +11,7 @@ export const BarChart = (props) => {
 
     datasets: [
       {
-        label: "Genres",
+        label: props.title,
         data: Object.values(props.genreCount),
         backgroundColor: "rgba(255,99,132,0.2)",
         borderColor: "rgba(255,99,132,1)",

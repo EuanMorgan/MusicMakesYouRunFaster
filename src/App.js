@@ -15,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Results from "./Components/Results/Results";
 import DeleteRun from "./Components/DeleteRun";
 import MoreInfo from "./Components/MoreInfo/MoreInfo";
+import OverallResults from "./Components/OverallResults/OverallResults";
 const App = () => {
   const [loading, setLoading] = useState(false); //passed down to other components as props, a boolean which toggles the loading spinner overlay
   const history = useHistory();
@@ -69,6 +70,12 @@ const App = () => {
                 toast={toast}
               />
               <Route path="/more-info" component={MoreInfo} />
+              <PrivateRoute
+                path="/overall-results"
+                component={OverallResults}
+                setLoading={setLoading}
+                toast={toast}
+              />
             </Switch>
             <ToastContainer />
           </div>

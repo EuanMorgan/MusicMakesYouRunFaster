@@ -4,13 +4,20 @@ import { BarChart } from "../Graphs/Bar";
 const AllSongs = (props) => {
   const [uniqueGenres, setUniqueGenres] = useState([]);
   const [genreCount, setGenreCount] = useState([]);
-
+  const [uniqueArtists, setUniqueArtists] = useState([]);
   const [showChart, setShowChart] = useState(false);
-  console.log(props.run.songs);
+  const [artistCount, setArtistCount] = useState([]);
+  console.log(props.songs);
   useEffect(() => {
     let genres = [];
-    props.run.songs.forEach((song) => genres.push(...song.artist_data.genres));
+    let artists = [];
+
+    props.songs.forEach((song) => {
+      genres.push(...song.artist_data.genres);
+      artists.push(song.artist_data.name);
+    });
     setUniqueGenres([...new Set(genres)]);
+    setUniqueArtists([...new Set(artists)]);
     let genreCount = {};
     genres.sort().forEach((genre) => {
       if (genreCount[genre]) {
@@ -20,6 +27,13 @@ const AllSongs = (props) => {
       }
     });
     setGenreCount(genreCount);
+
+    let artistCount = {};
+    artists.sort().forEach((artist) => {
+      if (artistCount[artist]) artistCount[artist]++;
+      else artistCount[artist] = 1;
+    });
+    setArtistCount(artistCount);
   }, []);
 
   return (
@@ -29,7 +43,11 @@ const AllSongs = (props) => {
         <div className="data-list-top">
           <p>
             <span className="data-list-title">You listened to:</span>{" "}
-            {props.run.songs.length} songs
+            {props.songs.length} songs
+          </p>
+          <p>
+            <span className="data-list-title">You listened to:</span>{" "}
+            {uniqueArtists.length} artists
           </p>
           <p className="end">
             <span className="data-list-title">Artists span:</span>{" "}
@@ -43,7 +61,7 @@ const AllSongs = (props) => {
         }}
         style={{ marginTop: "1rem" }}
       >
-        {showChart ? "Hide genres" : "Show genres"}
+        {showChart ? "Hide bar charts" : "Show bar charts"}
       </button>
       {showChart ? (
         <div className="chart-container">
@@ -51,6 +69,13 @@ const AllSongs = (props) => {
             show={showChart}
             labels={uniqueGenres.sort()}
             genreCount={genreCount}
+            title={"Genres"}
+          />
+          <BarChart
+            show={showChart}
+            labels={uniqueArtists.sort()}
+            genreCount={artistCount}
+            title={"Artists"}
           />
         </div>
       ) : null}

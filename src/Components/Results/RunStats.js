@@ -18,7 +18,7 @@ export const RunStats = (props) => {
           " " +
           props.run.fastest_points[0].time.split("T")[1].split(".")[0]}
       </h1>
-
+      <p>Overall Stats</p>
       <OverallStats
         run={props.run}
         speed_order={speed_order}
@@ -36,11 +36,7 @@ export const RunStats = (props) => {
           View run on map
         </Link>
       </div>
-      <AllSongs
-        run={props.run}
-        speed_order={speed_order}
-        bpm_order={bpm_order}
-      />
+      <AllSongs songs={props.run.songs} />
       <FastestSongs
         run={props.run}
         speed_order={speed_order}

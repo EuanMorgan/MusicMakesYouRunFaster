@@ -193,7 +193,7 @@ const RunsMap = (props) => {
         }}
         style="mapbox://styles/mapbox/streets-v9"
         containerStyle={{
-          height: windowWidth > 1600 ? "50vh" : "38vh",
+          height: "52vh",
           width: "100vw",
         }}
         center={
@@ -275,21 +275,21 @@ const RunsMap = (props) => {
             className={replayToggle ? "doRotation" : ""}
           />
         </div>
-        <div className="DataArea">
-          <p className="Data">Song Name: {currentlyPlaying.name}</p>
-          <p className="Data">
+        <div className="DataArea song-data">
+          <p className="Data song-data">Song Name: {currentlyPlaying.name}</p>
+          <p className="Data song-data">
             Artist Name: {currentlyPlaying.artists[0].name}
           </p>
-          <p className="Data">
+          <p className="Data song-data">
             Tempo: {currentlyPlaying.audio_features[0].tempo} BPM
           </p>
-          <p className="Data">
+          <p className="Data song-data">
             Key: {keys[currentlyPlaying.audio_features[0].key]}
           </p>
-          <p className="Data">
+          <p className="Data song-data">
             Energy: {currentlyPlaying.audio_features[0].energy}
           </p>
-          <p className="Data">
+          <p className="Data song-data">
             This song is in a {mode[currentlyPlaying.audio_features[0].mode]}{" "}
             key
           </p>

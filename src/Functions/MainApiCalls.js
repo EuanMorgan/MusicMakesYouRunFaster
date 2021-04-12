@@ -1,4 +1,4 @@
-import { isProduction } from "../Common/CommonFunctions";
+import { isProduction, average } from "../Common/CommonFunctions";
 import app, { db } from "../firebase/firebase";
 // import { useAuth } from "../Contexts/Auth";
 
@@ -381,8 +381,6 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
     all_speeds.push(parseFloat(p.pace));
   });
 
-  //get averages
-  const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length;
   const avg_pace = average(all_speeds);
   const avg_bpm = average(all_heart_rates);
 
