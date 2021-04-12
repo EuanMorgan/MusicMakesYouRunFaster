@@ -1,7 +1,9 @@
 .AlbumArtArea img {
   width: 80%;
+
   border-radius: 50%;
 }
+
 @media (max-width: 800px) {
   .AlbumArtArea img {
     width: 60%;

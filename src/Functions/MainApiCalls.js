@@ -134,7 +134,7 @@ const matchSongsToPoints = (spotifySongs, tempRoute) => {
   if (!someSongs) {
     return -500;
   }
-  return tempRoute;
+  return [tempRoute, spotifySongs];
 };
 
 const removeDuplicatePoints = (tempRoute) => {
@@ -304,8 +304,9 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   //using my shift algorithm
   spotifySongs = calculateSongPlayedTimes(spotifySongs);
 
-  tempRoute = matchSongsToPoints(spotifySongs, tempRoute);
-
+  [tempRoute, spotifySongs] = matchSongsToPoints(spotifySongs, tempRoute);
+  console.log("ditch other songs");
+  console.log(tempRoute, spotifySongs);
   if (tempRoute == -500) {
     // NO SONGS
     return -500;

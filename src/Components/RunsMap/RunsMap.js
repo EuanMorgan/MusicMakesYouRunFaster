@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl";
 import { useAuth } from "../../Contexts/Auth";
 import { retrieveRuns } from "../../Functions/RetrieveRuns";
+import BLANK from "../../Assets/BLANK_ICON.png";
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -128,6 +129,7 @@ const RunsMap = (props) => {
   useEffect(() => {
     // reset counter on component mount, stop interval on unmount
     replayCounter = 0;
+
     return () => {
       console.log("cleaning up...");
       stopRun();
@@ -152,6 +154,16 @@ const RunsMap = (props) => {
       setRun(runData);
     }
   };
+
+  useEffect(() => {
+    console.log(run);
+    if (!run) return;
+
+    setCurrentPointData({
+      ...currentPointData,
+      time: run.run_map[0].time,
+    });
+  }, [run]);
 
   useEffect(async () => {
     if (userData == null) {
@@ -251,6 +263,7 @@ const RunsMap = (props) => {
           {currentPointData.greenPoint}
         </Layer>
       </M>
+
       <div className="DataContainer">
         <div className="DataArea">
           <p className="Data">Heart rate: {currentPointData.heartRate}</p>
@@ -271,7 +284,11 @@ const RunsMap = (props) => {
         </div>
         <div className="AlbumArtArea">
           <img
-            src={currentlyPlaying.cover_art.url}
+            src={
+              currentlyPlaying.cover_art.url
+                ? currentlyPlaying.cover_art.url
+                : BLANK
+            }
             className={replayToggle ? "doRotation" : ""}
           />
         </div>
