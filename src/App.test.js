@@ -3,7 +3,8 @@ import {
   pullRuns,
   pullSongs,
 } from "./Functions/MainApiCalls";
-import { run, songs, shouldBe, mainTestShouldBe } from "./AllTestData";
+import { run, songs, shouldBe } from "./AllTestData";
+import { mainTestShouldBe } from "./MainTestData";
 
 test("Parsing run function", async () => {
   let x = await parseSongsAndRun(songs, run.run_map, "7LZHNM", true);
@@ -12,9 +13,9 @@ test("Parsing run function", async () => {
 });
 
 test("Creating,pulling,deleting", async () => {
-  // https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/test-create-account
+  // http://localhost:5000/musicmakesyourunfaster/europe-west2/app
   let code = await fetch(
-    "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/test-create-account",
+    "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/test-create-account",
     {
       method: "GET",
       headers: {
@@ -23,7 +24,7 @@ test("Creating,pulling,deleting", async () => {
     }
   );
   let data = await code.json();
-
+  console.log(data);
   console.log("created account");
   console.log(data.data.spotify);
   let songOutput = await pullSongs(data.data.spotify.refresh_token);
