@@ -45,7 +45,7 @@ const Dashboard = (props) => {
     let songs = await pullSongs(userData.spotifyRefreshToken);
     console.log(songs);
     try {
-      let x = await parseSongsAndRun(songs, map, currentUser.uid);
+      let x = await parseSongsAndRun(songs, map, "99GN7F", true);
       if (x === -255) {
         props.toast.info(
           "Most recent run not fetched because we already have it 😎"
@@ -55,6 +55,7 @@ const Dashboard = (props) => {
       } else {
         props.toast.success("🦄 run fetched successfully!");
       }
+      console.log(x);
     } catch (error) {
       console.log(error);
       props.toast.error("😢 there has been an error");
