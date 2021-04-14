@@ -102,6 +102,7 @@ const Home = (props) => {
         <div>
           <h1>Step 1: Sign up / Sign in with FitBit</h1>
           <button
+            id="fitbit-button"
             onClick={() => {
               console.log(`Are we in production env?`);
               console.log(isProduction());

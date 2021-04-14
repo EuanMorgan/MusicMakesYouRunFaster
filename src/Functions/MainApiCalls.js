@@ -94,6 +94,7 @@ const findStartingSong = (spotifySongs, tempRoute) => {
 const matchSongsToPoints = (spotifySongs, tempRoute) => {
   //for these songs... find the closest datapoint to the start... should be able to find exact second
   //do so for each track then bish bash bosh????? :D
+  console.log("hello there");
   let someSongs = false;
   for (let song of spotifySongs) {
     let closestPoint;
@@ -134,6 +135,7 @@ const matchSongsToPoints = (spotifySongs, tempRoute) => {
   if (!someSongs) {
     return -500;
   }
+  console.log("returning babyyyyyyyyy");
   return [tempRoute, spotifySongs];
 };
 
@@ -244,7 +246,7 @@ const split = (tempRoute) => {
 
 export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   let spotifySongs = songs.data.tracks;
-
+  // let x = calculateSongPlayedTimes([...spotifySongs]);
   //filter out unneccasry things, too much data to store otherwise
   // and get dates run occured
   //dates plural because some nutcase might go for a run at like 5 to midnight?
@@ -302,15 +304,21 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
 
   //calculate 'rough' start times for each song.
   //using my shift algorithm
+  console.log("trying this shit");
   spotifySongs = calculateSongPlayedTimes(spotifySongs);
+  console.log("done it");
 
-  [tempRoute, spotifySongs] = matchSongsToPoints(spotifySongs, tempRoute);
+  let ret = matchSongsToPoints(spotifySongs, tempRoute);
   console.log("ditch other songs");
-  console.log(tempRoute, spotifySongs);
-  if (tempRoute == -500) {
+
+  if (ret == -500) {
     // NO SONGS
     return -500;
   }
+
+  [tempRoute, spotifySongs] = ret;
+
+  console.log(tempRoute, spotifySongs);
 
   tempRoute = removeDuplicatePoints(tempRoute);
 

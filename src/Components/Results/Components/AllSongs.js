@@ -54,7 +54,7 @@ const AllSongs = (props) => {
           >
             <span className="data-list-title">You listened to:</span>{" "}
             {props.songs.length} songs
-            <Collapser>
+            <Collapser show={isShowingSongs}>
               <div>
                 {allSongsList &&
                   allSongsList.map((song) => (

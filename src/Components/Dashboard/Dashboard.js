@@ -81,7 +81,9 @@ const Dashboard = (props) => {
         </p>
       </div>
 
-      <button onClick={fetchRecentRun}>Pull most recent run</button>
+      <button id="fetch-run" onClick={fetchRecentRun}>
+        Pull most recent run
+      </button>
       <button
         onClick={() => {
           history.push("/runs");

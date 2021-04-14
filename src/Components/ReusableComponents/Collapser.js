@@ -8,19 +8,17 @@ import { useHistory } from "react-router-dom";
 import { keys, mode } from "../../Common/Data";
 import "./collapse.css";
 
-export function Collapser({ children }, props) {
+export function Collapser({ children, ...props }) {
   const [isButtonCollapseOpen, setIsButtonCollapseOpen] = useState(false);
 
-  const onClick = useCallback(
-    () => setIsButtonCollapseOpen(!isButtonCollapseOpen),
-    [isButtonCollapseOpen]
-  );
+  //   const onClick = useCallback(
+  //     () => setIsButtonCollapseOpen(!isButtonCollapseOpen),
+  //     [isButtonCollapseOpen]
+  //   );
   let x;
   if (props.audioFeatures) {
     x = props.audioFeatures[0];
   }
-
-  console.log(props.listeningMap);
 
   return (
     <div style={{ color: "white" }}>
@@ -28,13 +26,12 @@ export function Collapser({ children }, props) {
         <div>
           {/* <p aria-expanded={isButtonCollapseOpen} type="button"> */}
           <Icon
-            path={isButtonCollapseOpen ? mdiChevronUp : mdiChevronDown}
+            path={props.show ? mdiChevronUp : mdiChevronDown}
             size={1.5}
             style={{ cursor: "pointer" }}
-            onClick={onClick}
           />
         </div>
-        <Collapse isOpened={isButtonCollapseOpen} className="collapseMenu">
+        <Collapse isOpened={props.show} className="collapseMenu">
           {children}
         </Collapse>
       </div>
