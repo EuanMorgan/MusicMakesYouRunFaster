@@ -41,7 +41,7 @@ test("Creating,pulling,deleting", async () => {
       },
     }
   );
-  //console.log(final);
-  //console.log(mainTestShouldBe);
+  console.log(final);
+  console.log(mainTestShouldBe);
   expect(final).toEqual(mainTestShouldBe);
 }, 75000);
