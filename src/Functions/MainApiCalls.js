@@ -191,6 +191,7 @@ const calcSpeedAndPopulateCurrentlyPlaying = (tempRoute) => {
 
     //if the point already has a song, this will be a new song
     if (p.song_playing) {
+      console.log("new song being added");
       currSong = p.song_playing;
       return {
         ...p,
@@ -202,6 +203,7 @@ const calcSpeedAndPopulateCurrentlyPlaying = (tempRoute) => {
       currSong &&
       p.epoch_ms - currSong.rough_started_at < currSong.duration
     ) {
+      console.log("still playing");
       return {
         ...p,
         song_playing: currSong.id,
