@@ -55,7 +55,7 @@ const OverallResults = (props) => {
 
     spotifyToken = vals[2];
     let runData = vals[1][vals[1].length - 1];
-    console.log(runData);
+    //console.log(runData);
   };
 
   useEffect(async () => {

@@ -2,7 +2,7 @@ export const getCodeFromURL = () => {
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let code = params.get("code");
-  console.log(code);
+  //console.log(code);
   if (!code) {
     return null;
     // alert("Error authenticating with API, please try again.");

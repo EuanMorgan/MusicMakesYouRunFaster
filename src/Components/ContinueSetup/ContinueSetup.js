@@ -25,7 +25,7 @@ const ContinueSetup = (props) => {
   }
 
   const getSpotifyAccessToken = async (code) => {
-    console.log("sending code to backend", code);
+    //console.log("sending code to backend", code);
     let uri = isProduction()
       ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/spotify/user-auth"
       : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/spotify/user-auth";
@@ -38,7 +38,7 @@ const ContinueSetup = (props) => {
     });
     try {
       let x = await response.json();
-      console.log(x);
+      //console.log(x);
       if (x.error) {
         props.toast.error(
           `Server returned error message: ${x.error_description}`

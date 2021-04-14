@@ -12,7 +12,7 @@ export const RadarChart = (props) => {
     borderColor: "black",
     hidden: index === 0 ? false : true,
   }));
-  console.log(datasets);
+  //console.log(datasets);
   const data = {
     labels: [
       "acousticness",

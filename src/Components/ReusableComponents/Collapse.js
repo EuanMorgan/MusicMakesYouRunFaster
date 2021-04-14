@@ -32,9 +32,9 @@ export function CollapseMenu(props) {
 
   let radarData = [];
   if (props.audioFeatures) {
-    console.log(props.audioFeatures);
+    //console.log(props.audioFeatures);
     x = props.audioFeatures.filter((song) => song.id === props.id)[0];
-    console.log(x);
+    //console.log(x);
     radarData = [
       {
         title: [x.name],
@@ -64,10 +64,10 @@ export function CollapseMenu(props) {
       });
     });
 
-    console.log(radarData);
+    //console.log(radarData);
   }
 
-  console.log(props.listeningMap);
+  //console.log(props.listeningMap);
 
   return (
     <div className="accessible" style={{ color: "white" }}>
@@ -89,7 +89,7 @@ export function CollapseMenu(props) {
         </div>
         <Collapse isOpened={isButtonCollapseOpen} className="collapseMenu">
           <ul className="songs-ul">
-            {console.log(props.data)}
+            {//console.log(props.data)}
 
             {props.data.speed_sentences.map((d) => (
               <li>{d}</li>

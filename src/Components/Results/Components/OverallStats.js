@@ -1,7 +1,7 @@
 import React from "react";
 import { msToHMS } from "../../../Common/CommonFunctions";
 const OverallStats = (props) => {
-  console.log(props);
+  //console.log(props);
   return (
     <div>
       <div className="data-list-top-container">

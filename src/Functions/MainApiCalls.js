@@ -21,13 +21,13 @@ export const pullRuns = async (refreshToken) => {
     r = "oops";
   }
 
-  console.log("MAPPYBOY", r);
+  //console.log("MAPPYBOY", r);
   //TODO: -1 return
   return r.run_map;
 };
 
 export const pullSongs = async (refreshToken) => {
-  //console.log("Using refresh token ", refreshToken);
+  ////console.log("Using refresh token ", refreshToken);
   // sends request to backend which makes spotify api requests and returns an array of last 50 songs, each with audio feature info
   let uri = isProduction()
     ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/spotify/grab-songs"
@@ -45,7 +45,7 @@ export const pullSongs = async (refreshToken) => {
   if (spotifySongs == "error") {
     alert("There has been an error fetching the map of your most recent run.");
   }
-  console.log("SONGIES", spotifySongs);
+  //console.log("SONGIES", spotifySongs);
   return spotifySongs;
 };
 
@@ -94,7 +94,7 @@ const findStartingSong = (spotifySongs, tempRoute) => {
 const matchSongsToPoints = (spotifySongs, tempRoute) => {
   //for these songs... find the closest datapoint to the start... should be able to find exact second
   //do so for each track then bish bash bosh????? :D
-  console.log("hello there");
+  //console.log("hello there");
   let someSongs = false;
   for (let song of spotifySongs) {
     let closestPoint;
@@ -113,7 +113,7 @@ const matchSongsToPoints = (spotifySongs, tempRoute) => {
     console.log(
       `Closest for ${song["name"]} is ${closestPoint.time} at ${closestDiff}`
     );
-    console.log(closestDiff);
+    //console.log(closestDiff);
     if (closestDiff < 60000) {
       //discard any songs played over a minute ago
       //i.e. any other songs played on the day not while running
@@ -135,7 +135,7 @@ const matchSongsToPoints = (spotifySongs, tempRoute) => {
   if (!someSongs) {
     return -500;
   }
-  console.log("returning babyyyyyyyyy");
+  //console.log("returning babyyyyyyyyy");
   return [tempRoute, spotifySongs];
 };
 
@@ -175,15 +175,15 @@ const calcSpeedAndPopulateCurrentlyPlaying = (tempRoute) => {
     last_5_distances.push(p.distance_meters);
     last_5_times.push(p.epoch_ms / 1000);
 
-    // console.log(`Calculating m/s:`);
+    // //console.log(`Calculating m/s:`);
     let distance_last_sec =
       last_5_distances[last_5_distances.length - 1] - last_5_distances[0];
-    // console.log(`Distance in last time interval = ${distance_last_sec}`);
+    // //console.log(`Distance in last time interval = ${distance_last_sec}`);
     let time_difference =
       last_5_times[last_5_times.length - 1] - last_5_times[0];
-    // console.log(`Time difference between interval ${time_difference}`);
+    // //console.log(`Time difference between interval ${time_difference}`);
     let pace = Math.abs((distance_last_sec / time_difference).toFixed(2));
-    // console.log(`Speed = ${distance_last_sec} / ${time_difference}`);
+    // //console.log(`Speed = ${distance_last_sec} / ${time_difference}`);
     if (last_5_distances.length == 1) {
       // return 0 for first pace otherwise it will be NaN
       pace = 0;
@@ -288,7 +288,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   tempRoute.splice(0, 3);
   tempRoute.splice(tempRoute.length - 3, 3);
 
-  console.log(`This run occured on the following date(s) ${dates.toString()}`);
+  //console.log(`This run occured on the following date(s) ${dates.toString()}`);
   //discard all songs not played on the same date as the exercise
   spotifySongs = spotifySongs.filter((s) =>
     dates.includes(s["played_at"].split("T")[0])
@@ -304,12 +304,12 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
 
   //calculate 'rough' start times for each song.
   //using my shift algorithm
-  console.log("trying this shit");
+  //console.log("trying this shit");
   spotifySongs = calculateSongPlayedTimes(spotifySongs);
-  console.log("done it");
+  //console.log("done it");
 
   let ret = matchSongsToPoints(spotifySongs, tempRoute);
-  console.log("ditch other songs");
+  //console.log("ditch other songs");
 
   if (ret == -500) {
     // NO SONGS
@@ -318,13 +318,13 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
 
   [tempRoute, spotifySongs] = ret;
 
-  console.log(tempRoute, spotifySongs);
+  //console.log(tempRoute, spotifySongs);
 
   tempRoute = removeDuplicatePoints(tempRoute);
 
   tempRoute = calcSpeedAndPopulateCurrentlyPlaying(tempRoute);
 
-  console.log(tempRoute);
+  //console.log(tempRoute);
 
   //we have now combined the songs with the points :D
   //https://tenor.com/qVqP.gif
@@ -346,7 +346,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
           .doc(fixed_id + " part " + index);
         let check_ref = await ref.get();
         if (check_ref.exists) {
-          console.log("IT EXISTS");
+          //console.log("IT EXISTS");
           return -255;
         }
         ref.set({ run_map: g });
@@ -367,13 +367,13 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
         let check_ref = await ref.get();
 
         if (check_ref.exists) {
-          console.log("it exists!");
+          //console.log("it exists!");
           return -255;
         }
         ref.set({ run_map: tempRoute });
       }
     } catch (error) {
-      //console.log(error);
+      ////console.log(error);
     }
   }
 
@@ -418,11 +418,11 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
         );
     }
   } catch (error) {
-    //console.log(error);
+    ////console.log(error);
   }
 
-  //console.log("returning this to be fair....");
-  // console.log([
+  ////console.log("returning this to be fair....");
+  // //console.log([
   //   tempRoute,
   //   spotifySongs,
   //   avg_pace,
@@ -444,9 +444,9 @@ const findFastestPoints = async (points, uid, id, isTest) => {
   //sort points by pace
   let pace_order = points.sort(sort("pace"));
   let len = Math.ceil(pace_order.length / 10);
-  //console.log(pace_order);
+  ////console.log(pace_order);
   pace_order = pace_order.slice(0, len);
-  //console.log(pace_order);
+  ////console.log(pace_order);
   try {
     if (!isTest) {
       await db
@@ -458,7 +458,7 @@ const findFastestPoints = async (points, uid, id, isTest) => {
     }
     return pace_order;
   } catch (error) {
-    //console.log(error);
+    ////console.log(error);
   }
 };
 
@@ -466,9 +466,9 @@ const findHighestBPMPoints = async (points, uid, id, isTest) => {
   //sort points by pace
   let bpm_order = points.sort(sort("heart_rate_bpm"));
   let len = Math.ceil(bpm_order.length / 10);
-  //console.log(bpm_order);
+  ////console.log(bpm_order);
   bpm_order = bpm_order.slice(0, len);
-  //console.log(bpm_order);
+  ////console.log(bpm_order);
   try {
     if (!isTest) {
       await db
@@ -480,7 +480,7 @@ const findHighestBPMPoints = async (points, uid, id, isTest) => {
     }
     return bpm_order;
   } catch (error) {
-    //console.log(error);
+    ////console.log(error);
   }
 };
 
@@ -502,7 +502,7 @@ export const sort = (property) => {
 
 export const DeleteAccount = async (uid, toast, refresh_token, noSpotify) => {
   try {
-    console.log("'deleting");
+    //console.log("'deleting");
     let ref = db.collection("users").doc(uid);
     deleteCollection(uid);
 
@@ -512,7 +512,7 @@ export const DeleteAccount = async (uid, toast, refresh_token, noSpotify) => {
         let uri = isProduction()
           ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/fitbit/revoke"
           : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/fitbit/revoke";
-        console.log(refresh_token);
+        //console.log(refresh_token);
         fetch(uri, {
           method: "POST",
           headers: {
@@ -538,7 +538,7 @@ export const DeleteAccount = async (uid, toast, refresh_token, noSpotify) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     toast.error("Error deleting account!");
   }
 };
@@ -555,7 +555,7 @@ const deleteCollection = (uid) => {
         });
       });
   } catch (error) {
-    console.log(error);
+    //console.log(error);
   }
 };
 
@@ -570,14 +570,14 @@ export const deleteRun = async (id, uid, toast) => {
           .collection("runs")
           .doc(id.split(" ")[0] + " part " + part);
         if ((await ref.get()).exists) {
-          //console.log(id.split(" ")[0] + " part " + part);
+          ////console.log(id.split(" ")[0] + " part " + part);
           ref.delete();
         } else {
           break;
         }
       } catch (error) {
         toast.error("Error deleting!");
-        //console.log(error);
+        ////console.log(error);
         return false;
       }
       part++;
