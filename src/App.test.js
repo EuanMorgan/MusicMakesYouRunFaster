@@ -1,4 +1,5 @@
 import {
+  DeleteAccount,
   parseSongsAndRun,
   pullRuns,
   pullSongs,
@@ -15,7 +16,7 @@ test("Parsing run function", async () => {
 test("Creating,pulling,deleting", async () => {
   // http://localhost:5000/musicmakesyourunfaster/europe-west2/app
   let code = await fetch(
-    "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/test-create-account",
+    "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/test-create-account",
     {
       method: "GET",
       headers: {
@@ -32,5 +33,15 @@ test("Creating,pulling,deleting", async () => {
   let final = await parseSongsAndRun(songOutput, mapOutput, "99GN7F", true);
   console.log(final[0]);
   console.log(mainTestShouldBe[0]);
+
+  await fetch(
+    "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/test-delete",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
   expect(final).toStrictEqual(mainTestShouldBe);
 }, 75000);

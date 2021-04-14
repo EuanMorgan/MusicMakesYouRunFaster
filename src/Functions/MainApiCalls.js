@@ -502,10 +502,13 @@ export const sort = (property) => {
 
 export const DeleteAccount = async (uid, toast, refresh_token, noSpotify) => {
   try {
+    console.log("'deleting");
     let ref = db.collection("users").doc(uid);
     deleteCollection(uid);
+
     if ((await ref.get()).exists) {
       ref.delete().then(async () => {
+        if (toast == null) return;
         let uri = isProduction()
           ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/fitbit/revoke"
           : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/fitbit/revoke";
