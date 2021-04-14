@@ -29,6 +29,7 @@ test("Creating,pulling,deleting", async () => {
   let songOutput = await pullSongs(data.data.spotify.refresh_token);
   let mapOutput = await pullRuns(data.data.fitbit.refresh_token);
   let final = await parseSongsAndRun(songOutput, mapOutput, "99GN7F", true);
-
+  console.log(final[0]);
+  console.log(mainTestShouldBe[0]);
   expect(final).toStrictEqual(mainTestShouldBe);
 }, 75000);
