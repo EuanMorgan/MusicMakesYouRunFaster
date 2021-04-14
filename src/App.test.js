@@ -3,7 +3,7 @@ import {
   pullRuns,
   pullSongs,
 } from "./Functions/MainApiCalls";
-import { run, songs, shouldBe, mainTestShouldBe } from "./TestData";
+import { run, songs, shouldBe, mainTestShouldBe } from "./AllTestData";
 
 test("Parsing run function", async () => {
   let x = await parseSongsAndRun(songs, run.run_map, "7LZHNM", true);
