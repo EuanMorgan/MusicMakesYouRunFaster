@@ -54,3 +54,7 @@ export const msToHMS = (ms, isSeconds) => {
 export const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length;
 
 export const sortDescending = (a, b) => b - a;
+
+export const generateColor = () => {
+  return "#" + Math.random().toString(16).substr(-6);
+};

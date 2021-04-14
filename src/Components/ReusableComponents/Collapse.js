@@ -29,8 +29,42 @@ export function CollapseMenu(props) {
     [isButtonCollapseOpen]
   );
   let x;
+
+  let radarData = [];
   if (props.audioFeatures) {
-    x = props.audioFeatures[0];
+    console.log(props.audioFeatures);
+    x = props.audioFeatures.filter((song) => song.id === props.id)[0];
+    console.log(x);
+    radarData = [
+      {
+        title: [x.name],
+        color: x.color,
+        data: [
+          x.acousticness,
+          x.danceability,
+          x.energy,
+          x.valence,
+          x.speechiness,
+        ],
+      },
+    ];
+
+    props.audioFeatures.forEach((song) => {
+      if (song.id === props.id) return;
+      radarData.push({
+        title: [song.name],
+        color: song.color,
+        data: [
+          song.acousticness,
+          song.danceability,
+          song.energy,
+          song.valence,
+          song.speechiness,
+        ],
+      });
+    });
+
+    console.log(radarData);
   }
 
   console.log(props.listeningMap);
@@ -132,17 +166,7 @@ export function CollapseMenu(props) {
             <p className="subtitle">Audio features</p>
             <RadarChart
               songName={props.name}
-              songData={
-                x
-                  ? [
-                      x.acousticness,
-                      x.danceability,
-                      x.energy,
-                      x.valence,
-                      x.speechiness,
-                    ]
-                  : null
-              }
+              songData={x ? radarData : null}
               show={isButtonCollapseOpen}
             />
             <button

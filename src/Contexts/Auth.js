@@ -48,7 +48,6 @@ export const AuthProvider = ({ children }) => {
     }
 
     const data = doc.data();
-    // setCurrentUser({ ...currentUser, uid: "84L5ZQ" });
     try {
       return setUserData({
         ...userData,
@@ -58,8 +57,6 @@ export const AuthProvider = ({ children }) => {
         fitbitId: currentUser.uid,
         fitbitRefreshToken: data.fitbit.refresh_token,
         spotifyRefreshToken: data.spotify ? data.spotify.refresh_token : "",
-        // spotifyRefreshToken:
-        //   "AQA-qnyXxpySicz7KR96n_qEbCvdZULEDbDfXK41KfIfoG-X-LaquKoxjuYUvd8ENB5--n-HIJFcAd89KXDbgoKo5USeAHN7WRF3oGoTRwwVhWHpIETxM9CzGzEFPW7mYIs",
       });
     } catch (error) {
       return { errorMessage: "There has been an error with your user data." };
