@@ -31,8 +31,6 @@ test("Creating,pulling,deleting", async () => {
   let songOutput = await pullSongs(data.data.spotify.refresh_token);
   let mapOutput = await pullRuns(data.data.fitbit.refresh_token);
   let final = await parseSongsAndRun(songOutput, mapOutput, "99GN7F", true);
-  console.log(final[0]);
-  console.log(mainTestShouldBe[0]);
 
   await fetch(
     "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/test-delete",
@@ -44,4 +42,6 @@ test("Creating,pulling,deleting", async () => {
     }
   );
   expect(final).toStrictEqual(mainTestShouldBe);
+  console.log(final);
+  console.log(mainTestShouldBe);
 }, 75000);
