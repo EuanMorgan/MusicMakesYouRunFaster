@@ -84,6 +84,8 @@ const OverallResults = (props) => {
       <p>You listened to </p>
 
       <AllSongs songs={combinedData.songs} />
+
+      <h1>Note: this page is under construction</h1>
     </div>
   );
 };

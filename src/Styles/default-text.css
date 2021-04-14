@@ -102,7 +102,7 @@ button,
   }
 } */
 
-.data-list-top p {
+.data-list-top > p {
   font-size: 1.2rem;
   text-align: center;
   padding-left: 2rem;
@@ -123,10 +123,21 @@ button,
   flex-direction: row;
   background-color: rgba(200, 200, 200, 0.1);
   width: fit-content;
+
   margin: auto;
   border-radius: 1rem;
   justify-content: center;
   border: 0.01rem solid grey;
+}
+
+.data-list-top-container.all-songs {
+  max-width: 30vw;
+}
+
+@media (max-width: 100px) {
+  .data-list-top-container.all-songs {
+    max-width: 95vw;
+  }
 }
 
 .data-list-title {

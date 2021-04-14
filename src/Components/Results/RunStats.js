@@ -14,9 +14,9 @@ export const RunStats = (props) => {
     <div className="results">
       <h1>
         Run:{" "}
-        {props.run.fastest_points[0].time.split("T")[0] +
+        {props.run.run_map[0].time.split("T")[0] +
           " " +
-          props.run.fastest_points[0].time.split("T")[1].split(".")[0]}
+          props.run.run_map[0].time.split("T")[1].split(".")[0]}
       </h1>
       <p>Overall Stats</p>
       <OverallStats

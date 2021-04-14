@@ -45,6 +45,7 @@ export const retrieveRuns = async (props, userData, setStates, history) => {
     }
     idList.push(runRef.docs[i].id);
   }
+
   let allRuns = [];
 
   //Add runs to list, if split into subparts, combine them.

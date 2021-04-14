@@ -24,7 +24,7 @@ const Results = (props) => {
     setRunIdList(vals[0]);
     setRunList(vals[1]);
     spotifyToken = vals[2];
-    let runData = vals[1][vals[1].length - 1];
+    let runData = vals[1][0];
     console.log(runData);
     setRun(runData);
   };
