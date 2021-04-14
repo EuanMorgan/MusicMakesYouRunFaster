@@ -45,7 +45,7 @@ const Dashboard = (props) => {
     let songs = await pullSongs(userData.spotifyRefreshToken);
     console.log(songs);
     try {
-      let x = await parseSongsAndRun(songs, map, "99GN7F", true);
+      let x = await parseSongsAndRun(songs, map, currentUser.uid);
       if (x === -255) {
         props.toast.info(
           "Most recent run not fetched because we already have it 😎"
