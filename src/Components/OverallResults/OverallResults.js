@@ -55,7 +55,7 @@ const OverallResults = (props) => {
         if (!fastest_song_ids.includes(song_playing)) {
           let song = i.songs.filter((song) => song.id === song_playing)[0];
 
-          song.audio_features.color = generateColor();
+          song.color = generateColor();
 
           fastest_songs.push(song);
           fastest_song_ids.push(song.id);
