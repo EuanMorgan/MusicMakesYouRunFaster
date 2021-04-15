@@ -42,6 +42,17 @@ export const ScatterChart = (props) => {
   };
 
   let options = {
+    scales: {
+      xAxes: [
+        {
+          gridLines: {
+            borderWidth: 50,
+            color: "red",
+            display: true,
+          },
+        },
+      ],
+    },
     title: {
       display: true,
       text: "Song differences",

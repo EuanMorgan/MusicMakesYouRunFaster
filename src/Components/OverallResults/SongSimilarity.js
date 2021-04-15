@@ -33,7 +33,7 @@ export default function SongSimilarity(props) {
   };
 
   const compareTwoSongs = (songA, songB) => {
-    // console.log(`Similarity of ${songA.name} ||and|| ${songB.name}`);
+    console.log(`Similarity of ${songA.name} ||and|| ${songB.name}`);
     let overall = 0;
 
     const songAFeatures = extractFeatures(songA);
@@ -55,9 +55,9 @@ export default function SongSimilarity(props) {
     // console.log(similarity_percent);
     similarity_percent = 100 - similarity_percent;
 
-    // console.log(
-    //   `Overall difference is ${overall}. Meaning they are ${similarity_percent}% similar`
-    // );
+    console.log(
+      `Overall difference is ${overall}. Meaning they are ${similarity_percent}% similar`
+    );
 
     return overall;
   };
@@ -107,6 +107,9 @@ export default function SongSimilarity(props) {
   return (
     <div>
       <h1>How similar are your songs?</h1>
+      <p>
+        Below is a scatter chart of your songs showing how different they are.{" "}
+      </p>
       {/* {differences.map((song) => ( */}
       <ScatterChart differences={differences} />
       {/* ))} */}
