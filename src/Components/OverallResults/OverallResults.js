@@ -3,9 +3,15 @@ import "../../Styles/app.scss";
 import { retrieveRuns } from "../../Functions/RetrieveRuns";
 import { useAuth } from "../../Contexts/Auth";
 import { useHistory, Link } from "react-router-dom";
-import { msToHMS, average, sortDescending } from "../../Common/CommonFunctions";
+import {
+  msToHMS,
+  average,
+  sortDescending,
+  generateColor,
+} from "../../Common/CommonFunctions";
 import OverallStats from "../Results/Components/OverallStats";
 import AllSongs from "../Results/Components/AllSongs";
+import SongSimilarity from "./SongSimilarity";
 
 const OverallResults = (props) => {
   const { userData, fetchUserData, currentUser } = useAuth();
@@ -21,6 +27,9 @@ const OverallResults = (props) => {
     let allHeartRates = [];
     let allSpeeds = [];
     let songs = [];
+
+    let fastest_songs = [];
+
     data.forEach((i, index) => {
       totalDistance += i.run_map[i.run_map.length - 1].distance_meters;
       totalTime += i.run_map[i.run_map.length - 1].elapsed_sec;
@@ -29,10 +38,34 @@ const OverallResults = (props) => {
         allSpeeds.push(p.pace);
       });
       songs.push(...i.songs);
+
+      let fastest_song_ids = [];
+      i.fastest_points.forEach((p) => {
+        // find fastest songs
+        if (p.song_playing === undefined) {
+          return;
+        }
+
+        //find id of song playing
+        let song_playing =
+          typeof p.song_playing == "string"
+            ? p.song_playing
+            : p.song_playing.id;
+
+        if (!fastest_song_ids.includes(song_playing)) {
+          let song = i.songs.filter((song) => song.id === song_playing)[0];
+
+          song.audio_features.color = generateColor();
+
+          fastest_songs.push(song);
+          fastest_song_ids.push(song.id);
+        }
+      });
     });
 
     let sortedSpeeds = allSpeeds.sort(sortDescending);
     let sortedHeart = allHeartRates.sort(sortDescending);
+
     setCombinedData({
       ...combinedData,
       totalDistance: totalDistance.toFixed(2),
@@ -44,7 +77,10 @@ const OverallResults = (props) => {
       lowestHeart: sortedHeart[sortedHeart.length - 1],
       lowestSpeed: sortedSpeeds[sortedSpeeds.length - 1],
       songs: songs,
+      fastestSongs: fastest_songs,
     });
+
+    console.log(fastest_songs);
   };
 
   const setStates = (vals) => {
@@ -85,7 +121,10 @@ const OverallResults = (props) => {
 
       <AllSongs songs={combinedData.songs} />
 
-      <h1>Note: this page is under construction</h1>
+      <SongSimilarity
+        songs={combinedData.songs}
+        fastest_songs={combinedData.fastestSongs}
+      />
     </div>
   );
 };

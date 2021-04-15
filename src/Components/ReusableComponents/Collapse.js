@@ -89,7 +89,7 @@ export function CollapseMenu(props) {
         </div>
         <Collapse isOpened={isButtonCollapseOpen} className="collapseMenu">
           <ul className="songs-ul">
-            {//console.log(props.data)}
+            {/* {//console.log(props.data)} */}
 
             {props.data.speed_sentences.map((d) => (
               <li>{d}</li>
