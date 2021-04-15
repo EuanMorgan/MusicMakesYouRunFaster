@@ -1,22 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { db, firebaseApp } from "../../firebase/firebase";
+
 import ReactMapboxGl, { Layer, Feature } from "react-mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 // import "./RunsMap.css";
 import "../../Styles/app.scss";
 import Player from "../Player/Player";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl";
 import { retrieveRuns } from "../../Functions/RetrieveRuns";
 import { RunStats } from "./RunStats";
 import { Overall } from "./Overall";
 import { useAuth } from "../../Contexts/Auth";
-
-const M = ReactMapboxGl({
-  //TODO: Hide api keys
-  accessToken: process.env.REACT_APP_MAPBOX_KEY,
-});
 
 const Results = (props) => {
   const { userData, fetchUserData, currentUser } = useAuth();
@@ -29,8 +24,8 @@ const Results = (props) => {
     setRunIdList(vals[0]);
     setRunList(vals[1]);
     spotifyToken = vals[2];
-    let runData = vals[1][vals[1].length - 1];
-    console.log(runData);
+    let runData = vals[1][0];
+    //console.log(runData);
     setRun(runData);
   };
 
@@ -42,19 +37,19 @@ const Results = (props) => {
     }
 
     await retrieveRuns(props, userData, setStates, history);
-  }, [props.userData]);
-
+  }, [userData]);
+  useEffect(() => {}, []);
   const selectRunFromMenu = (id) => {
     setRun(runList[id]);
   };
 
   if (run == undefined) {
-    return <h1>Map</h1>;
+    return <h1>Loading</h1>;
   }
   return (
     <div>
       <BurgerMenu items={runIdList} menuClicked={selectRunFromMenu} />
-      {console.log(run)}
+
       {run &&
       run.run_map &&
       run.songs &&
@@ -63,6 +58,11 @@ const Results = (props) => {
       run.avg_pace &&
       run.avg_bpm ? (
         <div>
+          <h1>Individual Run Stats</h1>
+          <p>
+            Looking for overall stats?{" "}
+            <Link to="/overall-results">Click here</Link>
+          </p>
           <RunStats run={run} />
           {/* <Overall run={run} /> */}
         </div>

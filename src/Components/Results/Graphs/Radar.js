@@ -5,7 +5,15 @@ import { Radar } from "react-chartjs-2";
 export const RadarChart = (props) => {
   // show audio features
   //developer.spotify.com/documentation/web-api/reference/#object-audiofeaturesobject
-  https: console.log(props);
+  let datasets = props.songData.map((d, index) => ({
+    label: d.title,
+    data: d.data,
+    backgroundColor: d.color + "50",
+
+    borderColor: "black",
+    hidden: index === 0 ? false : true,
+  }));
+  //console.log(datasets);
   const data = {
     labels: [
       "acousticness",
@@ -14,13 +22,7 @@ export const RadarChart = (props) => {
       "valence",
       "speechiness",
     ],
-    datasets: [
-      {
-        data: props.songData,
-        backgroundColor: "rgba(75,192,192,0.5)",
-        borderColor: "black",
-      },
-    ],
+    datasets: datasets,
   };
 
   const options = {
@@ -47,12 +49,12 @@ export const RadarChart = (props) => {
       },
     },
     legend: {
-      display: false,
+      display: true,
     },
   };
   if (props.show) {
     return (
-      <div className="App">
+      <div className="chart-container">
         <Radar data={data} options={options} />
       </div>
     );

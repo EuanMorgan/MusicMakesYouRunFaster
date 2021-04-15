@@ -10,6 +10,7 @@ import { useHistory } from "react-router-dom";
 import mapboxgl from "mapbox-gl/dist/mapbox-gl";
 import { useAuth } from "../../Contexts/Auth";
 import { retrieveRuns } from "../../Functions/RetrieveRuns";
+import BLANK from "../../Assets/BLANK_ICON.png";
 // @ts-ignore
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require("worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker").default;
@@ -98,13 +99,13 @@ const RunsMap = (props) => {
       if (run.run_map[replayCounter].song_playing.cover_art) {
         stopRun();
         setCurrentlyPlaying(run.run_map[replayCounter].song_playing);
-        console.log(run.run_map[replayCounter].song_playing.audio_features);
+        //console.log(run.run_map[replayCounter].song_playing.audio_features);
         replayRun();
       }
     }
     clicked_point = null;
     replayCounter++;
-    // console.log(replayCounter, run.length);
+    // //console.log(replayCounter, run.length);
     if (replayCounter == run.run_map.length) {
       replayCounter = 0;
       stopRun();
@@ -128,8 +129,9 @@ const RunsMap = (props) => {
   useEffect(() => {
     // reset counter on component mount, stop interval on unmount
     replayCounter = 0;
+
     return () => {
-      console.log("cleaning up...");
+      //console.log("cleaning up...");
       stopRun();
       window.removeEventListener(
         "resize",
@@ -144,14 +146,24 @@ const RunsMap = (props) => {
     setRunList(vals[1]);
     spotifyToken = vals[2];
     let runData = vals[1][vals[1].length - 1];
-    console.log(runData);
+    //console.log(runData);
     if (props.location.state) {
       setRun(props.location.state.load_run);
-      console.log("set run to desired choice");
+      //console.log("set run to desired choice");
     } else {
       setRun(runData);
     }
   };
+
+  useEffect(() => {
+    //console.log(run);
+    if (!run) return;
+
+    setCurrentPointData({
+      ...currentPointData,
+      time: run.run_map[0].time,
+    });
+  }, [run]);
 
   useEffect(async () => {
     if (userData == null) {
@@ -193,7 +205,7 @@ const RunsMap = (props) => {
         }}
         style="mapbox://styles/mapbox/streets-v9"
         containerStyle={{
-          height: windowWidth > 1600 ? "50vh" : "38vh",
+          height: "52vh",
           width: "100vw",
         }}
         center={
@@ -229,7 +241,7 @@ const RunsMap = (props) => {
                 if (!clicked_point) clicked_point = p.seq;
 
                 if (clicked_point != p.seq) return;
-                console.log(p.seq);
+                //console.log(p.seq);
                 let wasReplaying = replayToggle;
 
                 replayCounter = p.seq;
@@ -251,6 +263,7 @@ const RunsMap = (props) => {
           {currentPointData.greenPoint}
         </Layer>
       </M>
+
       <div className="DataContainer">
         <div className="DataArea">
           <p className="Data">Heart rate: {currentPointData.heartRate}</p>
@@ -271,25 +284,29 @@ const RunsMap = (props) => {
         </div>
         <div className="AlbumArtArea">
           <img
-            src={currentlyPlaying.cover_art.url}
+            src={
+              currentlyPlaying.cover_art.url
+                ? currentlyPlaying.cover_art.url
+                : BLANK
+            }
             className={replayToggle ? "doRotation" : ""}
           />
         </div>
-        <div className="DataArea">
-          <p className="Data">Song Name: {currentlyPlaying.name}</p>
-          <p className="Data">
+        <div className="DataArea song-data">
+          <p className="Data song-data">Song Name: {currentlyPlaying.name}</p>
+          <p className="Data song-data">
             Artist Name: {currentlyPlaying.artists[0].name}
           </p>
-          <p className="Data">
+          <p className="Data song-data">
             Tempo: {currentlyPlaying.audio_features[0].tempo} BPM
           </p>
-          <p className="Data">
+          <p className="Data song-data">
             Key: {keys[currentlyPlaying.audio_features[0].key]}
           </p>
-          <p className="Data">
+          <p className="Data song-data">
             Energy: {currentlyPlaying.audio_features[0].energy}
           </p>
-          <p className="Data">
+          <p className="Data song-data">
             This song is in a {mode[currentlyPlaying.audio_features[0].mode]}{" "}
             key
           </p>

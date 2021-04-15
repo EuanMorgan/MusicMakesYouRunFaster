@@ -75,7 +75,7 @@ const Nav = (props) => {
 };
 
 const StyledNav = styled.nav`
-  min-height: 4vh;
+  min-height: 2vh;
   display: flex;
   margin: auto;
   justify-content: space-between;
@@ -106,6 +106,7 @@ const StyledNav = styled.nav`
 
   @media (max-width: 800px) {
     padding: 0.3rem 1rem;
+    max-height: 5vh;
     #logo {
       display: inline-block;
       margin: 0rem;

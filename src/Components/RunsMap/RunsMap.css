@@ -1,6 +1,7 @@
 .Data {
   color: aliceblue;
   font-size: 1rem;
+  text-align: right;
 }
 
 .DataContainer {
@@ -16,6 +17,9 @@
   flex-direction: row;
 }
 
+.Data.song-data {
+  text-align: left;
+}
 .ReplayButton {
   font-size: 2rem;
   border-radius: 50vw;
@@ -34,8 +38,7 @@
     font-size: 4vw;
   }
   .Data {
-    font-size: 0.55rem;
-    font-weight: 900;
+    font-size: 2.2vw;
   }
 }
 

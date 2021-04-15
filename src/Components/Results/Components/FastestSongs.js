@@ -2,9 +2,12 @@ import React from "react";
 import { sort } from "../../../Functions/MainApiCalls";
 import { CollapseMenu } from "../../ReusableComponents/Collapse";
 import { calcPercentIncDec } from "../../../Common/CommonFunctions";
+import { generateColor } from "../../../Common/CommonFunctions";
+
 const FastestSongs = (props) => {
   let fastest_song_ids = [];
   let fastest_speeds = {};
+  let fastest_song_audio_features = [];
   props.run.fastest_points.forEach((p) => {
     if (p.song_playing === undefined) {
       return;
@@ -14,7 +17,14 @@ const FastestSongs = (props) => {
       typeof p.song_playing == "string" ? p.song_playing : p.song_playing.id;
 
     if (!fastest_song_ids.includes(song_playing)) {
+      let song = props.run.songs.filter((song) => song.id === song_playing)[0];
       fastest_song_ids.push(song_playing);
+      //console.log(song);
+      let audioFeatures = song.audio_features;
+      //console.log(audioFeatures);
+      audioFeatures[0].name = song.name;
+      audioFeatures[0].color = generateColor();
+      fastest_song_audio_features.push(audioFeatures[0]);
       fastest_speeds[song_playing] = p.pace;
     }
   });
@@ -22,7 +32,7 @@ const FastestSongs = (props) => {
   let highest_heart_ids = [];
   let highest_hearts = {};
 
-  console.log(props.bpm_order);
+  //console.log(props.bpm_order);
   props.bpm_order.forEach((h) => {
     if (h.song_playing === undefined) {
       return;
@@ -138,15 +148,14 @@ const FastestSongs = (props) => {
           <div>
             <CollapseMenu
               name={props.run.songs.filter((s) => s.id === id)[0]["name"]}
+              id={id}
               data={formatText(id)}
               listeningData={listeningData}
               notListeningData={notListeningData}
               labels={labels}
               heartrateData={heartrates}
               notListeningHeartrates={notListeningHeartrates}
-              audioFeatures={
-                props.run.songs.filter((s) => s.id === id)[0]["audio_features"]
-              }
+              audioFeatures={[...fastest_song_audio_features]}
               listeningMap={listening_map}
             />
           </div>

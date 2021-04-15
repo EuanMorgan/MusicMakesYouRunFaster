@@ -2,7 +2,7 @@ export const getCodeFromURL = () => {
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let code = params.get("code");
-  console.log(code);
+  //console.log(code);
   if (!code) {
     return null;
     // alert("Error authenticating with API, please try again.");
@@ -26,9 +26,11 @@ export const calcPercentIncDec = (start, end) => {
     : ((end - start) / start) * 100;
 };
 
-export const msToHMS = (ms) => {
+export const msToHMS = (ms, isSeconds) => {
   // 1- Convert to seconds:
-  var seconds = ms / 1000;
+  let seconds = ms / 1000;
+  if (isSeconds) seconds = ms;
+
   // 2- Extract hours:
   var hours = parseInt(seconds / 3600); // 3,600 seconds in 1 hour
   seconds = seconds % 3600; // seconds remaining after extracting hours
@@ -47,4 +49,12 @@ export const msToHMS = (ms) => {
   minutes = minutes.length > 1 ? minutes : "0" + minutes;
 
   return hours + ":" + minutes + ":" + seconds;
+};
+
+export const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length;
+
+export const sortDescending = (a, b) => b - a;
+
+export const generateColor = () => {
+  return "#" + Math.random().toString(16).substr(-6);
 };

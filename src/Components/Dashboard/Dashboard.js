@@ -13,12 +13,12 @@ import { useHistory } from "react-router-dom";
 import { useAuth } from "../../Contexts/Auth";
 import { firebaseApp } from "../../firebase/firebase";
 const Dashboard = (props) => {
-  console.log(props);
+  //console.log(props);
+
   const history = useHistory();
   const { currentUser, fetchUserData, userData } = useAuth();
-  if (currentUser == null) {
-    return <h1>Hi There! Please sign in</h1>;
-  }
+  //console.log(currentUser, userData);
+
   if (userData == null) {
     fetchUserData(currentUser.uid);
     return <h1>fetching...</h1>;
@@ -40,10 +40,10 @@ const Dashboard = (props) => {
       props.setLoading(false);
       return;
     }
-    console.log(map);
+    //console.log(map);
 
     let songs = await pullSongs(userData.spotifyRefreshToken);
-    console.log(songs);
+    //console.log(songs);
     try {
       let x = await parseSongsAndRun(songs, map, currentUser.uid);
       if (x === -255) {
@@ -55,8 +55,9 @@ const Dashboard = (props) => {
       } else {
         props.toast.success("🦄 run fetched successfully!");
       }
+      //console.log(x);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       props.toast.error("😢 there has been an error");
     }
 
@@ -81,7 +82,9 @@ const Dashboard = (props) => {
         </p>
       </div>
 
-      <button onClick={fetchRecentRun}>Pull most recent run</button>
+      <button id="fetch-run" onClick={fetchRecentRun}>
+        Pull most recent run
+      </button>
       <button
         onClick={() => {
           history.push("/runs");
@@ -132,14 +135,14 @@ const Dashboard = (props) => {
       {/* <button
         onClick={async () => {
           let x = await pullSongs(props.userData.spotifyRefreshToken);
-          console.log(x);
+          //console.log(x);
         }}
       >
         test pull
       </button> */}
       {/* <button
         onClick={async () => {
-          console.log(
+          //console.log(
             await parseSongsAndRun(songs, run.run_map, "7LZHNM", true)
           );
         }}
