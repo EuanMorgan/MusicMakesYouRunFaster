@@ -8,11 +8,13 @@ export const ScatterChart = (props) => {
 
   props.differences.forEach((song, index) => {
     song.scores.forEach((score) => {
+      console.log(score);
       dataset.push({
         x: index + 1,
         y: score.difference,
         label: score.compare_song_name,
         color: score.compare_song_color,
+        percentageSimilar: score.percentage_similar,
       });
     });
     dataset.push({ x: index + 1, y: 0, label: song.name, color: song.color });
@@ -64,13 +66,23 @@ export const ScatterChart = (props) => {
       mode: "single",
       callbacks: {
         label: function (tooltipItems, data) {
-          //   console.log(tooltipItems);
+          console.log(tooltipItems, data);
+          // SET THE LABEL OF THE TOOL TIPS (HOVER OVER POINTS)
+          // TO CONTAIN THE SONG NAME, SCORE AND PERCENTAGE
           console.log(data);
-          return (
-            data.datasets[0].data[tooltipItems.index].label +
-            " " +
-            data.datasets[0].data[tooltipItems.index].y
-          );
+
+          let percentage =
+            data.datasets[0].data[tooltipItems.index].y === 0
+              ? ""
+              : " | SCORE: " +
+                data.datasets[0].data[tooltipItems.index].y.toFixed(2) +
+                " | " +
+                data.datasets[0].data[
+                  tooltipItems.index
+                ].percentageSimilar.toFixed(2) +
+                "% similar";
+
+          return data.datasets[0].data[tooltipItems.index].label + percentage;
         },
       },
     },

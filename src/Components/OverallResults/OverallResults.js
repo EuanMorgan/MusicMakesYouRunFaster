@@ -84,6 +84,14 @@ const OverallResults = (props) => {
   };
 
   const setStates = (vals) => {
+    if (vals[0].length < 3) {
+      history.push("/results");
+      props.toast.error(
+        "Whoops 😲 this feature unlocks once you have logged at least 3 runs"
+      );
+      return <div></div>;
+    }
+
     setRunIdList(vals[0]);
     setRunList(vals[1]);
 
@@ -107,6 +115,7 @@ const OverallResults = (props) => {
   if (combinedData === undefined) {
     return <h1>Loading</h1>;
   }
+
   return (
     <div>
       <h1>Overall</h1>

@@ -63,7 +63,7 @@ export default function SongSimilarity(props) {
       `Overall difference is ${overall}. Meaning they are ${similarity_percent}% similar`
     );
 
-    return overall;
+    return [overall, similarity_percent];
   };
 
   useEffect(() => {
@@ -82,7 +82,10 @@ export default function SongSimilarity(props) {
           return;
         }
 
-        let disagreement = compareTwoSongs(baseSong, compareSong);
+        let [disagreement, percentageSimilar] = compareTwoSongs(
+          baseSong,
+          compareSong
+        );
 
         temp_differences.push({
           base_song_id: baseSong.id,
@@ -91,6 +94,7 @@ export default function SongSimilarity(props) {
           compare_song_artist: compareSong.artists[0].name,
           difference: disagreement,
           compare_song_color: compareSong.color,
+          percentage_similar: percentageSimilar,
         });
         // console.log(temp_differences);
       });
@@ -145,7 +149,8 @@ export default function SongSimilarity(props) {
             <Collapser>
               {props.fastest_songs.map((song) => (
                 <p style={{ fontSize: "0.9em" }}>
-                  {song.artists[0].name} - <span className="red-text">{song.name}</span>
+                  {song.artists[0].name} -{" "}
+                  <span className="red-text">{song.name}</span>
                 </p>
               ))}
             </Collapser>
