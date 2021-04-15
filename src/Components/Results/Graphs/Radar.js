@@ -8,7 +8,8 @@ export const RadarChart = (props) => {
   let datasets = props.songData.map((d, index) => ({
     label: d.title,
     data: d.data,
-    backgroundColor: d.color,
+    backgroundColor: d.color + "50",
+
     borderColor: "black",
     hidden: index === 0 ? false : true,
   }));
@@ -53,7 +54,7 @@ export const RadarChart = (props) => {
   };
   if (props.show) {
     return (
-      <div className="App">
+      <div className="chart-container">
         <Radar data={data} options={options} />
       </div>
     );

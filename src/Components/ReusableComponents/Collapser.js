@@ -21,17 +21,25 @@ export function Collapser({ children, ...props }) {
   }
 
   return (
-    <div style={{ color: "white" }}>
+    <div
+      style={{ color: "white", cursor: "pointer" }}
+      onClick={() => setIsButtonCollapseOpen(!isButtonCollapseOpen)}
+    >
       <div>
         <div>
           {/* <p aria-expanded={isButtonCollapseOpen} type="button"> */}
           <Icon
-            path={props.show ? mdiChevronUp : mdiChevronDown}
+            path={
+              props.show || isButtonCollapseOpen ? mdiChevronUp : mdiChevronDown
+            }
             size={1.5}
             style={{ cursor: "pointer" }}
           />
         </div>
-        <Collapse isOpened={props.show} className="collapseMenu">
+        <Collapse
+          isOpened={props.show || isButtonCollapseOpen}
+          className="collapseMenu"
+        >
           {children}
         </Collapse>
       </div>

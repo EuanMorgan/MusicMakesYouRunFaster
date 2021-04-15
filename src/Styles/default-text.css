@@ -219,3 +219,7 @@ button,
               margin: "auto",
               padding: "1em",
               borderRadius: "1em", */
+
+.red-text {
+  color: #c41818;
+}

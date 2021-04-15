@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { ScatterChart } from "./Graphs/Scatter";
+import styled from "styled-components";
+import { Collapser } from "../ReusableComponents/Collapser";
+import { Radar } from "react-chartjs-2";
+import { RadarChart } from "../Results/Graphs/Radar";
 export default function SongSimilarity(props) {
   const [differences, setDifferences] = useState([]);
-
+  const [radarData, setRadarData] = useState([]);
   //find similarities
   // Each song has a confidence score for cerain properties
   /*
@@ -102,17 +106,102 @@ export default function SongSimilarity(props) {
 
     console.log(all_differences);
     setDifferences(all_differences);
+
+    let tempRadarData = [];
+
+    props.fastest_songs.forEach((song) => {
+      //Format audio features data for radar chart.
+      //Done in separate forEach for readability
+
+      tempRadarData.push({
+        title: song.name,
+        color: song.color,
+        data: [
+          song.audio_features[0].acousticness,
+          song.audio_features[0].danceability,
+          song.audio_features[0].energy,
+          song.audio_features[0].valence,
+          song.audio_features[0].speechiness,
+        ],
+      });
+    });
+    console.log(tempRadarData);
+    setRadarData(tempRadarData);
   }, []);
 
+  const Paragraph = styled.p`
+    font-size: 1rem;
+  `;
+
   return (
-    <div>
+    <div style={{ maxWidth: "80vw", margin: "auto" }}>
+      <h1>Fastest Songs</h1>
+      <div className="data-list-top-container">
+        <div className="data-list-top" style={{ borderBottom: 0 }}>
+          <p className="end">
+            Out of these songs,{" "}
+            <span className="red-text">{props.fastest_songs.length}</span>{" "}
+            appeared as you were running pretty quick
+            <Collapser>
+              {props.fastest_songs.map((song) => (
+                <p style={{ fontSize: "0.9em" }}>
+                  {song.artists[0].name} - <span className="red-text">{song.name}</span>
+                </p>
+              ))}
+            </Collapser>
+          </p>
+        </div>
+      </div>
+
       <h1>How similar are your songs?</h1>
-      <p>
-        Below is a scatter chart of your songs showing how different they are.{" "}
-      </p>
-      {/* {differences.map((song) => ( */}
+      <div
+        style={{
+          maxWidth: "50vw",
+          margin: "auto",
+        }}
+      >
+        <Paragraph>
+          Below is a scatter chart of your songs showing how different they are.
+          Each column is an individual song which is shown at the bottom, and
+          all other points in the column are how similar it is to each other
+          song. The further away any point in the column is from the bottom
+          point, the more different the song is.
+        </Paragraph>
+      </div>
+
       <ScatterChart differences={differences} />
-      {/* ))} */}
+
+      <h1>How do we know this?</h1>
+      <Collapser>
+        <div
+          style={{
+            maxWidth: "50vw",
+            margin: "auto",
+          }}
+        >
+          <Paragraph>
+            Spotify gives each song confidence scores which say how likely it is
+            that a particular song has a certain property. For example: a Bob
+            Dylan song might have 0.8 for acousticness, meaning there is a high
+            probability the song is acoustic. Whereas a song by System of the
+            Down may have 0.01 for acousticness meaning it is very unlikely the
+            song sounds acoustic.{" "}
+            <span className="red-text">
+              You can therefore think of these scores as a fingerprint of the
+              song.
+            </span>
+          </Paragraph>
+          <Paragraph>
+            We can use the scores to find how similar any two songs are. We find
+            the difference of every score for the two songs and sum them at the
+            end. This gives us one final value, 0 being identical songs and 5
+            being extremely different. See for yourself below, the closer the
+            songs are in the scatter chart the more similar their radar charts
+            will look
+          </Paragraph>
+        </div>
+      </Collapser>
+      <RadarChart songData={radarData} show={true} />
     </div>
   );
 }

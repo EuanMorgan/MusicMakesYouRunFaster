@@ -61,7 +61,7 @@ const AllSongs = (props) => {
                     <p style={{ fontSize: "0.9em" }}>
                       {song.artist}
                       {"  -  "}
-                      {song.name}
+                      <span className="red-text">{song.name}</span>
                     </p>
                   ))}
               </div>
