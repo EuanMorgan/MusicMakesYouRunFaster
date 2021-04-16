@@ -26,6 +26,7 @@ export const RadarChart = (props) => {
   };
 
   const options = {
+    maintainAspectRatio: false,
     tooltips: {
       enabled: true,
     },
@@ -45,7 +46,7 @@ export const RadarChart = (props) => {
         fontColor: "grey",
       },
       pointLabels: {
-        fontSize: 18,
+        fontSize: 12,
       },
     },
     legend: {

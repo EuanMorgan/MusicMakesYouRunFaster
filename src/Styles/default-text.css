@@ -173,6 +173,13 @@ button,
   margin: auto;
   width: 55%;
 }
+
+@media (min-width: 900px) {
+  .songs-ul li {
+    padding-left: 5%;
+  }
+}
+
 @media (max-width: 800px) {
   .songs-ul {
     font-size: 1.3rem;
@@ -185,9 +192,9 @@ button,
   background: #282828;
   border-radius: 1rem;
   margin: auto;
-  width: 100%;
-  padding: 1rem;
-  margin-top: 1rem;
+  width: 80%;
+  /* padding: 1rem; */
+  margin-top: 5%;
 }
 @media (max-width: 800px) {
   .chart-container {
@@ -196,9 +203,11 @@ button,
   }
 }
 
-.radar-chart-container {
-  width: 80vw;
-  height: 20vh;
+@media (max-width: 800px) {
+  .radar-chart-container {
+    height: 40vh;
+    padding: 5%;
+  }
 }
 
 @media (max-width: 859px) {

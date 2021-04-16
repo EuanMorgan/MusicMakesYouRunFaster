@@ -92,7 +92,7 @@ export function CollapseMenu(props) {
             {/* {//console.log(props.data)} */}
 
             {props.data.speed_sentences.map((d) => (
-              <p>{d}</p>
+              <li>{d}</li>
             ))}
 
             <LineGraph
