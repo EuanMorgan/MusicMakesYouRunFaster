@@ -3,6 +3,13 @@ import React from "react";
 import { Radar } from "react-chartjs-2";
 
 export const RadarChart = (props) => {
+  const lbls = [
+    "acousticness",
+    "danceability",
+    "energy",
+    "valence",
+    "speechiness",
+  ];
   // show audio features
   //developer.spotify.com/documentation/web-api/reference/#object-audiofeaturesobject
   let datasets = props.songData.map((d, index) => ({
@@ -15,19 +22,23 @@ export const RadarChart = (props) => {
   }));
   //console.log(datasets);
   const data = {
-    labels: [
-      "acousticness",
-      "danceability",
-      "energy",
-      "valence",
-      "speechiness",
-    ],
+    labels: lbls,
     datasets: datasets,
   };
 
   const options = {
+    maintainAspectRatio: false,
     tooltips: {
       enabled: true,
+      callbacks: {
+        // Format label i.e. accousitcness 0.9w325238235 instead of just the number
+        label: function (tooltipItems, data) {
+          return data.datasets[0].data[tooltipItems.index];
+        },
+        beforeLabel: function (tooltipItems, data) {
+          return lbls[tooltipItems.index];
+        },
+      },
     },
     animation: {
       duration: 1500,
@@ -45,7 +56,7 @@ export const RadarChart = (props) => {
         fontColor: "grey",
       },
       pointLabels: {
-        fontSize: 18,
+        fontSize: 12,
       },
     },
     legend: {
@@ -54,7 +65,7 @@ export const RadarChart = (props) => {
   };
   if (props.show) {
     return (
-      <div className="chart-container">
+      <div className="radar-chart-container">
         <Radar data={data} options={options} />
       </div>
     );

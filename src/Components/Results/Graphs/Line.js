@@ -53,6 +53,7 @@ export const LineGraph = (props) => {
   };
 
   const options = {
+    maintainAspectRatio: false,
     tooltips: {
       enabled: true,
     },
@@ -84,7 +85,7 @@ export const LineGraph = (props) => {
   };
   if (props.show) {
     return (
-      <div className="chart-container">
+      <div className="chart-container line">
         <Line data={data} options={options} />
       </div>
     );
