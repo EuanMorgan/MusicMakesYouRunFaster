@@ -48,6 +48,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const data = doc.data();
+
     try {
       return setUserData({
         ...userData,
