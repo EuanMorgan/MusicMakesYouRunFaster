@@ -82,8 +82,16 @@ button,
   }
 }
 
+@media (max-width: 800px) {
+  .results h1 {
+    font-size: 1.5rem;
+  }
+  .results p {
+    font-size: 1.8rem;
+  }
+}
 .results h1 {
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 .results p {
   font-size: 1.8rem;
@@ -208,6 +216,11 @@ button,
     font-size: 1.3rem;
     width: 90%;
   }
+}
+
+.bar {
+  width: 50vw;
+  height: 50vh;
 }
 
 .radar {

@@ -121,12 +121,12 @@ const OverallResults = (props) => {
       <h1>Overall</h1>
 
       <p>
-        Over the last {runIdList.length} runs you travelled{" "}
-        {combinedData.totalDistance} metres in{" "}
+        Over the last <span className="red-text"> {runIdList.length} runs</span>{" "}
+        you travelled{" "}
+        <span className="red-text">{combinedData.totalDistance} metres</span> in{" "}
         {msToHMS(combinedData.totalTime, true)}
       </p>
       <OverallStats combinedData={combinedData} />
-      <p>You listened to </p>
 
       <AllSongs songs={combinedData.songs} />
 

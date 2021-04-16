@@ -41,20 +41,17 @@ const AllSongs = (props) => {
       else artistCount[artist] = 1;
     });
     setArtistCount(artistCount);
-  }, []);
+  }, [props.songs]);
 
   return (
     <div>
       <h1>All Songs</h1>
       <div className="data-list-top-container all-songs">
         <div className="data-list-top">
-          <p
-            style={{ cursor: "pointer" }}
-            onClick={() => setIsShowingSongs(!isShowingSongs)}
-          >
+          <p>
             <span className="data-list-title">You listened to:</span>{" "}
             {props.songs.length} songs
-            <Collapser show={isShowingSongs}>
+            <Collapser>
               <div>
                 {allSongsList &&
                   allSongsList.map((song) => (
@@ -87,7 +84,7 @@ const AllSongs = (props) => {
         {showChart ? "Hide bar charts" : "Show bar charts"}
       </button>
       {showChart ? (
-        <div className="chart-container">
+        <div>
           <BarChart
             show={showChart}
             labels={uniqueGenres.sort()}

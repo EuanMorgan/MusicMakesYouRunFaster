@@ -7,6 +7,7 @@ export const BarChart = (props) => {
   //   defaults.global.responsive = true;
   //console.log(props);
   const data = {
+    maintainAspectRatio: false,
     labels: props.labels,
 
     datasets: [
@@ -45,7 +46,7 @@ export const BarChart = (props) => {
   };
   if (props.show) {
     return (
-      <div className="chart-container">
+      <div className="chart-container bar">
         <Bar data={data} options={options} />
       </div>
     );

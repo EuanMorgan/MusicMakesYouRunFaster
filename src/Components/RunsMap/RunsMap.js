@@ -153,6 +153,8 @@ const RunsMap = (props) => {
     } else {
       setRun(runData);
     }
+
+    console.log(runData);
   };
 
   useEffect(() => {
@@ -188,6 +190,7 @@ const RunsMap = (props) => {
     stopRun();
     replayCounter = 0;
     setRun(runList[id]);
+    console.log(runList[id]);
   };
 
   return (
