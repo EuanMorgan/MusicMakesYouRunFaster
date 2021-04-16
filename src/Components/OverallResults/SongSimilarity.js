@@ -135,10 +135,32 @@ export default function SongSimilarity(props) {
 
   const Paragraph = styled.p`
     font-size: 1rem;
+
+    @media (max-width: 858px) {
+      width: 80vw;
+    }
+  `;
+
+  const ParagraphContainer = styled.div`
+    max-width: 50vw;
+    margin: auto;
+
+    @media (max-width: 858px) {
+      max-width: 80vw;
+    }
+  `;
+
+  const PageContainer = styled.div`
+    max-width: 80vw;
+    margin: auto;
+
+    @media (max-width: 858px) {
+      max-width: 95vw;
+    }
   `;
 
   return (
-    <div style={{ maxWidth: "80vw", margin: "auto" }}>
+    <PageContainer>
       <h1>Fastest Songs</h1>
       <div className="data-list-top-container">
         <div className="data-list-top" style={{ borderBottom: 0 }}>
@@ -159,12 +181,7 @@ export default function SongSimilarity(props) {
       </div>
 
       <h1>How similar are your songs?</h1>
-      <div
-        style={{
-          maxWidth: "50vw",
-          margin: "auto",
-        }}
-      >
+      <ParagraphContainer>
         <Paragraph>
           Below is a scatter chart of your songs showing how different they are.
           Each column is an individual song which is shown at the bottom, and
@@ -172,18 +189,13 @@ export default function SongSimilarity(props) {
           song. The further away any point in the column is from the bottom
           point, the more different the song is.
         </Paragraph>
-      </div>
+      </ParagraphContainer>
 
       <ScatterChart differences={differences} />
 
       <h1>How do we know this?</h1>
       <Collapser>
-        <div
-          style={{
-            maxWidth: "50vw",
-            margin: "auto",
-          }}
-        >
+        <ParagraphContainer>
           <Paragraph>
             Spotify gives each song confidence scores which say how likely it is
             that a particular song has a certain property. For example: a Bob
@@ -204,9 +216,9 @@ export default function SongSimilarity(props) {
             songs are in the scatter chart the more similar their radar charts
             will look
           </Paragraph>
-        </div>
+        </ParagraphContainer>
       </Collapser>
       <RadarChart songData={radarData} show={true} />
-    </div>
+    </PageContainer>
   );
 }

@@ -201,6 +201,12 @@ button,
   height: 20vh;
 }
 
+@media (max-width: 859px) {
+  .chart-container.scatter {
+    height: 50vh;
+  }
+}
+
 /*       listStylePosition: "inside",
               fontSize: "2em",
               background: "#282828",

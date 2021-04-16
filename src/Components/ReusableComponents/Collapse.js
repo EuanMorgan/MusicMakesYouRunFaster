@@ -92,7 +92,7 @@ export function CollapseMenu(props) {
             {/* {//console.log(props.data)} */}
 
             {props.data.speed_sentences.map((d) => (
-              <li>{d}</li>
+              <p>{d}</p>
             ))}
 
             <LineGraph
@@ -118,7 +118,7 @@ export function CollapseMenu(props) {
               containerStyle={{
                 height: "25rem",
                 // textAlign: "center",
-                maxWidth: "100vw",
+                maxWidth: "100%",
                 // display: "flex",
                 margin: "auto",
               }}
