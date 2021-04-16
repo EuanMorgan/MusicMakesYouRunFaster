@@ -10,6 +10,7 @@ export const RunStats = (props) => {
   let bpm_order = [...props.run.run_map].sort(sort("heart_rate_bpm"));
   let speed_order = [...props.run.run_map].sort(sort("pace"));
   //console.log(props.run.songs);
+
   return (
     <div className="results">
       <h1>
@@ -24,7 +25,7 @@ export const RunStats = (props) => {
         speed_order={speed_order}
         bpm_order={bpm_order}
       />
-      <div style={{ paddingTop: "8%", paddingBottom: "10%" }}>
+      <div style={{ paddingTop: "5vh", paddingBottom: "5vh" }}>
         <Link
           className="button"
           to={{
@@ -36,6 +37,7 @@ export const RunStats = (props) => {
           View run on map
         </Link>
       </div>
+
       <AllSongs songs={props.run.songs} />
       <FastestSongs
         run={props.run}

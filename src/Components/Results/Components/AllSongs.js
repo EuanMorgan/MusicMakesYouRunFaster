@@ -82,7 +82,7 @@ const AllSongs = (props) => {
         onClick={() => {
           setShowChart(!showChart);
         }}
-        style={{ marginTop: "1vh" }}
+        style={{ marginTop: "2vh", marginBottom: "3vh" }}
       >
         {showChart ? "Hide bar charts" : "Show bar charts"}
       </button>
