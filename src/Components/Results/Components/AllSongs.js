@@ -102,16 +102,6 @@ const AllSongs = (props) => {
           />
         </div>
       ) : null}
-
-      {/* {showChart ? (
-        <div className="chart-container">
-          <BarChart
-            show={showChart}
-            labels={uniqueGenres.sort()}
-            genreCount={genreCount}
-          />
-        </div>
-      ) : null} */}
     </div>
   );
 };

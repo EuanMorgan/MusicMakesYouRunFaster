@@ -3,6 +3,13 @@ import React from "react";
 import { Radar } from "react-chartjs-2";
 
 export const RadarChart = (props) => {
+  const lbls = [
+    "acousticness",
+    "danceability",
+    "energy",
+    "valence",
+    "speechiness",
+  ];
   // show audio features
   //developer.spotify.com/documentation/web-api/reference/#object-audiofeaturesobject
   let datasets = props.songData.map((d, index) => ({
@@ -15,13 +22,7 @@ export const RadarChart = (props) => {
   }));
   //console.log(datasets);
   const data = {
-    labels: [
-      "acousticness",
-      "danceability",
-      "energy",
-      "valence",
-      "speechiness",
-    ],
+    labels: lbls,
     datasets: datasets,
   };
 
@@ -29,6 +30,15 @@ export const RadarChart = (props) => {
     maintainAspectRatio: false,
     tooltips: {
       enabled: true,
+      callbacks: {
+        // Format label i.e. accousitcness 0.9w325238235 instead of just the number
+        label: function (tooltipItems, data) {
+          return data.datasets[0].data[tooltipItems.index];
+        },
+        beforeLabel: function (tooltipItems, data) {
+          return lbls[tooltipItems.index];
+        },
+      },
     },
     animation: {
       duration: 1500,
