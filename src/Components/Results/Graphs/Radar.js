@@ -65,7 +65,7 @@ export const RadarChart = (props) => {
   };
   if (props.show) {
     return (
-      <div className="radar-chart-container">
+      <div className="chart-container radar">
         <Radar data={data} options={options} />
       </div>
     );
