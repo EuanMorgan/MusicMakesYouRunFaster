@@ -118,7 +118,7 @@ export function CollapseMenu(props) {
               containerStyle={{
                 height: "25rem",
                 // textAlign: "center",
-                maxWidth: "100%",
+                maxWidth: "95%",
                 // display: "flex",
                 margin: "auto",
               }}

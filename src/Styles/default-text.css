@@ -214,6 +214,11 @@ button,
   .chart-container.scatter {
     height: 50vh;
   }
+  .chart-container.line {
+    height: 40vh;
+    width: 85%;
+    padding: 2%;
+  }
 }
 
 /*       listStylePosition: "inside",
