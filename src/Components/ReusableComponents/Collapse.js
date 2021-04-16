@@ -88,7 +88,7 @@ export function CollapseMenu(props) {
           </p>
         </div>
         <Collapse isOpened={isButtonCollapseOpen} className="collapseMenu">
-          <ul className="songs-ul">
+          <div className="songs-ul">
             {/* {//console.log(props.data)} */}
 
             {props.data.speed_sentences.map((d) => (
@@ -117,9 +117,9 @@ export function CollapseMenu(props) {
               style="mapbox://styles/mapbox/streets-v9"
               containerStyle={{
                 height: "25rem",
-                textAlign: "center",
-                maxWidth: "50rem",
-                display: "flex",
+                // textAlign: "center",
+                maxWidth: "100vw",
+                // display: "flex",
                 margin: "auto",
               }}
               center={[
@@ -179,7 +179,7 @@ export function CollapseMenu(props) {
             >
               Find out more about audio features
             </button>
-          </ul>
+          </div>
         </Collapse>
       </div>
     </div>

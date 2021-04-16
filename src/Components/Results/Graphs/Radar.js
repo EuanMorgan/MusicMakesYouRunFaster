@@ -54,7 +54,7 @@ export const RadarChart = (props) => {
   };
   if (props.show) {
     return (
-      <div className="chart-container">
+      <div className="radar-chart-container">
         <Radar data={data} options={options} />
       </div>
     );

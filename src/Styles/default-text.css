@@ -134,9 +134,9 @@ button,
   max-width: 30vw;
 }
 
-@media (max-width: 100px) {
+@media (max-width: 1000px) {
   .data-list-top-container.all-songs {
-    max-width: 95vw;
+    max-width: 60vw;
   }
 }
 
@@ -185,7 +185,7 @@ button,
   background: #282828;
   border-radius: 1rem;
   margin: auto;
-  width: 70%;
+  width: 100%;
   padding: 1rem;
   margin-top: 1rem;
 }
@@ -196,20 +196,9 @@ button,
   }
 }
 
-.chart-container {
-  font-size: 2rem;
-  background: #282828;
-  border-radius: 1rem;
-  margin: auto;
-  width: 70%;
-  padding: 1rem;
-  margin-top: 1rem;
-}
-@media (max-width: 800px) {
-  .chart-container {
-    font-size: 1.3rem;
-    width: 90%;
-  }
+.radar-chart-container {
+  width: 80vw;
+  height: 20vh;
 }
 
 /*       listStylePosition: "inside",
