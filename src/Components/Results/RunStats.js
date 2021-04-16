@@ -24,7 +24,7 @@ export const RunStats = (props) => {
         speed_order={speed_order}
         bpm_order={bpm_order}
       />
-      <div style={{ paddingTop: "2rem" }}>
+      <div style={{ paddingTop: "8%", paddingBottom: "10%" }}>
         <Link
           className="button"
           to={{

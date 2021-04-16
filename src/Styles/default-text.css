@@ -16,6 +16,13 @@ h3 :not(.nav) {
   text-align: center;
 }
 
+@media (max-width: 800px) {
+  h1:not(.nav),
+  h3 :not(.nav) {
+    font-size: 2rem;
+  }
+}
+
 .faq h3 {
   font-size: 1.8vw;
 }
@@ -61,10 +68,10 @@ button,
     margin: auto;
   }
   .Buttons p {
-    font-size: 2rem;
+    font-size: 1rem;
   }
   .Buttons h1 {
-    font-size: 3rem;
+    font-size: 1.5rem;
   }
   button,
   .button {
@@ -76,7 +83,7 @@ button,
 }
 
 .results h1 {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
 }
 .results p {
   font-size: 1.8rem;
