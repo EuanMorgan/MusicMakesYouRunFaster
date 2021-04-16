@@ -252,7 +252,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   //filter out unneccasry things, too much data to store otherwise
   // and get dates run occured
   //dates plural because some nutcase might go for a run at like 5 to midnight?
-
+  console.log("finding ddate and distances");
   let dates = [];
   let total_distance = 0;
   let tempRoute = run.trackpoints.map((point, index) => {
@@ -286,11 +286,11 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   //REMOVE FIRST AND LAST 3 POINTS
   //REASON IS BECAUSE SOMETIMES FITBIT GPS SEEMS TO ACT UP DURING THIS TIMES
   //I.E. NOT RECORDING THE CORRECT POINTS WHICH MESSES UP SPEED AND DISTANCE CALCULATIONS
-
+  console.log("removing 3 points");
   tempRoute.splice(0, 3);
   tempRoute.splice(tempRoute.length - 3, 3);
 
-  //console.log(`This run occured on the following date(s) ${dates.toString()}`);
+  console.log(`This run occured on the following date(s) ${dates.toString()}`);
   //discard all songs not played on the same date as the exercise
   spotifySongs = spotifySongs.filter((s) =>
     dates.includes(s["played_at"].split("T")[0])
@@ -298,18 +298,19 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
 
   //find starting song (first played during run)
   //remove any songs that come before it.
+
   let starting_song = findStartingSong(spotifySongs, tempRoute);
   spotifySongs = spotifySongs.splice(
     0,
     spotifySongs.indexOf(starting_song) + 1
   );
-
+  console.log("starting song: " + starting_song.name);
   //calculate 'rough' start times for each song.
   //using my shift algorithm
-  //console.log("trying this shit");
+  console.log("calculating played times");
   spotifySongs = calculateSongPlayedTimes(spotifySongs);
   //console.log("done it");
-
+  console.log("matching songs to points");
   let ret = matchSongsToPoints(spotifySongs, tempRoute);
   //console.log("ditch other songs");
 
@@ -321,9 +322,10 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   [tempRoute, spotifySongs] = ret;
 
   //console.log(tempRoute, spotifySongs);
-
+  console.log("removing duplicates");
   tempRoute = removeDuplicatePoints(tempRoute);
 
+  console.log("calculating speed and flesh out currently playing");
   tempRoute = calcSpeedAndPopulateCurrentlyPlaying(tempRoute);
 
   //console.log(tempRoute);
@@ -333,10 +335,12 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
 
   //changed ID from YYYY-MM-DD (horrific) to DD-MM-YYYY (lovely and correct)
   // totally unnecessary but I find it more readable
+  console.log("fixing id");
   let fixed_id = changeIdFormat(run.activityId);
 
   if (tempRoute.length > 3000) {
     //split up into subparts to avoid exceeding firestore limit
+    console.log("splitting into parts");
     let groups = split(tempRoute);
     try {
       groups.forEach(async (g, index) => {
@@ -358,6 +362,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
       return -5;
     }
   } else {
+    console.log("no need to split into parts, writing to db");
     try {
       if (!isTest) {
         let ref = await db
@@ -385,6 +390,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   //TODO: this takes the top 10% of all points - instead loop through and only add points if they are more than x amount above the average for the run.
 
   //Get array of all speeds and heart rates.
+  console.log("extracting all speeds/bpms");
   let all_speeds = [];
   let all_heart_rates = [];
   tempRoute.forEach((p) => {
@@ -392,11 +398,13 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
     all_speeds.push(parseFloat(p.pace));
   });
 
+  console.log("finding averages");
   const avg_pace = average(all_speeds);
   const avg_bpm = average(all_heart_rates);
 
   // Get fastest and highest bpm points
   // Top 10% of points get returned.
+  console.log("getting fastest pojnts");
   let fastest = tempRoute.filter((p) => p.pace > avg_pace);
   let highest = tempRoute.filter((p) => p.heart_rate_bpm > avg_bpm);
   let fastest_points = await findFastestPoints(fastest, uid, final_id, isTest);
@@ -408,6 +416,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   );
 
   try {
+    console.log("writing other data");
     if (!isTest) {
       await db
         .collection("users")
@@ -420,7 +429,8 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
         );
     }
   } catch (error) {
-    ////console.log(error);
+    console.log(error);
+    return -1000;
   }
 
   ////console.log("returning this to be fair....");

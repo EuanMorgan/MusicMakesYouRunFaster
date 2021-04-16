@@ -52,6 +52,10 @@ const Dashboard = (props) => {
         );
       } else if (x === -500) {
         props.toast.error("No songs found for most recent run 😭😭😭");
+      } else if (x === -1000) {
+        props.toast.error(
+          "Error writing additional data, please delete run and try again"
+        );
       } else {
         props.toast.success("🦄 run fetched successfully!");
       }

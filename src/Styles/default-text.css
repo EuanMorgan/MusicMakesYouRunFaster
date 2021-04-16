@@ -16,6 +16,13 @@ h3 :not(.nav) {
   text-align: center;
 }
 
+@media (max-width: 800px) {
+  h1:not(.nav),
+  h3 :not(.nav) {
+    font-size: 2rem;
+  }
+}
+
 .faq h3 {
   font-size: 1.8vw;
 }
@@ -61,10 +68,10 @@ button,
     margin: auto;
   }
   .Buttons p {
-    font-size: 2rem;
+    font-size: 1rem;
   }
   .Buttons h1 {
-    font-size: 3rem;
+    font-size: 1.5rem;
   }
   button,
   .button {
@@ -76,7 +83,7 @@ button,
 }
 
 .results h1 {
-  font-size: 2.5rem;
+  font-size: 1.5rem;
 }
 .results p {
   font-size: 1.8rem;
@@ -134,9 +141,9 @@ button,
   max-width: 30vw;
 }
 
-@media (max-width: 100px) {
+@media (max-width: 1000px) {
   .data-list-top-container.all-songs {
-    max-width: 95vw;
+    max-width: 60vw;
   }
 }
 
@@ -173,6 +180,13 @@ button,
   margin: auto;
   width: 55%;
 }
+
+@media (min-width: 900px) {
+  .songs-ul li {
+    padding-left: 5%;
+  }
+}
+
 @media (max-width: 800px) {
   .songs-ul {
     font-size: 1.3rem;
@@ -185,9 +199,9 @@ button,
   background: #282828;
   border-radius: 1rem;
   margin: auto;
-  width: 70%;
-  padding: 1rem;
-  margin-top: 1rem;
+  width: 80%;
+  /* padding: 1rem; */
+  margin-top: 5%;
 }
 @media (max-width: 800px) {
   .chart-container {
@@ -196,19 +210,21 @@ button,
   }
 }
 
-.chart-container {
-  font-size: 2rem;
-  background: #282828;
-  border-radius: 1rem;
-  margin: auto;
-  width: 70%;
-  padding: 1rem;
-  margin-top: 1rem;
-}
 @media (max-width: 800px) {
-  .chart-container {
-    font-size: 1.3rem;
-    width: 90%;
+  .radar-chart-container {
+    height: 40vh;
+    padding: 5%;
+  }
+}
+
+@media (max-width: 859px) {
+  .chart-container.scatter {
+    height: 50vh;
+  }
+  .chart-container.line {
+    height: 40vh;
+    width: 85%;
+    padding: 2%;
   }
 }
 

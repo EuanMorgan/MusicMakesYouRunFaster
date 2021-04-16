@@ -44,6 +44,7 @@ export const ScatterChart = (props) => {
   };
 
   let options = {
+    maintainAspectRatio: false,
     scales: {
       xAxes: [
         {
@@ -88,7 +89,7 @@ export const ScatterChart = (props) => {
     },
   };
   return (
-    <div className="chart-container">
+    <div className="chart-container scatter">
       <Scatter data={data} options={options} />
     </div>
   );
