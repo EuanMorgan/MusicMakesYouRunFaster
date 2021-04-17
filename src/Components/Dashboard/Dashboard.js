@@ -39,6 +39,12 @@ const Dashboard = (props) => {
       );
       props.setLoading(false);
       return;
+    } else if (map === "oops") {
+      props.toast.error(
+        "There has been an error communicating with FitBit (the sods), please refresh the page and try again 👍"
+      );
+      props.setLoading(false);
+      return;
     }
     //console.log(map);
 

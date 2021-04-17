@@ -8,7 +8,7 @@ export const ScatterChart = (props) => {
 
   props.differences.forEach((song, index) => {
     song.scores.forEach((score) => {
-      console.log(score);
+      // console.log(score);
       dataset.push({
         x: index + 1,
         y: score.difference,
@@ -67,10 +67,10 @@ export const ScatterChart = (props) => {
       mode: "single",
       callbacks: {
         label: function (tooltipItems, data) {
-          console.log(tooltipItems, data);
+          // console.log(tooltipItems, data);
           // SET THE LABEL OF THE TOOL TIPS (HOVER OVER POINTS)
           // TO CONTAIN THE SONG NAME, SCORE AND PERCENTAGE
-          console.log(data);
+          // console.log(data);
 
           let percentage =
             data.datasets[0].data[tooltipItems.index].y === 0

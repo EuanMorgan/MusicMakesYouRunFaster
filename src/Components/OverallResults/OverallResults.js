@@ -79,7 +79,7 @@ const OverallResults = (props) => {
       songs: songs,
       fastestSongs: fastest_songs,
     });
-
+    findRepeatOccurences(songs);
     console.log(fastest_songs);
   };
 
@@ -100,6 +100,16 @@ const OverallResults = (props) => {
     spotifyToken = vals[2];
     let runData = vals[1][vals[1].length - 1];
     //console.log(runData);
+  };
+
+  const findRepeatOccurences = (songs) => {
+    let tempIDArray = songs.map((song) => song.id);
+
+    let findDuplicates = tempIDArray.filter(
+      (item, index) => tempIDArray.indexOf(item) != index
+    );
+    console.log(tempIDArray);
+    console.log(findDuplicates);
   };
 
   useEffect(async () => {
@@ -129,6 +139,9 @@ const OverallResults = (props) => {
       <OverallStats combinedData={combinedData} />
 
       <AllSongs songs={combinedData.songs} />
+
+      {/* {combinedData.songs} */}
+      {/* <Frequency /> */}
 
       <SongSimilarity
         songs={combinedData.songs}
