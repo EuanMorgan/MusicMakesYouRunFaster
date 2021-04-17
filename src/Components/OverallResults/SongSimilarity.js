@@ -4,9 +4,12 @@ import styled from "styled-components";
 import { Collapser } from "../ReusableComponents/Collapser";
 import { Radar } from "react-chartjs-2";
 import { RadarChart } from "../Results/Graphs/Radar";
+import { average } from "../../Common/CommonFunctions";
 export default function SongSimilarity(props) {
   const [differences, setDifferences] = useState([]);
   const [radarData, setRadarData] = useState([]);
+  const [avgFastestDiff, setAvgFastestDiff] = useState();
+  const [avgNonFastestDiff, setAvgNonFastestDiff] = useState();
   //find similarities
   // Each song has a confidence score for cerain properties
   /*
@@ -37,7 +40,7 @@ export default function SongSimilarity(props) {
   };
 
   const compareTwoSongs = (songA, songB) => {
-    console.log(`Similarity of ${songA.name} ||and|| ${songB.name}`);
+    // console.log(`Similarity of ${songA.name} ||and|| ${songB.name}`);
     let overall = 0;
 
     const songAFeatures = extractFeatures(songA);
@@ -59,20 +62,21 @@ export default function SongSimilarity(props) {
     // console.log(similarity_percent);
     similarity_percent = 100 - similarity_percent;
 
-    console.log(
-      `Overall difference is ${overall}. Meaning they are ${similarity_percent}% similar`
-    );
+    // console.log(
+    //   `Overall difference is ${overall}. Meaning they are ${similarity_percent}% similar`
+    // );
 
     return [overall, similarity_percent];
   };
 
   useEffect(() => {
-    console.log(props.fastest_songs);
+    // console.log(props.fastest_songs);
     let all_differences = [];
 
     //for each song, make an object containing its id, name, artist name
     //and the differences compared to every other song
-
+    let fastest_percentages = [];
+    let non_fastest_percentages = [];
     props.fastest_songs.forEach((baseSong) => {
       let temp_differences = [];
 
@@ -86,6 +90,8 @@ export default function SongSimilarity(props) {
           baseSong,
           compareSong
         );
+
+        fastest_percentages.push(percentageSimilar);
 
         temp_differences.push({
           base_song_id: baseSong.id,
@@ -108,7 +114,29 @@ export default function SongSimilarity(props) {
       });
     });
 
-    console.log(all_differences);
+    // console.log(all_differences);
+
+    props.non_fastest_songs.forEach((baseSong) => {
+      props.non_fastest_songs.forEach((compareSong) => {
+        if (baseSong.id === compareSong.id) {
+          return;
+        }
+
+        let [disagreement, percentageSimilar] = compareTwoSongs(
+          baseSong,
+          compareSong
+        );
+
+        non_fastest_percentages.push(percentageSimilar);
+      });
+      // console.log(non_fastest_percentages);
+    });
+
+    let averageFastestSimilarity = average(fastest_percentages);
+    setAvgFastestDiff(averageFastestSimilarity);
+    let averageNonFastestSimilarity = average(non_fastest_percentages);
+    setAvgNonFastestDiff(averageNonFastestSimilarity);
+
     setDifferences(all_differences);
 
     let tempRadarData = [];
@@ -129,12 +157,20 @@ export default function SongSimilarity(props) {
         ],
       });
     });
-    console.log(tempRadarData);
+    // console.log(tempRadarData);
     setRadarData(tempRadarData);
   }, []);
 
   const Paragraph = styled.p`
     font-size: 1rem;
+
+    @media (max-width: 858px) {
+      width: 80vw;
+    }
+  `;
+
+  const ParagraphLarger = styled.p`
+    font-size: 1.5rem;
 
     @media (max-width: 858px) {
       width: 80vw;
@@ -219,6 +255,17 @@ export default function SongSimilarity(props) {
         </ParagraphContainer>
       </Collapser>
       <RadarChart songData={radarData} show={true} />
+      <ParagraphContainer>
+        <ParagraphLarger>
+          Songs that made you run faster are{" "}
+          {avgFastestDiff && avgFastestDiff.toFixed(2)}% similar on average.
+        </ParagraphLarger>
+        <ParagraphLarger>
+          All other songs are{" "}
+          {avgNonFastestDiff && avgNonFastestDiff.toFixed(2)}% similar on
+          average
+        </ParagraphLarger>
+      </ParagraphContainer>
     </PageContainer>
   );
 }

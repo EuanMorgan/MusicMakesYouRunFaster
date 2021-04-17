@@ -81,14 +81,12 @@ export const Frequency = (props) => {
         label: function (tooltipItem, data) {
           var dataset = data.datasets[tooltipItem.datasetIndex];
           var index = tooltipItem.index;
-          console.log(dataset, index);
 
           return labelArray[index] + "  |  " + dataset.data[index]; //+ ": " + dataset.data[index];
         },
         title: function (tooltipItem, data) {
-          console.log(tooltipItem, data);
           var dataset = data.datasets[tooltipItem[0].datasetIndex];
-          //   return dataset.label;
+
           return dataset.label;
         },
       },
@@ -100,6 +98,4 @@ export const Frequency = (props) => {
       <Bar data={data} options={options} />
     </div>
   );
-
-  return <div></div>;
 };

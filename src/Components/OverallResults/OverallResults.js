@@ -214,6 +214,7 @@ const OverallResults = (props) => {
       <SongSimilarity
         songs={combinedData.songs}
         fastest_songs={combinedData.fastestSongs}
+        non_fastest_songs={combinedData.nonFastestSongs}
       />
     </div>
   );

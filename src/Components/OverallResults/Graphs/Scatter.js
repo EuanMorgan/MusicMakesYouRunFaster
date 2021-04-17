@@ -4,7 +4,7 @@ import { Scatter } from "react-chartjs-2";
 
 export const ScatterChart = (props) => {
   const dataset = [];
-  console.log(props.differences);
+  // console.log(props.differences);
 
   props.differences.forEach((song, index) => {
     song.scores.forEach((score) => {
@@ -20,7 +20,7 @@ export const ScatterChart = (props) => {
     dataset.push({ x: index + 1, y: 0, label: song.name, color: song.color });
   });
 
-  console.log(dataset);
+  // console.log(dataset);
 
   const data = {
     datasets: [
