@@ -15,6 +15,7 @@ export const RunStats = (props) => {
     <div className="results">
       <h1>
         Run:{" "}
+        {/* Do some rearranging on the run date, change from YYYY-MM-DD to DD-MM-YYYY */}
         {props.run.run_map[0].time
           .split("T")[0]
           .split("-")

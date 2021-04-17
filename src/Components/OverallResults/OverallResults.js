@@ -13,6 +13,7 @@ import OverallStats from "../Results/Components/OverallStats";
 import AllSongs from "../Results/Components/AllSongs";
 import SongSimilarity from "./SongSimilarity";
 import { Frequency } from "./Graphs/Frequency";
+import FastestSongs from "../Results/Components/FastestSongs";
 const OverallResults = (props) => {
   const { userData, fetchUserData, currentUser } = useAuth();
   const [runIdList, setRunIdList] = useState();
@@ -66,6 +67,20 @@ const OverallResults = (props) => {
     let sortedSpeeds = allSpeeds.sort(sortDescending);
     let sortedHeart = allHeartRates.sort(sortDescending);
 
+    let nonFastestSongs = [...songs];
+
+    fastest_songs.forEach((song) => {
+      nonFastestSongs.splice(nonFastestSongs.indexOf(song), 1);
+    });
+    let repeats = findRepeatOccurences(songs);
+
+    let fastestRepeats = findRepeatOccurences(fastest_songs);
+
+    let nonFastestRepeats = findRepeatOccurences(nonFastestSongs);
+
+    console.log(fastestRepeats);
+    console.log(nonFastestRepeats);
+
     setCombinedData({
       ...combinedData,
       totalDistance: totalDistance.toFixed(2),
@@ -78,6 +93,10 @@ const OverallResults = (props) => {
       lowestSpeed: sortedSpeeds[sortedSpeeds.length - 1],
       songs: songs,
       fastestSongs: fastest_songs,
+      repeatOccurences: repeats,
+      fastestRepeats: fastestRepeats,
+      nonFastestRepeats: nonFastestRepeats,
+      nonFastestSongs: nonFastestSongs,
     });
 
     console.log(fastest_songs);
@@ -102,7 +121,7 @@ const OverallResults = (props) => {
     //console.log(runData);
   };
 
-  const findRepeatOccurences = (songs) => {
+  const findRepeatOccurences = (songs, fastest_songs, nonFastestSongs) => {
     let tempIDArray = songs.map((song) => song.id);
 
     let tempCount = {};
@@ -127,15 +146,26 @@ const OverallResults = (props) => {
     });
 
     console.log(duplicateValues);
+    if (Object.keys(duplicateValues).length > 0) {
+      return duplicateValues;
+    }
 
+    return null;
+  };
+
+  const showRepeatOccurences = () => {
+    console.log(combinedData.repeatOccurences);
+    if (combinedData.repeatOccurences === null) {
+      return;
+    }
     let returnVal =
-      Object.keys(duplicateValues).length > 0 ? (
+      Object.keys(combinedData.repeatOccurences).length > 0 ? (
         <div>
           <p>Songs that appear more than once</p>
-          <Frequency data={duplicateValues} />
-          {/* {duplicates.map((id) => (
-            <p>{songs.filter((song) => song.id === id)[0].name}</p>
-          ))} */}
+          <Frequency
+            fastest={combinedData.fastestRepeats}
+            nonFastest={combinedData.nonFastestRepeats}
+          />
         </div>
       ) : (
         <p>
@@ -162,6 +192,7 @@ const OverallResults = (props) => {
     return <h1>Loading</h1>;
   }
 
+  console.log(combinedData);
   return (
     <div>
       <h1>Overall</h1>
@@ -175,7 +206,7 @@ const OverallResults = (props) => {
       <OverallStats combinedData={combinedData} />
 
       <AllSongs songs={combinedData.songs} />
-      {findRepeatOccurences(combinedData.songs)}
+      {showRepeatOccurences()}
 
       {/* {combinedData.songs} */}
       {/* <Frequency /> */}

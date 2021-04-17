@@ -6,16 +6,41 @@ export const Frequency = (props) => {
   // defaults.global.maintainAspectRatio = false;
   //   defaults.global.responsive = true;
   //console.log(props);
-  const data = {
-    labels: Object.keys(props.data),
 
+  let labelArray = [];
+  let dataArray = [];
+  if (props.fastest != null) {
+    labelArray = [...labelArray, ...Object.keys(props.fastest)];
+    dataArray = [...dataArray, ...Object.values(props.fastest)];
+  }
+  if (props.nonFastest != null) {
+    labelArray = [...labelArray, ...Object.keys(props.nonFastest)];
+    dataArray = [...dataArray, ...Object.values(props.nonFastest)];
+  }
+  console.log(props.fastest, props.nonFastest);
+  console.log(labelArray);
+  const data = {
+    // labels: Object.keys(props.data),
+    labels: labelArray,
     datasets: [
       {
-        label: props.title,
-        data: Object.values(props.data),
+        label: "Running Fastest",
+        data: Object.values(props.fastest),
         backgroundColor: "rgba(255,99,132,0.2)",
         borderColor: "rgba(255,99,132,1)",
         borderWidth: 1,
+        labels: Object.keys(props.fastest),
+      },
+      {
+        label: "Not running fastest",
+        data: [
+          ...Object.keys(props.fastest).map((i) => null),
+          ...Object.values(props.nonFastest),
+        ],
+        backgroundColor: "rgba(89,255,255,0.2)",
+        borderColor: "rgba(5,55,132,1)",
+        borderWidth: 1,
+        labels: Object.keys(props.nonFastest),
       },
     ],
   };
@@ -50,6 +75,23 @@ export const Frequency = (props) => {
           },
         },
       ],
+    },
+    tooltips: {
+      callbacks: {
+        label: function (tooltipItem, data) {
+          var dataset = data.datasets[tooltipItem.datasetIndex];
+          var index = tooltipItem.index;
+          console.log(dataset, index);
+
+          return labelArray[index] + "  |  " + dataset.data[index]; //+ ": " + dataset.data[index];
+        },
+        title: function (tooltipItem, data) {
+          console.log(tooltipItem, data);
+          var dataset = data.datasets[tooltipItem[0].datasetIndex];
+          //   return dataset.label;
+          return dataset.label;
+        },
+      },
     },
   };
 

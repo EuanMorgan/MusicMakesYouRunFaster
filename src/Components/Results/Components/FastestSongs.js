@@ -134,7 +134,7 @@ const FastestSongs = (props) => {
 
   return (
     <div>
-      <h1>The songs that made you run the fastest were: </h1>
+      <h1>You ran the fastest whilst listening to these songs: </h1>
       {fastest_song_ids.map((id) => {
         let [
           listeningData,
