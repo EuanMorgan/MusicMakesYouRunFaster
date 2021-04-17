@@ -7,7 +7,6 @@ export const BarChart = (props) => {
   //   defaults.global.responsive = true;
   //console.log(props);
   const data = {
-    maintainAspectRatio: false,
     labels: props.labels,
 
     datasets: [
@@ -22,13 +21,18 @@ export const BarChart = (props) => {
   };
 
   const options = {
+    maintainAspectRatio: false,
     tooltips: {
       enabled: true,
     },
     animation: {
       duration: 1500,
     },
+
     scales: {
+      pointLabels: {
+        fontSize: 5,
+      },
       xAxes: [
         {
           maxBarThickness: 20,

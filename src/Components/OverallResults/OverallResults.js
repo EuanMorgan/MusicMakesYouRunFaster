@@ -12,7 +12,7 @@ import {
 import OverallStats from "../Results/Components/OverallStats";
 import AllSongs from "../Results/Components/AllSongs";
 import SongSimilarity from "./SongSimilarity";
-
+import { Frequency } from "./Graphs/Frequency";
 const OverallResults = (props) => {
   const { userData, fetchUserData, currentUser } = useAuth();
   const [runIdList, setRunIdList] = useState();
@@ -79,7 +79,7 @@ const OverallResults = (props) => {
       songs: songs,
       fastestSongs: fastest_songs,
     });
-    findRepeatOccurences(songs);
+
     console.log(fastest_songs);
   };
 
@@ -105,11 +105,47 @@ const OverallResults = (props) => {
   const findRepeatOccurences = (songs) => {
     let tempIDArray = songs.map((song) => song.id);
 
-    let findDuplicates = tempIDArray.filter(
-      (item, index) => tempIDArray.indexOf(item) != index
-    );
-    console.log(tempIDArray);
-    console.log(findDuplicates);
+    let tempCount = {};
+
+    tempIDArray.forEach((id) => {
+      let ref = songs.filter((song) => song.id === id)[0].name;
+      if (!tempCount[ref]) {
+        tempCount[ref] = 1;
+      } else {
+        tempCount[ref]++;
+      }
+    });
+
+    let duplicateValues = {};
+
+    Object.keys(tempCount).forEach((key) => {
+      if (tempCount[key] > 1) {
+        duplicateValues[key] = tempCount[key];
+      }
+      console.log(duplicateValues);
+      console.log(tempCount[key]);
+    });
+
+    console.log(duplicateValues);
+
+    let returnVal =
+      Object.keys(duplicateValues).length > 0 ? (
+        <div>
+          <p>Songs that appear more than once</p>
+          <Frequency data={duplicateValues} />
+          {/* {duplicates.map((id) => (
+            <p>{songs.filter((song) => song.id === id)[0].name}</p>
+          ))} */}
+        </div>
+      ) : (
+        <p>
+          You have a diverse music taste, you never listened to the same song
+          twice!
+        </p>
+      );
+
+    console.log(returnVal);
+    return returnVal;
   };
 
   useEffect(async () => {
@@ -139,6 +175,7 @@ const OverallResults = (props) => {
       <OverallStats combinedData={combinedData} />
 
       <AllSongs songs={combinedData.songs} />
+      {findRepeatOccurences(combinedData.songs)}
 
       {/* {combinedData.songs} */}
       {/* <Frequency /> */}
