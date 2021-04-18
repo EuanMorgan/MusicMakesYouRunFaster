@@ -5,11 +5,19 @@ import { Collapser } from "../ReusableComponents/Collapser";
 import { Radar } from "react-chartjs-2";
 import { RadarChart } from "../Results/Graphs/Radar";
 import { average } from "../../Common/CommonFunctions";
+import {
+  Paragraph,
+  ParagraphContainer,
+  ParagraphLarger,
+} from "../../Constants/Styled";
 export default function SongSimilarity(props) {
   const [differences, setDifferences] = useState([]);
   const [radarData, setRadarData] = useState([]);
   const [avgFastestDiff, setAvgFastestDiff] = useState();
   const [avgNonFastestDiff, setAvgNonFastestDiff] = useState();
+  const [avgScoresFastest, setAverageScoresFastest] = useState({});
+  const [avgScoresNotFastest, setAverageScoresNotFastest] = useState({});
+
   //find similarities
   // Each song has a confidence score for cerain properties
   /*
@@ -37,6 +45,41 @@ export default function SongSimilarity(props) {
     };
 
     return audioFeatures;
+  };
+
+  const findAverageFeatures = (songs) => {
+    //Used to temporarily store the scores for the final radar chart
+    let fastest_all_scores = {
+      acousticness: 0,
+      danceability: 0,
+      energy: 0,
+      valence: 0,
+      speechiness: 0,
+    };
+    // Sum all scores of fastest songs audio features and get average.
+    songs.forEach((song) => {
+      Object.keys(song.audio_features[0]).forEach((feature) => {
+        if (fastest_all_scores[feature] === undefined) {
+          return;
+        }
+
+        fastest_all_scores[feature] += song.audio_features[0][feature];
+      });
+    });
+
+    Object.keys(fastest_all_scores).forEach((feature) => {
+      fastest_all_scores[feature] = fastest_all_scores[feature] / songs.length;
+    });
+
+    console.log(fastest_all_scores);
+
+    return [
+      fastest_all_scores.acousticness,
+      fastest_all_scores.danceability,
+      fastest_all_scores.energy,
+      fastest_all_scores.valence,
+      fastest_all_scores.speechiness,
+    ];
   };
 
   const compareTwoSongs = (songA, songB) => {
@@ -77,9 +120,9 @@ export default function SongSimilarity(props) {
     //and the differences compared to every other song
     let fastest_percentages = [];
     let non_fastest_percentages = [];
-    props.fastest_songs.forEach((baseSong) => {
-      let temp_differences = [];
 
+    let temp_differences = [];
+    props.fastest_songs.forEach((baseSong) => {
       props.fastest_songs.forEach((compareSong) => {
         if (baseSong.id === compareSong.id) {
           //base case
@@ -161,31 +204,6 @@ export default function SongSimilarity(props) {
     setRadarData(tempRadarData);
   }, []);
 
-  const Paragraph = styled.p`
-    font-size: 1rem;
-
-    @media (max-width: 858px) {
-      width: 80vw;
-    }
-  `;
-
-  const ParagraphLarger = styled.p`
-    font-size: 1.5rem;
-
-    @media (max-width: 858px) {
-      width: 80vw;
-    }
-  `;
-
-  const ParagraphContainer = styled.div`
-    max-width: 50vw;
-    margin: auto;
-
-    @media (max-width: 858px) {
-      max-width: 80vw;
-    }
-  `;
-
   const PageContainer = styled.div`
     max-width: 80vw;
     margin: auto;
@@ -258,14 +276,34 @@ export default function SongSimilarity(props) {
       <ParagraphContainer>
         <ParagraphLarger>
           Songs that made you run faster are{" "}
-          {avgFastestDiff && avgFastestDiff.toFixed(2)}% similar on average.
+          <span className="red-text">
+            {avgFastestDiff && avgFastestDiff.toFixed(2)}%
+          </span>{" "}
+          similar on average.
         </ParagraphLarger>
         <ParagraphLarger>
           All other songs are{" "}
-          {avgNonFastestDiff && avgNonFastestDiff.toFixed(2)}% similar on
-          average
+          <span className="red-text">
+            {avgNonFastestDiff && avgNonFastestDiff.toFixed(2)}%
+          </span>{" "}
+          similar on average
         </ParagraphLarger>
       </ParagraphContainer>
+      <RadarChart
+        songData={[
+          {
+            title: "Fastest",
+            color: "#FF0000",
+            data: findAverageFeatures(props.fastest_songs),
+          },
+          {
+            title: "Not fastest",
+            color: "#0000FF",
+            data: findAverageFeatures(props.non_fastest_songs),
+          },
+        ]}
+        show={true}
+      />
     </PageContainer>
   );
 }
