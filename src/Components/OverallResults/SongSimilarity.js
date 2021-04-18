@@ -289,6 +289,14 @@ export default function SongSimilarity(props) {
           similar on average
         </ParagraphLarger>
       </ParagraphContainer>
+      <h1>Average Audio Features</h1>
+      <ParagraphContainer>
+        <ParagraphLarger>
+          Below is another (lovely) radar chart showing the average scores for
+          songs that get you moving like a cheetah and songs that get you moving
+          like a slug
+        </ParagraphLarger>
+      </ParagraphContainer>
       <RadarChart
         songData={[
           {

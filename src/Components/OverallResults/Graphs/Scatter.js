@@ -33,6 +33,7 @@ export const ScatterChart = (props) => {
         pointBackgroundColor: function (context) {
           let index = context.dataIndex;
           let value = context.dataset.data[index];
+          console.log(value);
           return value.color;
         },
         pointBorderWidth: 1,
