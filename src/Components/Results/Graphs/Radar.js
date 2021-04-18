@@ -28,6 +28,7 @@ export const RadarChart = (props) => {
 
   const options = {
     maintainAspectRatio: false,
+
     tooltips: {
       enabled: true,
       callbacks: {

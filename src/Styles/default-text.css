@@ -239,6 +239,10 @@ button,
   }
 }
 
+.chart-container.scatter {
+  height: 80vh;
+}
+
 @media (max-width: 859px) {
   .chart-container.scatter {
     height: 50vh;
