@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import { Scatter } from "react-chartjs-2";
 
 export const ScatterChart = (props) => {
   const dataset = [];
+  const [max, setMax] = useState();
   // console.log(props.differences);
 
   props.differences.forEach((song, index) => {
@@ -33,19 +34,20 @@ export const ScatterChart = (props) => {
         pointBackgroundColor: function (context) {
           let index = context.dataIndex;
           let value = context.dataset.data[index];
-          console.log(value);
+          // console.log(value);
           return value.color;
         },
-        pointBorderWidth: 1,
-        pointHoverRadius: 5,
+        // pointBorderWidth: 1,
+        pointHoverRadius: 1,
         pointRadius: 8,
-        pointHitRadius: 5,
+        pointHitRadius: 1,
       },
     ],
   };
 
   let options = {
     maintainAspectRatio: false,
+    scaleShowValues: true,
     scales: {
       xAxes: [
         {
@@ -53,6 +55,18 @@ export const ScatterChart = (props) => {
             borderWidth: 50,
             color: "red",
             display: true,
+          },
+
+          ticks: {
+            // Include a dollar sign in the ticks
+            autoSkip: false,
+            callback: function (value, index, values) {
+              try {
+                return dataset.filter(
+                  (point) => point.x === value && point.y === 0
+                )[0].label;
+              } catch (error) {}
+            },
           },
         },
       ],

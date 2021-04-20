@@ -34,10 +34,15 @@ export const RadarChart = (props) => {
       callbacks: {
         // Format label i.e. accousitcness 0.9w325238235 instead of just the number
         label: function (tooltipItems, data) {
-          return data.datasets[0].data[tooltipItems.index];
+          return (
+            data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index] +
+            " " +
+            lbls[tooltipItems.index]
+          );
         },
-        beforeLabel: function (tooltipItems, data) {
-          return lbls[tooltipItems.index];
+
+        title: function (tooltipItems, data) {
+          return data.datasets[tooltipItems[0].datasetIndex].label;
         },
       },
     },

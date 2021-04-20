@@ -239,7 +239,7 @@ const calcDistance = (lat1, lon1, lat2, lon2) => {
   return Math.abs(ans * 1000).toFixed(2); // 2 * R; R = 6371 km
 };
 
-const split = (tempRoute) => {
+export const split = (tempRoute) => {
   let chunk_size = 3000;
 
   // split into groups of 3000 (after testing this value seemed to be good to avoid overflowing firestore max storage)

@@ -22,6 +22,7 @@ export const BarChart = (props) => {
 
   const options = {
     maintainAspectRatio: false,
+
     tooltips: {
       enabled: true,
     },

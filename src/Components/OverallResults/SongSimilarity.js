@@ -17,7 +17,8 @@ export default function SongSimilarity(props) {
   const [avgNonFastestDiff, setAvgNonFastestDiff] = useState();
   const [avgScoresFastest, setAverageScoresFastest] = useState({});
   const [avgScoresNotFastest, setAverageScoresNotFastest] = useState({});
-
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(5);
   //find similarities
   // Each song has a confidence score for cerain properties
   /*
@@ -122,8 +123,8 @@ export default function SongSimilarity(props) {
     let non_fastest_percentages = [];
 
     let temp_differences = [];
-    props.fastest_songs.forEach((baseSong) => {
-      props.fastest_songs.forEach((compareSong) => {
+    props.fastest_songs.slice(0, 12).forEach((baseSong) => {
+      props.fastest_songs.slice(0, 12).forEach((compareSong) => {
         if (baseSong.id === compareSong.id) {
           //base case
           return;
@@ -312,6 +313,8 @@ export default function SongSimilarity(props) {
         ]}
         show={true}
       />
+
+      {/* TODO: ADD SENTENCES LIKE, YOUR SONGS ARE MROE ACCOSUITC WHEN GOING FAST */}
     </PageContainer>
   );
 }

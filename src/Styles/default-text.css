@@ -240,7 +240,7 @@ button,
 }
 
 .chart-container.scatter {
-  height: 80vh;
+  height: 50vh;
 }
 
 @media (max-width: 859px) {
