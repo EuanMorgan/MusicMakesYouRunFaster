@@ -113,6 +113,7 @@ const FastestSongs = (props) => {
     ).toFixed(0);
     let bpm_highlow =
       props.run.avg_bpm > highest_hearts[id] ? "lower" : "higher";
+    console.log(props.run.avg_bpm.toFixed(0), highest_hearts[id]);
     let percentSpeed = calcPercentIncDec(
       props.run.avg_pace,
       fastest_speeds[id]
@@ -122,19 +123,23 @@ const FastestSongs = (props) => {
     return {
       speed_sentences: [
         `Fastest speed when listening: ${fastest_speeds[id]} m/s`,
-        `That's ${percentSpeed}% ${speed_highlow} than your average`,
+        percentSpeed === "0"
+          ? "That's the same as your average for the whole run"
+          : `That's ${percentSpeed}% ${speed_highlow} than your average`,
         ,
       ],
       heart_sentences: [
         `Your highest heartrate when listening to this was: ${highest_hearts[id]}`,
-        `That's ${percentBPM}% ${bpm_highlow} than your average`,
+        percentBPM === "0"
+          ? "That's the same as your average for the whole run."
+          : `That's ${percentBPM}% ${bpm_highlow} than your average`,
       ],
     };
   };
 
   return (
     <div>
-      <h1>The songs that made you run the fastest were: </h1>
+      <h1>You ran the fastest whilst listening to these songs: </h1>
       {fastest_song_ids.map((id) => {
         let [
           listeningData,

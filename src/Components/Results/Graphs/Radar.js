@@ -28,15 +28,21 @@ export const RadarChart = (props) => {
 
   const options = {
     maintainAspectRatio: false,
+
     tooltips: {
       enabled: true,
       callbacks: {
         // Format label i.e. accousitcness 0.9w325238235 instead of just the number
         label: function (tooltipItems, data) {
-          return data.datasets[0].data[tooltipItems.index];
+          return (
+            data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index] +
+            " " +
+            lbls[tooltipItems.index]
+          );
         },
-        beforeLabel: function (tooltipItems, data) {
-          return lbls[tooltipItems.index];
+
+        title: function (tooltipItems, data) {
+          return data.datasets[tooltipItems[0].datasetIndex].label;
         },
       },
     },
@@ -65,7 +71,7 @@ export const RadarChart = (props) => {
   };
   if (props.show) {
     return (
-      <div className="radar-chart-container">
+      <div className="chart-container radar">
         <Radar data={data} options={options} />
       </div>
     );

@@ -1,4 +1,8 @@
-import { isProduction, average } from "../Common/CommonFunctions";
+import {
+  isProduction,
+  average,
+  calcPercentIncDec,
+} from "../Common/CommonFunctions";
 import app, { db } from "../firebase/firebase";
 // import { useAuth } from "../Contexts/Auth";
 
@@ -18,10 +22,10 @@ export const pullRuns = async (refreshToken) => {
   try {
     r = await response.json();
   } catch {
-    r = "oops";
+    return "oops";
   }
 
-  //console.log("MAPPYBOY", r);
+  console.log("MAPPYBOY", r);
   //TODO: -1 return
   return r.run_map;
 };
@@ -45,11 +49,11 @@ export const pullSongs = async (refreshToken) => {
   if (spotifySongs == "error") {
     alert("There has been an error fetching the map of your most recent run.");
   }
-  //console.log("SONGIES", spotifySongs);
+  console.log("SONGIES", spotifySongs);
   return spotifySongs;
 };
 
-const calculateSongPlayedTimes = (spotifySongs) => {
+const calculateSongPlayedTimes = (spotifySongs, lastTime) => {
   /*
     Spotify API returns a played_at time for each song, however this is actually the time
     that the song started. Intuitively you might use this to calculate the speed by doing
@@ -64,15 +68,19 @@ const calculateSongPlayedTimes = (spotifySongs) => {
             i.e. shift them all backwards, because the time that song A finsihed is also the time that song B started
             in continous playback.
   */
-  return spotifySongs.map((song, index) => {
-    if (index == spotifySongs.length - 1) {
+  let theSongs = spotifySongs.filter(
+    (song) => song.rough_started_at < lastTime
+  );
+  return theSongs.map((song, index) => {
+    if (index == theSongs.length - 1) {
       delete song.played_at;
       return { ...song };
     }
+
     return {
       ...song,
-      played_at: spotifySongs[index + 1].played_at,
-      rough_started_at: new Date(spotifySongs[index + 1].played_at).getTime(),
+      played_at: theSongs[index + 1].played_at,
+      rough_started_at: new Date(theSongs[index + 1].played_at).getTime(),
     };
   });
 };
@@ -231,10 +239,8 @@ const calcDistance = (lat1, lon1, lat2, lon2) => {
   return Math.abs(ans * 1000).toFixed(2); // 2 * R; R = 6371 km
 };
 
-const split = (tempRoute) => {
-  let chunk_size = 3000;
-
-  // split into groups of 3000 (after testing this value seemed to be good to avoid overflowing firestore max storage)
+export const split = (tempRoute, chunk_size = 3000) => {
+  //used for runs mainly - split into groups of 3000 (after testing this value seemed to be good to avoid overflowing firestore max storage)
   //example: if our chunk size was 5 and we had an array of 12 elements this function would return
   //[[1,2,3,4,5],[6,7,8,9,10],[11,12]]
   let groups = tempRoute
@@ -308,7 +314,11 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   //calculate 'rough' start times for each song.
   //using my shift algorithm
   console.log("calculating played times");
-  spotifySongs = calculateSongPlayedTimes(spotifySongs);
+  spotifySongs = calculateSongPlayedTimes(
+    spotifySongs,
+    tempRoute[tempRoute.length - 1].epoch_ms
+  );
+  console.log(spotifySongs);
   //console.log("done it");
   console.log("matching songs to points");
   let ret = matchSongsToPoints(spotifySongs, tempRoute);
@@ -387,8 +397,6 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   //if split into parts, use only the first ID
   let final_id = tempRoute.length > 3000 ? fixed_id + " part 0" : fixed_id;
 
-  //TODO: this takes the top 10% of all points - instead loop through and only add points if they are more than x amount above the average for the run.
-
   //Get array of all speeds and heart rates.
   console.log("extracting all speeds/bpms");
   let all_speeds = [];
@@ -407,7 +415,13 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   console.log("getting fastest pojnts");
   let fastest = tempRoute.filter((p) => p.pace > avg_pace);
   let highest = tempRoute.filter((p) => p.heart_rate_bpm > avg_bpm);
-  let fastest_points = await findFastestPoints(fastest, uid, final_id, isTest);
+  let fastest_points = await findFastestPoints(
+    fastest,
+    uid,
+    final_id,
+    avg_pace,
+    isTest
+  );
   let highest_points = await findHighestBPMPoints(
     highest,
     uid,
@@ -452,13 +466,19 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   ];
 };
 
-const findFastestPoints = async (points, uid, id, isTest) => {
-  //sort points by pace
+const findFastestPoints = async (points, uid, id, avg_pace, isTest) => {
+  //sort points by pace, get top 10%, from these loop through and see if they are >30% higher than the average for the run
   let pace_order = points.sort(sort("pace"));
   let len = Math.ceil(pace_order.length / 10);
-  ////console.log(pace_order);
+
   pace_order = pace_order.slice(0, len);
-  ////console.log(pace_order);
+
+  pace_order = pace_order.filter(
+    (point) => calcPercentIncDec(avg_pace, point.pace) > 30
+  );
+  console.log(avg_pace);
+  console.log(pace_order);
+
   try {
     if (!isTest) {
       await db

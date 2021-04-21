@@ -2,11 +2,29 @@ import React, { useEffect, useState } from "react";
 import { ScatterChart } from "./Graphs/Scatter";
 import styled from "styled-components";
 import { Collapser } from "../ReusableComponents/Collapser";
-import { Radar } from "react-chartjs-2";
 import { RadarChart } from "../Results/Graphs/Radar";
+import { Speed } from "./Graphs/Speed";
+import {
+  average,
+  isProduction,
+  retrieveDataForSong,
+} from "../../Common/CommonFunctions";
+import {
+  Paragraph,
+  ParagraphContainer,
+  ParagraphLarger,
+} from "../../Constants/Styled";
+import { SIMILAR } from "../../Constants/URLs";
+import { useAuth } from "../../Contexts/Auth";
+import Heatmap from "./Graphs/Heatmap";
+import { LineGraph } from "../Results/Graphs/Line";
+import SongSpeeds from "./SongSpeeds";
 export default function SongSimilarity(props) {
+  const { userData } = useAuth();
   const [differences, setDifferences] = useState([]);
   const [radarData, setRadarData] = useState([]);
+  const [avgFastestDiff, setAvgFastestDiff] = useState();
+  const [avgNonFastestDiff, setAvgNonFastestDiff] = useState();
   //find similarities
   // Each song has a confidence score for cerain properties
   /*
@@ -36,8 +54,43 @@ export default function SongSimilarity(props) {
     return audioFeatures;
   };
 
+  const findAverageFeatures = (songs) => {
+    //Used to temporarily store the scores for the final radar chart
+    let fastest_all_scores = {
+      acousticness: 0,
+      danceability: 0,
+      energy: 0,
+      valence: 0,
+      speechiness: 0,
+    };
+    // Sum all scores of fastest songs audio features and get average.
+    songs.forEach((song) => {
+      Object.keys(song.audio_features[0]).forEach((feature) => {
+        if (fastest_all_scores[feature] === undefined) {
+          return;
+        }
+
+        fastest_all_scores[feature] += song.audio_features[0][feature];
+      });
+    });
+
+    Object.keys(fastest_all_scores).forEach((feature) => {
+      fastest_all_scores[feature] = fastest_all_scores[feature] / songs.length;
+    });
+
+    // console.log(fastest_all_scores);
+
+    return [
+      fastest_all_scores.acousticness,
+      fastest_all_scores.danceability,
+      fastest_all_scores.energy,
+      fastest_all_scores.valence,
+      fastest_all_scores.speechiness,
+    ];
+  };
+
   const compareTwoSongs = (songA, songB) => {
-    console.log(`Similarity of ${songA.name} ||and|| ${songB.name}`);
+    // console.log(`Similarity of ${songA.name} ||and|| ${songB.name}`);
     let overall = 0;
 
     const songAFeatures = extractFeatures(songA);
@@ -59,19 +112,21 @@ export default function SongSimilarity(props) {
     // console.log(similarity_percent);
     similarity_percent = 100 - similarity_percent;
 
-    console.log(
-      `Overall difference is ${overall}. Meaning they are ${similarity_percent}% similar`
-    );
+    // console.log(
+    //   `Overall difference is ${overall}. Meaning they are ${similarity_percent}% similar`
+    // );
 
     return [overall, similarity_percent];
   };
 
   useEffect(() => {
-    console.log(props.fastest_songs);
+    // console.log(props.fastest_songs);
     let all_differences = [];
 
     //for each song, make an object containing its id, name, artist name
     //and the differences compared to every other song
+    let fastest_percentages = [];
+    let non_fastest_percentages = [];
 
     props.fastest_songs.forEach((baseSong) => {
       let temp_differences = [];
@@ -86,6 +141,8 @@ export default function SongSimilarity(props) {
           baseSong,
           compareSong
         );
+
+        fastest_percentages.push(percentageSimilar);
 
         temp_differences.push({
           base_song_id: baseSong.id,
@@ -108,7 +165,29 @@ export default function SongSimilarity(props) {
       });
     });
 
-    console.log(all_differences);
+    // console.log(all_differences);
+
+    props.non_fastest_songs.forEach((baseSong) => {
+      props.non_fastest_songs.forEach((compareSong) => {
+        if (baseSong.id === compareSong.id) {
+          return;
+        }
+
+        let [disagreement, percentageSimilar] = compareTwoSongs(
+          baseSong,
+          compareSong
+        );
+
+        non_fastest_percentages.push(percentageSimilar);
+      });
+      // console.log(non_fastest_percentages);
+    });
+
+    let averageFastestSimilarity = average(fastest_percentages);
+    setAvgFastestDiff(averageFastestSimilarity);
+    let averageNonFastestSimilarity = average(non_fastest_percentages);
+    setAvgNonFastestDiff(averageNonFastestSimilarity);
+
     setDifferences(all_differences);
 
     let tempRadarData = [];
@@ -129,26 +208,33 @@ export default function SongSimilarity(props) {
         ],
       });
     });
-    console.log(tempRadarData);
+    // console.log(tempRadarData);
+
+    fetchSimilarSongs();
     setRadarData(tempRadarData);
   }, []);
 
-  const Paragraph = styled.p`
-    font-size: 1rem;
-
-    @media (max-width: 858px) {
-      width: 80vw;
-    }
-  `;
-
-  const ParagraphContainer = styled.div`
-    max-width: 50vw;
-    margin: auto;
-
-    @media (max-width: 858px) {
-      max-width: 80vw;
-    }
-  `;
+  const fetchSimilarSongs = async () => {
+    if (!userData.spotifyRefreshToken) return;
+    // console.log(props.all.unqiueArtists);
+    // console.log(props.all.uniqueGenres);
+    // console.log(props.all.unqiueArtists);
+    // console.log(userData.spotifyRefreshToken);
+    let uri = isProduction() ? SIMILAR.PRODUCTION : SIMILAR.DEBUG;
+    const response = await fetch(uri, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: findAverageFeatures(props.fastest_songs),
+        refreshToken: userData.spotifyRefreshToken,
+        seed_genres: props.all.uniqueGenres,
+        seed_artists: props.all.uniqueArtists,
+        seed_songs: props.all.uniqueSongs,
+      }),
+    });
+  };
 
   const PageContainer = styled.div`
     max-width: 80vw;
@@ -168,41 +254,66 @@ export default function SongSimilarity(props) {
             Out of these songs,{" "}
             <span className="red-text">{props.fastest_songs.length}</span>{" "}
             appeared as you were running pretty quick
-            <Collapser>
-              {props.fastest_songs.map((song) => (
-                <p style={{ fontSize: "0.9em" }}>
-                  {song.artists[0].name} -{" "}
-                  <span className="red-text">{song.name}</span>
-                </p>
-              ))}
+            <Collapser onlyArrowClickable={true}>
+              {props.fastest_songs.map((song) => {
+                let data = retrieveDataForSong(song.id, props.all.allData);
+                // console.log(data);
+                return (
+                  <Collapser
+                    title={
+                      <>
+                        {song.artists[0].name} -{" "}
+                        <span className="red-text">{song.name}</span>
+                      </>
+                    }
+                    onlyArrowClickable={true}
+                  >
+                    {data.map((run) => (
+                      <LineGraph
+                        listeningData={run.data}
+                        labels={run.labels}
+                        notListeningData={[]}
+                        show={true}
+                        isHeartrate={false}
+                        title={run.title}
+                        onlyFastest={true}
+                      />
+                    ))}
+                  </Collapser>
+                );
+              })}
             </Collapser>
           </p>
         </div>
       </div>
 
-      <h1>How similar are your songs?</h1>
+      <SongSpeeds data={props.all} />
+
+      <h1>How similar are your fastest songs?</h1>
       <ParagraphContainer>
         <Paragraph>
-          Below is a scatter chart of your songs showing how different they are.
-          Each column is an individual song which is shown at the bottom, and
-          all other points in the column are how similar it is to each other
-          song. The further away any point in the column is from the bottom
-          point, the more different the song is.
+          Below is a heatmap of your fastest songs showing how similar they are.
+          Each column represents a song which is labelled at the bottom. Each
+          cell in the column shows the similarity percentage of this song
+          compared to the song in the row you're in. The more similar two songs
+          are, the brighter that cell will be.
         </Paragraph>
       </ParagraphContainer>
+      {/* <ScatterChart differences={differences} /> */}
+      <Heatmap differences={differences} />
 
-      <ScatterChart differences={differences} />
-
-      <h1>How do we know this?</h1>
-      <Collapser>
+      <Collapser
+        title={"How do we know this?"}
+        titleStyle={{ textAlign: "center" }}
+      >
         <ParagraphContainer>
           <Paragraph>
             Spotify gives each song confidence scores which say how likely it is
             that a particular song has a certain property. For example: a Bob
             Dylan song might have 0.8 for acousticness, meaning there is a high
-            probability the song is acoustic. Whereas a song by System of the
-            Down may have 0.01 for acousticness meaning it is very unlikely the
-            song sounds acoustic.{" "}
+            probability the song is acoustic. Whereas a song by Metallica may
+            have 0.01 for acousticness meaning it is very unlikely the song
+            sounds acoustic.{" "}
             <span className="red-text">
               You can therefore think of these scores as a fingerprint of the
               song.
@@ -210,15 +321,57 @@ export default function SongSimilarity(props) {
           </Paragraph>
           <Paragraph>
             We can use the scores to find how similar any two songs are. We find
-            the difference of every score for the two songs and sum them at the
-            end. This gives us one final value, 0 being identical songs and 5
-            being extremely different. See for yourself below, the closer the
-            songs are in the scatter chart the more similar their radar charts
-            will look
+            the difference of every score for the two songs and sum them. This
+            gives us one final value between 0 and 5, 0 being identical songs
+            and 5 being extremely different. See for yourself below, the higher
+            similarity percentage they score in the heatmap, the more alike
+            their radar charts will look.
           </Paragraph>
         </ParagraphContainer>
       </Collapser>
+
+      <h1>Audio features comparison</h1>
       <RadarChart songData={radarData} show={true} />
+      <h1>Average Similarity</h1>
+      <ParagraphContainer>
+        <ParagraphLarger>
+          Songs that made you run faster are{" "}
+          <span className="red-text">
+            {avgFastestDiff && avgFastestDiff.toFixed(2)}%
+          </span>{" "}
+          similar on average.
+        </ParagraphLarger>
+        <ParagraphLarger>
+          All other songs are{" "}
+          <span className="red-text">
+            {avgNonFastestDiff && avgNonFastestDiff.toFixed(2)}%
+          </span>{" "}
+          similar on average
+        </ParagraphLarger>
+      </ParagraphContainer>
+      <h1>Average Audio Features</h1>
+      <ParagraphContainer>
+        <ParagraphLarger>
+          Below is another (lovely) radar chart showing the average scores for
+          songs that get you moving like a cheetah and songs that get you moving
+          like a sloth
+        </ParagraphLarger>
+      </ParagraphContainer>
+      <RadarChart
+        songData={[
+          {
+            title: "Fastest",
+            color: "#FF0000",
+            data: findAverageFeatures(props.fastest_songs),
+          },
+          {
+            title: "Not fastest",
+            color: "#0000FF",
+            data: findAverageFeatures(props.non_fastest_songs),
+          },
+        ]}
+        show={true}
+      />
     </PageContainer>
   );
 }

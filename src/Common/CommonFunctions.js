@@ -58,3 +58,51 @@ export const sortDescending = (a, b) => b - a;
 export const generateColor = () => {
   return "#" + Math.random().toString(16).substr(-6);
 };
+
+export const retrieveDataForSong = (songid, run_data) => {
+  let all_data = [];
+
+  console.log(run_data);
+  run_data.forEach((run) => {
+    let data = [];
+    let labels = [];
+
+    run.run_map.forEach((p) => {
+      if (!p.song_playing) {
+        // NOT LISTENING
+        return;
+      }
+      if (
+        (typeof p.song_playing == "string" && p.song_playing == songid) ||
+        p.song_playing.id == songid
+      ) {
+        // listening
+        labels.push(p.elapsed_hhmmss);
+        data.push(p.pace);
+      }
+    });
+
+    //add the data for the run to the array
+    if (data.length > 0) {
+      let title =
+        run.run_map[0].time.split("T")[0] +
+        " " +
+        run.run_map[0].time.split("T")[1].split(".")[0];
+      all_data.push({
+        data: data,
+        title: title,
+        labels: labels,
+      });
+    }
+  });
+
+  return all_data;
+  // [
+  //   data,
+  //   not_listening_data,
+  //   heartrates,
+  //   not_listening_heartrates,
+  //   listening_map,
+  //   labels,
+  // ];
+};

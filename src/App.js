@@ -16,6 +16,7 @@ import Results from "./Components/Results/Results";
 import DeleteRun from "./Components/DeleteRun";
 import MoreInfo from "./Components/MoreInfo/MoreInfo";
 import OverallResults from "./Components/OverallResults/OverallResults";
+import ReactTooltip from "react-tooltip";
 const App = () => {
   const [loading, setLoading] = useState(false); //passed down to other components as props, a boolean which toggles the loading spinner overlay
   const history = useHistory();
@@ -26,7 +27,6 @@ const App = () => {
         <LoadingSpinner active={loading} text={"Loading..."}>
           <div className="App">
             <Nav toast={toast} />
-
             <Switch>
               <Route
                 path="/"

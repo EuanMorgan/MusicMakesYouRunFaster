@@ -21,13 +21,19 @@ export const BarChart = (props) => {
   };
 
   const options = {
+    maintainAspectRatio: false,
+
     tooltips: {
       enabled: true,
     },
     animation: {
       duration: 1500,
     },
+
     scales: {
+      pointLabels: {
+        fontSize: 5,
+      },
       xAxes: [
         {
           maxBarThickness: 20,
@@ -45,7 +51,7 @@ export const BarChart = (props) => {
   };
   if (props.show) {
     return (
-      <div className="chart-container">
+      <div className="chart-container bar">
         <Bar data={data} options={options} />
       </div>
     );
