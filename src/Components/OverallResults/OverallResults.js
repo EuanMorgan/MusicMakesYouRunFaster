@@ -89,6 +89,16 @@ const OverallResults = (props) => {
     console.log(fastestRepeats);
     console.log(nonFastestRepeats);
 
+    let genres = [];
+    let artists = [];
+    let allSongs = [];
+    songs.forEach((song) => {
+      genres.push(...song.artist_data.genres);
+      artists.push(song.artist_data.id);
+      allSongs.push(song.id);
+      console.log(artists);
+    });
+
     setCombinedData({
       ...combinedData,
       totalDistance: totalDistance.toFixed(2),
@@ -105,6 +115,9 @@ const OverallResults = (props) => {
       fastestRepeats: fastestRepeats,
       nonFastestRepeats: nonFastestRepeats,
       nonFastestSongs: nonFastestSongs,
+      uniqueGenres: [...new Set(genres)],
+      uniqueArtists: [...new Set(artists)],
+      uniqueSongs: [...new Set(allSongs)],
     });
 
     console.log(songs);
@@ -252,6 +265,7 @@ const OverallResults = (props) => {
         songs={combinedData.songs}
         fastest_songs={combinedData.fastestSongs}
         non_fastest_songs={combinedData.nonFastestSongs}
+        all={combinedData}
       />
     </div>
   );

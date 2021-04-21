@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import { Scatter } from "react-chartjs-2";
 
 export const ScatterChart = (props) => {
   const dataset = [];
-  const [max, setMax] = useState();
+
   // console.log(props.differences);
 
   props.differences.forEach((song, index) => {
@@ -38,16 +38,16 @@ export const ScatterChart = (props) => {
           return value.color;
         },
         // pointBorderWidth: 1,
-        pointHoverRadius: 1,
+        pointHoverRadius: 4,
         pointRadius: 8,
-        pointHitRadius: 1,
+        pointHitRadius: 2,
       },
     ],
   };
 
   let options = {
     maintainAspectRatio: false,
-    scaleShowValues: true,
+
     scales: {
       xAxes: [
         {
@@ -57,17 +57,15 @@ export const ScatterChart = (props) => {
             display: true,
           },
 
-          ticks: {
-            // Include a dollar sign in the ticks
-            autoSkip: false,
-            callback: function (value, index, values) {
-              try {
-                return dataset.filter(
-                  (point) => point.x === value && point.y === 0
-                )[0].label;
-              } catch (error) {}
-            },
-          },
+          // ticks: {
+          //   callback: function (value, index, values) {
+          //     try {
+          //       return dataset.filter(
+          //         (point) => point.x === value && point.y === 0
+          //       )[0].label;
+          //     } catch (error) {}
+          //   },
+          // },
         },
       ],
     },

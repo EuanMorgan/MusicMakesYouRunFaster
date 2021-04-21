@@ -223,6 +223,15 @@ button,
   height: 50vh;
 }
 
+.heatmap {
+  margin: auto;
+  height: fit-content;
+  width: fit-content;
+  margin-top: 5%;
+  padding: 5vw;
+  text-align: center;
+}
+
 .radar {
   height: 50vh;
   margin-bottom: 5vh;
@@ -240,7 +249,8 @@ button,
 }
 
 .chart-container.scatter {
-  height: 50vh;
+  height: 60vh;
+  padding: 0.5rem;
 }
 
 @media (max-width: 859px) {

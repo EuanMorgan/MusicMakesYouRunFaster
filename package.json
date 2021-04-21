@@ -25,6 +25,8 @@
     "react-confirm-alert": "^2.7.0",
     "react-dev-utils": "^11.0.4",
     "react-dom": "^17.0.1",
+    "react-grid-heatmap": "^1.0.1",
+    "react-heatmap-grid": "^0.8.2",
     "react-loader-spinner": "^4.0.0",
     "react-loading-overlay": "^1.0.1",
     "react-mapbox-gl": "^4.8.6",

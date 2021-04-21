@@ -2,23 +2,22 @@ import React, { useEffect, useState } from "react";
 import { ScatterChart } from "./Graphs/Scatter";
 import styled from "styled-components";
 import { Collapser } from "../ReusableComponents/Collapser";
-import { Radar } from "react-chartjs-2";
 import { RadarChart } from "../Results/Graphs/Radar";
-import { average } from "../../Common/CommonFunctions";
+import { average, isProduction } from "../../Common/CommonFunctions";
 import {
   Paragraph,
   ParagraphContainer,
   ParagraphLarger,
 } from "../../Constants/Styled";
+import { SIMILAR } from "../../Constants/URLs";
+import { useAuth } from "../../Contexts/Auth";
+import Heatmap from "./Graphs/Heatmap";
 export default function SongSimilarity(props) {
+  const { userData } = useAuth();
   const [differences, setDifferences] = useState([]);
   const [radarData, setRadarData] = useState([]);
   const [avgFastestDiff, setAvgFastestDiff] = useState();
   const [avgNonFastestDiff, setAvgNonFastestDiff] = useState();
-  const [avgScoresFastest, setAverageScoresFastest] = useState({});
-  const [avgScoresNotFastest, setAverageScoresNotFastest] = useState({});
-  const [startIndex, setStartIndex] = useState(0);
-  const [endIndex, setEndIndex] = useState(5);
   //find similarities
   // Each song has a confidence score for cerain properties
   /*
@@ -122,9 +121,10 @@ export default function SongSimilarity(props) {
     let fastest_percentages = [];
     let non_fastest_percentages = [];
 
-    let temp_differences = [];
-    props.fastest_songs.slice(0, 12).forEach((baseSong) => {
-      props.fastest_songs.slice(0, 12).forEach((compareSong) => {
+    props.fastest_songs.forEach((baseSong) => {
+      let temp_differences = [];
+
+      props.fastest_songs.forEach((compareSong) => {
         if (baseSong.id === compareSong.id) {
           //base case
           return;
@@ -202,8 +202,32 @@ export default function SongSimilarity(props) {
       });
     });
     // console.log(tempRadarData);
+
+    fetchSimilarSongs();
     setRadarData(tempRadarData);
   }, []);
+
+  const fetchSimilarSongs = async () => {
+    if (!userData.spotifyRefreshToken) return;
+    console.log(props.all.unqiueArtists);
+    console.log(props.all.uniqueGenres);
+    console.log(props.all.unqiueArtists);
+    console.log(userData.spotifyRefreshToken);
+    let uri = isProduction() ? SIMILAR.PRODUCTION : SIMILAR.DEBUG;
+    const response = await fetch(uri, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        data: findAverageFeatures(props.fastest_songs),
+        refreshToken: userData.spotifyRefreshToken,
+        seed_genres: props.all.uniqueGenres,
+        seed_artists: props.all.uniqueArtists,
+        seed_songs: props.all.uniqueSongs,
+      }),
+    });
+  };
 
   const PageContainer = styled.div`
     max-width: 80vw;
@@ -238,16 +262,16 @@ export default function SongSimilarity(props) {
       <h1>How similar are your songs?</h1>
       <ParagraphContainer>
         <Paragraph>
-          Below is a scatter chart of your songs showing how different they are.
-          Each column is an individual song which is shown at the bottom, and
-          all other points in the column are how similar it is to each other
-          song. The further away any point in the column is from the bottom
-          point, the more different the song is.
+          Below is a heatmap of your songs showing how similar they are. Each
+          column represents a song which is labelled at the bottom. Each cell in
+          the column shows the similarity percentage of this song compared to
+          the song in the row you're in. The more similar two songs are, the
+          brighter that cell will be.
         </Paragraph>
       </ParagraphContainer>
 
-      <ScatterChart differences={differences} />
-
+      {/* <ScatterChart differences={differences} /> */}
+      <Heatmap differences={differences} />
       <h1>How do we know this?</h1>
       <Collapser>
         <ParagraphContainer>
@@ -272,8 +296,8 @@ export default function SongSimilarity(props) {
             will look
           </Paragraph>
         </ParagraphContainer>
+        <RadarChart songData={radarData} show={true} />
       </Collapser>
-      <RadarChart songData={radarData} show={true} />
       <ParagraphContainer>
         <ParagraphLarger>
           Songs that made you run faster are{" "}
