@@ -62,6 +62,10 @@ const Dashboard = (props) => {
         props.toast.error(
           "Error writing additional data, please delete run and try again"
         );
+      } else if (x === -21) {
+        props.toast.error(
+          "Error finding songs, you may have overwritten them in your play history of 50 songs 😢"
+        );
       } else {
         props.toast.success("🦄 run fetched successfully!");
       }

@@ -310,6 +310,9 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
     0,
     spotifySongs.indexOf(starting_song) + 1
   );
+  if (!starting_song) {
+    return -21;
+  }
   console.log("starting song: " + starting_song.name);
   //calculate 'rough' start times for each song.
   //using my shift algorithm
