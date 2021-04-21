@@ -36,6 +36,7 @@
     "react-scroll": "^1.8.1",
     "react-scrollbars-custom": "^4.0.25",
     "react-spinners": "^0.10.6",
+    "react-spotify-player": "^1.0.4",
     "react-spotify-web-playback": "^0.8.1",
     "react-toastify": "^7.0.3",
     "react-tooltip": "^4.2.17",

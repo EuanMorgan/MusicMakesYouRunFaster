@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Collapser } from "../ReusableComponents/Collapser";
 import { RadarChart } from "../Results/Graphs/Radar";
 import { Speed } from "./Graphs/Speed";
+import Player from "../Player/Player";
 import {
   average,
   isProduction,
@@ -19,12 +20,15 @@ import { useAuth } from "../../Contexts/Auth";
 import Heatmap from "./Graphs/Heatmap";
 import { LineGraph } from "../Results/Graphs/Line";
 import SongSpeeds from "./SongSpeeds";
+import SpotifyPlaylistPlayer from "../PlaylistPlayer/PlaylistPlayer";
 export default function SongSimilarity(props) {
   const { userData } = useAuth();
   const [differences, setDifferences] = useState([]);
   const [radarData, setRadarData] = useState([]);
   const [avgFastestDiff, setAvgFastestDiff] = useState();
   const [avgNonFastestDiff, setAvgNonFastestDiff] = useState();
+  const [similarPlaylist, setSimilarPlaylist] = useState([]);
+  const [spotifyToken, setSpotifyToken] = useState();
   //find similarities
   // Each song has a confidence score for cerain properties
   /*
@@ -220,6 +224,7 @@ export default function SongSimilarity(props) {
     // console.log(props.all.uniqueGenres);
     // console.log(props.all.unqiueArtists);
     // console.log(userData.spotifyRefreshToken);
+
     let uri = isProduction() ? SIMILAR.PRODUCTION : SIMILAR.DEBUG;
     const response = await fetch(uri, {
       method: "POST",
@@ -234,6 +239,27 @@ export default function SongSimilarity(props) {
         seed_songs: props.all.uniqueSongs,
       }),
     });
+    let resp = await response.json();
+
+    let playlist_uri = resp.data;
+
+    let spotifyToken;
+    //console.log(userData.spotifyRefreshToken);
+    let api_uri = isProduction()
+      ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/spotify/refresh"
+      : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/spotify/refresh";
+    spotifyToken = await fetch(api_uri, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        refresh_token: userData.spotifyRefreshToken,
+      }),
+    });
+    spotifyToken = await spotifyToken.text();
+    setSpotifyToken(spotifyToken);
+    setSimilarPlaylist(playlist_uri);
   };
 
   const PageContainer = styled.div`
@@ -371,6 +397,20 @@ export default function SongSimilarity(props) {
           },
         ]}
         show={true}
+      />
+
+      <h1>Recommended Songs</h1>
+
+      <p>
+        Here is a playlist of songs similar to your fastest that you may enjoy!
+      </p>
+      <p>Good luck on your next run!</p>
+      {console.log(props.spotifyToken)}
+
+      <SpotifyPlaylistPlayer
+        uri={similarPlaylist}
+        token={spotifyToken}
+        play={true}
       />
     </PageContainer>
   );
