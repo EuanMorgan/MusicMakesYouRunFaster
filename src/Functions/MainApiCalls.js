@@ -239,10 +239,8 @@ const calcDistance = (lat1, lon1, lat2, lon2) => {
   return Math.abs(ans * 1000).toFixed(2); // 2 * R; R = 6371 km
 };
 
-const split = (tempRoute) => {
-  let chunk_size = 3000;
-
-  // split into groups of 3000 (after testing this value seemed to be good to avoid overflowing firestore max storage)
+export const split = (tempRoute, chunk_size = 3000) => {
+  //used for runs mainly - split into groups of 3000 (after testing this value seemed to be good to avoid overflowing firestore max storage)
   //example: if our chunk size was 5 and we had an array of 12 elements this function would return
   //[[1,2,3,4,5],[6,7,8,9,10],[11,12]]
   let groups = tempRoute

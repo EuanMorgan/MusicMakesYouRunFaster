@@ -268,6 +268,10 @@ button,
   }
 }
 
+.chart-container.bar-horizontal {
+  height: 70vh;
+}
+
 /*       listStylePosition: "inside",
               fontSize: "2em",
               background: "#282828",

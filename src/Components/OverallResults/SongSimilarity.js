@@ -3,6 +3,7 @@ import { ScatterChart } from "./Graphs/Scatter";
 import styled from "styled-components";
 import { Collapser } from "../ReusableComponents/Collapser";
 import { RadarChart } from "../Results/Graphs/Radar";
+import { Speed } from "./Graphs/Speed";
 import {
   average,
   isProduction,
@@ -17,6 +18,7 @@ import { SIMILAR } from "../../Constants/URLs";
 import { useAuth } from "../../Contexts/Auth";
 import Heatmap from "./Graphs/Heatmap";
 import { LineGraph } from "../Results/Graphs/Line";
+import SongSpeeds from "./SongSpeeds";
 export default function SongSimilarity(props) {
   const { userData } = useAuth();
   const [differences, setDifferences] = useState([]);
@@ -76,7 +78,7 @@ export default function SongSimilarity(props) {
       fastest_all_scores[feature] = fastest_all_scores[feature] / songs.length;
     });
 
-    console.log(fastest_all_scores);
+    // console.log(fastest_all_scores);
 
     return [
       fastest_all_scores.acousticness,
@@ -214,10 +216,10 @@ export default function SongSimilarity(props) {
 
   const fetchSimilarSongs = async () => {
     if (!userData.spotifyRefreshToken) return;
-    console.log(props.all.unqiueArtists);
-    console.log(props.all.uniqueGenres);
-    console.log(props.all.unqiueArtists);
-    console.log(userData.spotifyRefreshToken);
+    // console.log(props.all.unqiueArtists);
+    // console.log(props.all.uniqueGenres);
+    // console.log(props.all.unqiueArtists);
+    // console.log(userData.spotifyRefreshToken);
     let uri = isProduction() ? SIMILAR.PRODUCTION : SIMILAR.DEBUG;
     const response = await fetch(uri, {
       method: "POST",
@@ -255,7 +257,7 @@ export default function SongSimilarity(props) {
             <Collapser onlyArrowClickable={true}>
               {props.fastest_songs.map((song) => {
                 let data = retrieveDataForSong(song.id, props.all.allData);
-                console.log(data);
+                // console.log(data);
                 return (
                   <Collapser
                     title={
@@ -284,14 +286,17 @@ export default function SongSimilarity(props) {
           </p>
         </div>
       </div>
-      <h1>How similar are your songs?</h1>
+
+      <SongSpeeds data={props.all} />
+
+      <h1>How similar are your fastest songs?</h1>
       <ParagraphContainer>
         <Paragraph>
-          Below is a heatmap of your songs showing how similar they are. Each
-          column represents a song which is labelled at the bottom. Each cell in
-          the column shows the similarity percentage of this song compared to
-          the song in the row you're in. The more similar two songs are, the
-          brighter that cell will be.
+          Below is a heatmap of your fastest songs showing how similar they are.
+          Each column represents a song which is labelled at the bottom. Each
+          cell in the column shows the similarity percentage of this song
+          compared to the song in the row you're in. The more similar two songs
+          are, the brighter that cell will be.
         </Paragraph>
       </ParagraphContainer>
       {/* <ScatterChart differences={differences} /> */}

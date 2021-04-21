@@ -259,9 +259,6 @@ const OverallResults = (props) => {
       <AllSongs songs={combinedData.songs} />
       {showRepeatOccurences()}
 
-      {/* {combinedData.songs} */}
-      {/* <Frequency /> */}
-
       <SongSimilarity
         songs={combinedData.songs}
         fastest_songs={combinedData.fastestSongs}
