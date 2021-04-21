@@ -59,13 +59,21 @@ export const generateColor = () => {
   return "#" + Math.random().toString(16).substr(-6);
 };
 
-export const retrieveDataForSong = (songid, run_data) => {
+export const retrieveDataForSong = (songid, run_data, onlyFast) => {
   let all_data = [];
 
   console.log(run_data);
   run_data.forEach((run) => {
     let data = [];
     let labels = [];
+    console.log(run);
+    //remove duplicates that are not fastest
+    if (
+      !run.fastest_points.map((point) => point.song_playing).includes(songid) &&
+      onlyFast
+    ) {
+      return;
+    }
 
     run.run_map.forEach((p) => {
       if (!p.song_playing) {

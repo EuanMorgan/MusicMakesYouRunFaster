@@ -22,7 +22,7 @@ import { LineGraph } from "../Results/Graphs/Line";
 import SongSpeeds from "./SongSpeeds";
 import SpotifyPlaylistPlayer from "../PlaylistPlayer/PlaylistPlayer";
 export default function SongSimilarity(props) {
-  const { userData } = useAuth();
+  const { userData, currentUser } = useAuth();
   const [differences, setDifferences] = useState([]);
   const [radarData, setRadarData] = useState([]);
   const [avgFastestDiff, setAvgFastestDiff] = useState();
@@ -237,6 +237,7 @@ export default function SongSimilarity(props) {
         seed_genres: props.all.uniqueGenres,
         seed_artists: props.all.uniqueArtists,
         seed_songs: props.all.uniqueSongs,
+        id: currentUser.uid,
       }),
     });
     let resp = await response.json();

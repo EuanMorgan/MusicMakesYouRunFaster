@@ -10,7 +10,11 @@ const SongSpeeds = (props) => {
 
     let songSpeedList = props.data.fastestSongs.map((song) => {
       //get array of run objects, each object contains an array of points across the run that the song was playing
-      let currentSongData = retrieveDataForSong(song.id, props.data.allData);
+      let currentSongData = retrieveDataForSong(
+        song.id,
+        props.data.allData,
+        true
+      );
 
       currentSongData.forEach((run) => {
         //for every run calculate average for each quarter of the song
