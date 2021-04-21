@@ -264,6 +264,7 @@ const OverallResults = (props) => {
         fastest_songs={combinedData.fastestSongs}
         non_fastest_songs={combinedData.nonFastestSongs}
         all={combinedData}
+        spotifyToken={spotifyToken}
       />
     </div>
   );

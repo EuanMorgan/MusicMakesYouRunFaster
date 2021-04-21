@@ -67,8 +67,8 @@ const ContinueSetup = (props) => {
         // debug http://localhost:3000/continue-setup
         onClick={() => {
           let uri = isProduction()
-            ? "https://accounts.spotify.com/authorize?client_id=07333755bcb145f691d3bcb5477b47e4&response_type=code&redirect_uri=https://musicmakesyourunfaster.firebaseapp.com/continue-setup&scope=streaming%20user-read-private%20user-read-email%20user-read-playback-state%20user-modify-playback-state%20user-read-recently-played"
-            : "https://accounts.spotify.com/authorize?client_id=07333755bcb145f691d3bcb5477b47e4&response_type=code&redirect_uri=http://localhost:3000/continue-setup&scope=streaming%20user-read-private%20user-read-email%20user-read-playback-state%20user-modify-playback-state%20user-read-recently-played";
+            ? "https://accounts.spotify.com/authorize?client_id=07333755bcb145f691d3bcb5477b47e4&response_type=code&redirect_uri=https://musicmakesyourunfaster.firebaseapp.com/continue-setup&scope=streaming%20user-read-private%20user-read-email%20user-read-playback-state%20user-modify-playback-state%20user-read-recently-played%20playlist-modify-private"
+            : "https://accounts.spotify.com/authorize?client_id=07333755bcb145f691d3bcb5477b47e4&response_type=code&redirect_uri=http://localhost:3000/continue-setup&scope=streaming%20user-read-private%20user-read-email%20user-read-playback-state%20user-modify-playback-state%20user-read-recently-played%20playlist-modify-private";
           window.open(uri, "_current");
         }}
       >
