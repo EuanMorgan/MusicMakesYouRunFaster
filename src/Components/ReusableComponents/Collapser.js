@@ -21,7 +21,9 @@ export function Collapser({ children, ...props }) {
     >
       <div>
         <div>
-          <p style={{ fontSize: "0.9em", textAlign: "left" }}>
+          <p
+            style={({ fontSize: "0.9em", textAlign: "left" }, props.titleStyle)}
+          >
             {props.title}
             <Icon
               path={

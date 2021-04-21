@@ -264,6 +264,7 @@ export default function SongSimilarity(props) {
                         <span className="red-text">{song.name}</span>
                       </>
                     }
+                    onlyArrowClickable={true}
                   >
                     {data.map((run) => (
                       <LineGraph
@@ -273,6 +274,7 @@ export default function SongSimilarity(props) {
                         show={true}
                         isHeartrate={false}
                         title={run.title}
+                        onlyFastest={true}
                       />
                     ))}
                   </Collapser>
@@ -282,7 +284,6 @@ export default function SongSimilarity(props) {
           </p>
         </div>
       </div>
-
       <h1>How similar are your songs?</h1>
       <ParagraphContainer>
         <Paragraph>
@@ -293,41 +294,40 @@ export default function SongSimilarity(props) {
           brighter that cell will be.
         </Paragraph>
       </ParagraphContainer>
-
       {/* <ScatterChart differences={differences} /> */}
       <Heatmap differences={differences} />
-      <p>
-        How do we know this?
-        <Collapser>
-          <ParagraphContainer>
-            <Paragraph>
-              Spotify gives each song confidence scores which say how likely it
-              is that a particular song has a certain property. For example: a
-              Bob Dylan song might have 0.8 for acousticness, meaning there is a
-              high probability the song is acoustic. Whereas a song by Metallica
-              may have 0.01 for acousticness meaning it is very unlikely the
-              song sounds acoustic.{" "}
-              <span className="red-text">
-                You can therefore think of these scores as a fingerprint of the
-                song.
-              </span>
-            </Paragraph>
-            <Paragraph>
-              We can use the scores to find how similar any two songs are. We
-              find the difference of every score for the two songs and sum them.
-              This gives us one final value between 0 and 5, 0 being identical
-              songs and 5 being extremely different. See for yourself below, the
-              higher similarity percentage they score in the heatmap, the more
-              alike their radar charts will look.
-            </Paragraph>
-          </ParagraphContainer>
-        </Collapser>
-      </p>
+
+      <Collapser
+        title={"How do we know this?"}
+        titleStyle={{ textAlign: "center" }}
+      >
+        <ParagraphContainer>
+          <Paragraph>
+            Spotify gives each song confidence scores which say how likely it is
+            that a particular song has a certain property. For example: a Bob
+            Dylan song might have 0.8 for acousticness, meaning there is a high
+            probability the song is acoustic. Whereas a song by Metallica may
+            have 0.01 for acousticness meaning it is very unlikely the song
+            sounds acoustic.{" "}
+            <span className="red-text">
+              You can therefore think of these scores as a fingerprint of the
+              song.
+            </span>
+          </Paragraph>
+          <Paragraph>
+            We can use the scores to find how similar any two songs are. We find
+            the difference of every score for the two songs and sum them. This
+            gives us one final value between 0 and 5, 0 being identical songs
+            and 5 being extremely different. See for yourself below, the higher
+            similarity percentage they score in the heatmap, the more alike
+            their radar charts will look.
+          </Paragraph>
+        </ParagraphContainer>
+      </Collapser>
 
       <h1>Audio features comparison</h1>
       <RadarChart songData={radarData} show={true} />
       <h1>Average Similarity</h1>
-
       <ParagraphContainer>
         <ParagraphLarger>
           Songs that made you run faster are{" "}

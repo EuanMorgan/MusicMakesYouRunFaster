@@ -38,21 +38,26 @@ export const LineGraph = (props) => {
               borderColor: "#742774",
               backgroundColor: "rgba(75,192,192,0.2)",
             },
-            {
-              label: props.isHeartrate
-                ? "Heartrate (not listening)"
-                : "Speed (not listening)",
-              data: props.notListeningData.filter(
-                (d, index) => (index + 1) % 2
-              ),
-              fill: true,
-              backgroundColor: "rgba(200,192,192,0.2)",
-              borderColor: "rgba(75,192,192,1)",
-            },
+            props.onlyFastest
+              ? {}
+              : {
+                  label: props.isHeartrate
+                    ? "Heartrate (not listening)"
+                    : "Speed (not listening)",
+                  data: props.notListeningData.filter(
+                    (d, index) => (index + 1) % 2
+                  ),
+                  fill: true,
+                  backgroundColor: "rgba(200,192,192,0.2)",
+                  borderColor: "rgba(75,192,192,1)",
+                },
           ],
   };
 
   const options = {
+    legend: {
+      display: props.onlyFastest ? false : true,
+    },
     title: {
       text: props.title ? props.title : null,
       display: props.title ? true : false,
