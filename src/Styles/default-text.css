@@ -228,10 +228,14 @@ button,
   height: fit-content;
   width: fit-content;
   margin-top: 5%;
-  padding: 5vw;
+  padding: 0.2vw 5vw;
   text-align: center;
 }
-
+@media (max-width: 800px) {
+  .heatmap {
+    padding: 10px 5px;
+  }
+}
 .radar {
   height: 50vh;
   margin-bottom: 5vh;

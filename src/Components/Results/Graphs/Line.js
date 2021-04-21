@@ -53,6 +53,10 @@ export const LineGraph = (props) => {
   };
 
   const options = {
+    title: {
+      text: props.title ? props.title : null,
+      display: props.title ? true : false,
+    },
     maintainAspectRatio: false,
     tooltips: {
       enabled: true,

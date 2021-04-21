@@ -118,6 +118,7 @@ const OverallResults = (props) => {
       uniqueGenres: [...new Set(genres)],
       uniqueArtists: [...new Set(artists)],
       uniqueSongs: [...new Set(allSongs)],
+      allData: data,
     });
 
     console.log(songs);

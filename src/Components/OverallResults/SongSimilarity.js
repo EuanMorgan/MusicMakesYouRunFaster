@@ -3,7 +3,11 @@ import { ScatterChart } from "./Graphs/Scatter";
 import styled from "styled-components";
 import { Collapser } from "../ReusableComponents/Collapser";
 import { RadarChart } from "../Results/Graphs/Radar";
-import { average, isProduction } from "../../Common/CommonFunctions";
+import {
+  average,
+  isProduction,
+  retrieveDataForSong,
+} from "../../Common/CommonFunctions";
 import {
   Paragraph,
   ParagraphContainer,
@@ -12,6 +16,7 @@ import {
 import { SIMILAR } from "../../Constants/URLs";
 import { useAuth } from "../../Contexts/Auth";
 import Heatmap from "./Graphs/Heatmap";
+import { LineGraph } from "../Results/Graphs/Line";
 export default function SongSimilarity(props) {
   const { userData } = useAuth();
   const [differences, setDifferences] = useState([]);
@@ -247,13 +252,32 @@ export default function SongSimilarity(props) {
             Out of these songs,{" "}
             <span className="red-text">{props.fastest_songs.length}</span>{" "}
             appeared as you were running pretty quick
-            <Collapser>
-              {props.fastest_songs.map((song) => (
-                <p style={{ fontSize: "0.9em" }}>
-                  {song.artists[0].name} -{" "}
-                  <span className="red-text">{song.name}</span>
-                </p>
-              ))}
+            <Collapser onlyArrowClickable={true}>
+              {props.fastest_songs.map((song) => {
+                let data = retrieveDataForSong(song.id, props.all.allData);
+                console.log(data);
+                return (
+                  <Collapser
+                    title={
+                      <>
+                        {song.artists[0].name} -{" "}
+                        <span className="red-text">{song.name}</span>
+                      </>
+                    }
+                  >
+                    {data.map((run) => (
+                      <LineGraph
+                        listeningData={run.data}
+                        labels={run.labels}
+                        notListeningData={[]}
+                        show={true}
+                        isHeartrate={false}
+                        title={run.title}
+                      />
+                    ))}
+                  </Collapser>
+                );
+              })}
             </Collapser>
           </p>
         </div>
@@ -343,8 +367,6 @@ export default function SongSimilarity(props) {
         ]}
         show={true}
       />
-
-      {/* TODO: ADD SENTENCES LIKE, YOUR SONGS ARE MROE ACCOSUITC WHEN GOING FAST */}
     </PageContainer>
   );
 }
