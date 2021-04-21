@@ -272,32 +272,38 @@ export default function SongSimilarity(props) {
 
       {/* <ScatterChart differences={differences} /> */}
       <Heatmap differences={differences} />
-      <h1>How do we know this?</h1>
-      <Collapser>
-        <ParagraphContainer>
-          <Paragraph>
-            Spotify gives each song confidence scores which say how likely it is
-            that a particular song has a certain property. For example: a Bob
-            Dylan song might have 0.8 for acousticness, meaning there is a high
-            probability the song is acoustic. Whereas a song by System of the
-            Down may have 0.01 for acousticness meaning it is very unlikely the
-            song sounds acoustic.{" "}
-            <span className="red-text">
-              You can therefore think of these scores as a fingerprint of the
-              song.
-            </span>
-          </Paragraph>
-          <Paragraph>
-            We can use the scores to find how similar any two songs are. We find
-            the difference of every score for the two songs and sum them at the
-            end. This gives us one final value, 0 being identical songs and 5
-            being extremely different. See for yourself below, the closer the
-            songs are in the scatter chart the more similar their radar charts
-            will look
-          </Paragraph>
-        </ParagraphContainer>
-        <RadarChart songData={radarData} show={true} />
-      </Collapser>
+      <p>
+        How do we know this?
+        <Collapser>
+          <ParagraphContainer>
+            <Paragraph>
+              Spotify gives each song confidence scores which say how likely it
+              is that a particular song has a certain property. For example: a
+              Bob Dylan song might have 0.8 for acousticness, meaning there is a
+              high probability the song is acoustic. Whereas a song by Metallica
+              may have 0.01 for acousticness meaning it is very unlikely the
+              song sounds acoustic.{" "}
+              <span className="red-text">
+                You can therefore think of these scores as a fingerprint of the
+                song.
+              </span>
+            </Paragraph>
+            <Paragraph>
+              We can use the scores to find how similar any two songs are. We
+              find the difference of every score for the two songs and sum them.
+              This gives us one final value between 0 and 5, 0 being identical
+              songs and 5 being extremely different. See for yourself below, the
+              higher similarity percentage they score in the heatmap, the more
+              alike their radar charts will look.
+            </Paragraph>
+          </ParagraphContainer>
+        </Collapser>
+      </p>
+
+      <h1>Audio features comparison</h1>
+      <RadarChart songData={radarData} show={true} />
+      <h1>Average Similarity</h1>
+
       <ParagraphContainer>
         <ParagraphLarger>
           Songs that made you run faster are{" "}
@@ -319,7 +325,7 @@ export default function SongSimilarity(props) {
         <ParagraphLarger>
           Below is another (lovely) radar chart showing the average scores for
           songs that get you moving like a cheetah and songs that get you moving
-          like a slug
+          like a sloth
         </ParagraphLarger>
       </ParagraphContainer>
       <RadarChart

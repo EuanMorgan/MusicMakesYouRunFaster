@@ -208,7 +208,7 @@ const OverallResults = (props) => {
                   when running slower.
                   <br />
                   {notfastest === fastest
-                    ? null
+                    ? "Since it has shown up when in your fastest and not fastest points, perhaps the speed was caused by external factors (e.g. running down a hill)"
                     : notfastest > fastest
                     ? "Since it shows up more often when running slower, perhaps it wasn't the song that influenced your speed in the other cases."
                     : "Since it shows up more often when you're going faster, perhaps the slower times were a fluke."}
