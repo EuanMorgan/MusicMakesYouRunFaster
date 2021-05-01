@@ -2,7 +2,7 @@ export const getCodeFromURL = () => {
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let code = params.get("code");
-  //console.log(code);
+  ////console.log(code);
   if (!code) {
     return null;
     // alert("Error authenticating with API, please try again.");
@@ -62,11 +62,11 @@ export const generateColor = () => {
 export const retrieveDataForSong = (songid, run_data, onlyFast) => {
   let all_data = [];
 
-  console.log(run_data);
+  //console.log(run_data);
   run_data.forEach((run) => {
     let data = [];
     let labels = [];
-    console.log(run);
+    //console.log(run);
     //remove duplicates that are not fastest
     if (
       !run.fastest_points.map((point) => point.song_playing).includes(songid) &&

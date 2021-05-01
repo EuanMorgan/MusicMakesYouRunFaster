@@ -99,13 +99,13 @@ const RunsMap = (props) => {
       if (run.run_map[replayCounter].song_playing.cover_art) {
         stopRun();
         setCurrentlyPlaying(run.run_map[replayCounter].song_playing);
-        //console.log(run.run_map[replayCounter].song_playing.audio_features);
+        ////console.log(run.run_map[replayCounter].song_playing.audio_features);
         replayRun();
       }
     }
     clicked_point = null;
     replayCounter++;
-    // //console.log(replayCounter, run.length);
+    // ////console.log(replayCounter, run.length);
     if (replayCounter == run.run_map.length) {
       replayCounter = 0;
       stopRun();
@@ -131,7 +131,7 @@ const RunsMap = (props) => {
     replayCounter = 0;
 
     return () => {
-      //console.log("cleaning up...");
+      ////console.log("cleaning up...");
       stopRun();
       window.removeEventListener(
         "resize",
@@ -146,19 +146,19 @@ const RunsMap = (props) => {
     setRunList(vals[1]);
     spotifyToken = vals[2];
     let runData = vals[1][vals[1].length - 1];
-    //console.log(runData);
+    ////console.log(runData);
     if (props.location.state) {
       setRun(props.location.state.load_run);
-      //console.log("set run to desired choice");
+      ////console.log("set run to desired choice");
     } else {
       setRun(runData);
     }
 
-    console.log(runData);
+    //console.log(runData);
   };
 
   useEffect(() => {
-    //console.log(run);
+    ////console.log(run);
     if (!run) return;
 
     setCurrentPointData({
@@ -190,7 +190,7 @@ const RunsMap = (props) => {
     stopRun();
     replayCounter = 0;
     setRun(runList[id]);
-    console.log(runList[id]);
+    //console.log(runList[id]);
   };
 
   return (
@@ -244,7 +244,7 @@ const RunsMap = (props) => {
                 if (!clicked_point) clicked_point = p.seq;
 
                 if (clicked_point != p.seq) return;
-                //console.log(p.seq);
+                ////console.log(p.seq);
                 let wasReplaying = replayToggle;
 
                 replayCounter = p.seq;

@@ -9,8 +9,8 @@ const Player = (props) => {
     setKey(Math.random());
   }, [props.uri]);
 
-  console.log(props.token);
-  console.log(props.uri);
+  //console.log(props.token);
+  //console.log(props.uri);
 
   return (
     <SpotifyPlayer

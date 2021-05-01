@@ -15,8 +15,8 @@ const Home = (props) => {
   const history = useHistory();
   const { currentUser, signIn } = useAuth();
   if (currentUser) {
-    //console.log(currentUser);
-    //console.log("redirect from home");
+    ////console.log(currentUser);
+    ////console.log("redirect from home");
     history.push("/dashboard");
   }
   const scrollToSection = (duration) => {
@@ -43,21 +43,21 @@ const Home = (props) => {
       },
       body: JSON.stringify({ code: code }),
     });
-    //console.log(response);
+    ////console.log(response);
     let customToken = await response.text();
-    //console.log(customToken);
+    ////console.log(customToken);
     try {
       await signIn(customToken);
 
       //signed in
-      //console.log("Sign in successful, redirecting");
+      ////console.log("Sign in successful, redirecting");
       history.push("/continue-setup");
       props.setLoading(false);
       props.toast("🌈 sign in successful! 🌈");
     } catch (error) {
       props.toast.error("There has been an error signing in");
       history.push("/");
-      //console.log(error);
+      ////console.log(error);
     }
   };
 
@@ -104,13 +104,13 @@ const Home = (props) => {
           <button
             id="fitbit-button"
             onClick={() => {
-              //console.log(`Are we in production env?`);
-              //console.log(isProduction());
+              ////console.log(`Are we in production env?`);
+              ////console.log(isProduction());
               let uri = isProduction()
                 ? "https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22C8M7&redirect_uri=https://musicmakesyourunfaster.firebaseapp.com/fitbit&scope=activity%20heartrate%20location%20profile"
                 : "https://www.fitbit.com/oauth2/authorize?response_type=code&client_id=22C8M7&redirect_uri=http://localhost:3000/fitbit&scope=activity%20heartrate%20location%20profile";
 
-              //console.log(uri);
+              ////console.log(uri);
               openInNewTab(uri);
             }}
           >

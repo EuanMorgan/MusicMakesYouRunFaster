@@ -12,7 +12,7 @@ const AllSongs = (props) => {
   const [artistCount, setArtistCount] = useState([]);
   const [allSongsList, setAllSongsList] = useState();
   const [isShowingSongs, setIsShowingSongs] = useState(false);
-  //console.log(props.songs);
+  ////console.log(props.songs);
   useEffect(() => {
     let genres = [];
     let artists = [];

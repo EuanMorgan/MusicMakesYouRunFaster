@@ -19,9 +19,9 @@ const FastestSongs = (props) => {
     if (!fastest_song_ids.includes(song_playing)) {
       let song = props.run.songs.filter((song) => song.id === song_playing)[0];
       fastest_song_ids.push(song_playing);
-      //console.log(song);
+      ////console.log(song);
       let audioFeatures = song.audio_features;
-      //console.log(audioFeatures);
+      ////console.log(audioFeatures);
       audioFeatures[0].name = song.name;
       audioFeatures[0].color = generateColor();
       fastest_song_audio_features.push(audioFeatures[0]);
@@ -32,7 +32,7 @@ const FastestSongs = (props) => {
   let highest_heart_ids = [];
   let highest_hearts = {};
 
-  //console.log(props.bpm_order);
+  ////console.log(props.bpm_order);
   props.bpm_order.forEach((h) => {
     if (h.song_playing === undefined) {
       return;
@@ -113,7 +113,7 @@ const FastestSongs = (props) => {
     ).toFixed(0);
     let bpm_highlow =
       props.run.avg_bpm > highest_hearts[id] ? "lower" : "higher";
-    console.log(props.run.avg_bpm.toFixed(0), highest_hearts[id]);
+    //console.log(props.run.avg_bpm.toFixed(0), highest_hearts[id]);
     let percentSpeed = calcPercentIncDec(
       props.run.avg_pace,
       fastest_speeds[id]

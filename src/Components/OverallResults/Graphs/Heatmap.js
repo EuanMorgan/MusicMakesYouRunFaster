@@ -4,7 +4,7 @@ import { useWindowSize } from "../../../Hooks/useWindowSize";
 import ReactTooltip from "react-tooltip";
 const Heatmap = (props) => {
   const size = useWindowSize();
-  //   console.log(props.differences);
+  //   //console.log(props.differences);
   const xLabels = props.differences.map((song) => song.name.split("-")[0]);
   const yLabels = props.differences.map((song) =>
     song.name
@@ -13,9 +13,9 @@ const Heatmap = (props) => {
   );
   const data = new Array(yLabels.length).fill(0).map((item, xIndex) =>
     new Array(xLabels.length).fill(0).map((item, yIndex) => {
-      //   console.log(xIndex, yIndex);
-      //   console.log(props.differences[yIndex].id);
-      //   console.log(
+      //   //console.log(xIndex, yIndex);
+      //   //console.log(props.differences[yIndex].id);
+      //   //console.log(
       //     `x ${props.differences[xIndex].name}, y ${
       //       props.differences[xIndex].scores.filter(
       //         (song) => song.compare_song_id === props.differences[yIndex].id
@@ -26,11 +26,11 @@ const Heatmap = (props) => {
       let filtered = props.differences[xIndex].scores.filter(
         (song) => song.compare_song_id === props.differences[yIndex].id
       );
-      //   console.log(filtered);
+      //   //console.log(filtered);
       return filtered[0] ? filtered[0].percentage_similar : 100;
     })
   );
-  //   console.log(data);
+  //   //console.log(data);
   return (
     <div className="chart-container heatmap">
       <p>Similarity</p>

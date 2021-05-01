@@ -5,7 +5,7 @@ import { useWindowSize } from "../../../Hooks/useWindowSize";
 export const Speed = (props) => {
   const size = useWindowSize();
 
-  console.log(props.data);
+  //console.log(props.data);
 
   let q1 = [];
   let q2 = [];
@@ -19,7 +19,7 @@ export const Speed = (props) => {
     q3.push(song.data[2]);
     q4.push(song.data[3]);
     labels.push(song.title);
-    console.log(song);
+    //console.log(song);
     dates.push(song.date.split(" ")[0]);
   });
 
@@ -111,7 +111,7 @@ export const Speed = (props) => {
           ); //+ ": " + dataset.data[index];
         },
         title: function (tooltipItem, data) {
-          //   console.log(tooltipItem);
+          //   //console.log(tooltipItem);
           return tooltipItem[0].label;
         },
         beforeLabel: function (tooltipItem, data) {

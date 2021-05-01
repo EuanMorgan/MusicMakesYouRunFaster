@@ -54,7 +54,14 @@ export default function SongSimilarity(props) {
       valence: temp.valence,
       speechiness: temp.speechiness,
     };
-
+    return [
+      audioFeatures,
+      temp.acousticness,
+      temp.danceability,
+      temp.energy,
+      temp.valence,
+      temp.speechiness,
+    ];
     return audioFeatures;
   };
 
@@ -82,7 +89,7 @@ export default function SongSimilarity(props) {
       fastest_all_scores[feature] = fastest_all_scores[feature] / songs.length;
     });
 
-    // console.log(fastest_all_scores);
+    // //console.log(fastest_all_scores);
 
     return [
       fastest_all_scores.acousticness,
@@ -93,19 +100,40 @@ export default function SongSimilarity(props) {
     ];
   };
 
+  const cosinesimtest = (A, B) => {
+    var dotproduct = 0;
+    var mA = 0;
+    var mB = 0;
+    for (let i = 0; i < A.length; i++) {
+      // here you missed the i++
+      dotproduct += A[i] * B[i];
+      mA += A[i] * A[i];
+      mB += B[i] * B[i];
+    }
+    mA = Math.sqrt(mA);
+    mB = Math.sqrt(mB);
+    var similarity = dotproduct / (mA * mB); // here you needed extra brackets
+    return similarity;
+  };
+
   const compareTwoSongs = (songA, songB) => {
-    // console.log(`Similarity of ${songA.name} ||and|| ${songB.name}`);
+    // //console.log(`Similarity of ${songA.name} ||and|| ${songB.name}`);
     let overall = 0;
 
-    const songAFeatures = extractFeatures(songA);
-    const songBFeatures = extractFeatures(songB);
+    let songAFeatures = extractFeatures(songA);
+    let songBFeatures = extractFeatures(songB);
+    let cosine = cosinesimtest(songAFeatures.slice(1), songBFeatures.slice(1));
+    songAFeatures = songAFeatures[0];
+    songBFeatures = songBFeatures[0];
+
+    console.log(songAFeatures, songBFeatures);
 
     Object.keys(songAFeatures).forEach((feature) => {
-      //   console.log(feature);
+      //   //console.log(feature);
       let difference = parseFloat(
         Math.abs(songAFeatures[feature] - songBFeatures[feature]).toFixed(5)
       );
-      //   console.log(
+      //   //console.log(
       //     `${songAFeatures[feature]} - ${songBFeatures[feature]} = ${difference}`
       //   );
       overall += difference;
@@ -113,10 +141,11 @@ export default function SongSimilarity(props) {
 
     let similarity_percent =
       (overall / Object.keys(songAFeatures).length) * 100;
-    // console.log(similarity_percent);
+    // //console.log(similarity_percent);
     similarity_percent = 100 - similarity_percent;
 
-    // console.log(
+    console.log(cosine, overall);
+    // //console.log(
     //   `Overall difference is ${overall}. Meaning they are ${similarity_percent}% similar`
     // );
 
@@ -124,7 +153,7 @@ export default function SongSimilarity(props) {
   };
 
   useEffect(() => {
-    // console.log(props.fastest_songs);
+    // //console.log(props.fastest_songs);
     let all_differences = [];
 
     //for each song, make an object containing its id, name, artist name
@@ -157,7 +186,7 @@ export default function SongSimilarity(props) {
           compare_song_color: compareSong.color,
           percentage_similar: percentageSimilar,
         });
-        // console.log(temp_differences);
+        // //console.log(temp_differences);
       });
 
       all_differences.push({
@@ -169,7 +198,7 @@ export default function SongSimilarity(props) {
       });
     });
 
-    // console.log(all_differences);
+    // //console.log(all_differences);
 
     props.non_fastest_songs.forEach((baseSong) => {
       props.non_fastest_songs.forEach((compareSong) => {
@@ -184,7 +213,7 @@ export default function SongSimilarity(props) {
 
         non_fastest_percentages.push(percentageSimilar);
       });
-      // console.log(non_fastest_percentages);
+      // //console.log(non_fastest_percentages);
     });
 
     let averageFastestSimilarity = average(fastest_percentages);
@@ -212,7 +241,7 @@ export default function SongSimilarity(props) {
         ],
       });
     });
-    // console.log(tempRadarData);
+    // //console.log(tempRadarData);
 
     fetchSimilarSongs();
     setRadarData(tempRadarData);
@@ -220,10 +249,10 @@ export default function SongSimilarity(props) {
 
   const fetchSimilarSongs = async () => {
     if (!userData.spotifyRefreshToken) return;
-    // console.log(props.all.unqiueArtists);
-    // console.log(props.all.uniqueGenres);
-    // console.log(props.all.unqiueArtists);
-    // console.log(userData.spotifyRefreshToken);
+    // //console.log(props.all.unqiueArtists);
+    // //console.log(props.all.uniqueGenres);
+    // //console.log(props.all.unqiueArtists);
+    // //console.log(userData.spotifyRefreshToken);
 
     let uri = isProduction() ? SIMILAR.PRODUCTION : SIMILAR.DEBUG;
     const response = await fetch(uri, {
@@ -245,7 +274,7 @@ export default function SongSimilarity(props) {
     let playlist_uri = resp.data;
 
     let spotifyToken;
-    //console.log(userData.spotifyRefreshToken);
+    ////console.log(userData.spotifyRefreshToken);
     let api_uri = isProduction()
       ? "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/api/spotify/refresh"
       : "http://localhost:5000/musicmakesyourunfaster/europe-west2/app/api/spotify/refresh";
@@ -284,7 +313,7 @@ export default function SongSimilarity(props) {
             <Collapser onlyArrowClickable={true}>
               {props.fastest_songs.map((song) => {
                 let data = retrieveDataForSong(song.id, props.all.allData);
-                // console.log(data);
+                // //console.log(data);
                 return (
                   <Collapser
                     title={
@@ -406,7 +435,7 @@ export default function SongSimilarity(props) {
         Here is a playlist of songs similar to your fastest that you may enjoy!
       </p>
       <p>Good luck on your next run!</p>
-      {console.log(props.spotifyToken)}
+      {/* {//console.log(props.spotifyToken)} */}
 
       <SpotifyPlaylistPlayer
         uri={similarPlaylist}
