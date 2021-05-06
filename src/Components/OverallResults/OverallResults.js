@@ -52,6 +52,13 @@ const OverallResults = (props) => {
           return;
         }
 
+        if (fastest_songs.length == 15) {
+          //if overflowing song limit, remove oldest song
+          fastest_songs.splice(0, 1);
+        }
+
+        //console.log(fastest_songs);
+        //console.log(fastest_songs.length, "didnt return");
         //find id of song playing
         let song_playing =
           typeof p.song_playing == "string"
@@ -83,11 +90,11 @@ const OverallResults = (props) => {
 
     let nonFastestRepeats = findRepeatOccurences(nonFastestSongs, repeats);
 
-    console.log(fastest_songs);
-    console.log(nonFastestSongs);
+    //console.log(fastest_songs);
+    //console.log(nonFastestSongs);
 
-    console.log(fastestRepeats);
-    console.log(nonFastestRepeats);
+    //console.log(fastestRepeats);
+    //console.log(nonFastestRepeats);
 
     let genres = [];
     let artists = [];
@@ -96,7 +103,7 @@ const OverallResults = (props) => {
       genres.push(...song.artist_data.genres);
       artists.push(song.artist_data.id);
       allSongs.push(song.id);
-      console.log(artists);
+      //console.log(artists);
     });
 
     setCombinedData({
@@ -121,9 +128,9 @@ const OverallResults = (props) => {
       allData: data,
     });
 
-    console.log(songs);
+    //console.log(songs);
 
-    console.log(fastest_songs);
+    //console.log(fastest_songs);
   };
 
   const setStates = (vals) => {
@@ -142,12 +149,12 @@ const OverallResults = (props) => {
 
     spotifyToken = vals[2];
     let runData = vals[1][vals[1].length - 1];
-    //console.log(runData);
+    ////console.log(runData);
   };
 
   const findRepeatOccurences = (songs, repeats = []) => {
     let tempIDArray = songs.map((song) => song.id);
-    console.log(songs);
+    //console.log(songs);
     let tempCount = {};
 
     tempIDArray.forEach((id) => {
@@ -158,18 +165,18 @@ const OverallResults = (props) => {
         tempCount[ref]++;
       }
     });
-    console.log(tempCount);
+    //console.log(tempCount);
     let duplicateValues = {};
 
     Object.keys(tempCount).forEach((key) => {
       if (tempCount[key] > 1 || repeats[key]) {
         duplicateValues[key] = tempCount[key];
       }
-      console.log(duplicateValues);
-      console.log(tempCount[key]);
+      //console.log(duplicateValues);
+      //console.log(tempCount[key]);
     });
 
-    console.log(duplicateValues);
+    //console.log(duplicateValues);
     if (Object.keys(duplicateValues).length > 0) {
       return duplicateValues;
     }
@@ -178,12 +185,12 @@ const OverallResults = (props) => {
   };
 
   const showRepeatOccurences = () => {
-    console.log(combinedData.repeatOccurences);
+    //console.log(combinedData.repeatOccurences);
     if (combinedData.repeatOccurences === null) {
       return;
     }
 
-    console.log(combinedData.fastestRepeats, combinedData.nonFastestRepeats);
+    //console.log(combinedData.fastestRepeats, combinedData.nonFastestRepeats);
     let returnVal =
       Object.keys(combinedData.repeatOccurences).length > 0 ? (
         <div>
@@ -225,7 +232,7 @@ const OverallResults = (props) => {
         </p>
       );
 
-    console.log(returnVal);
+    //console.log(returnVal);
     return returnVal;
   };
 
@@ -243,11 +250,10 @@ const OverallResults = (props) => {
     return <h1>Loading</h1>;
   }
 
-  console.log(combinedData);
+  //console.log(combinedData);
   return (
     <div>
       <h1>Overall</h1>
-
       <p>
         Over the last <span className="red-text"> {runIdList.length} runs</span>{" "}
         you travelled{" "}
@@ -255,7 +261,6 @@ const OverallResults = (props) => {
         {msToHMS(combinedData.totalTime, true)}
       </p>
       <OverallStats combinedData={combinedData} />
-
       <AllSongs songs={combinedData.songs} />
       {showRepeatOccurences()}
 
@@ -265,6 +270,8 @@ const OverallResults = (props) => {
         non_fastest_songs={combinedData.nonFastestSongs}
         all={combinedData}
         spotifyToken={spotifyToken}
+        setLoading={props.setLoading}
+        toast={props.toast}
       />
     </div>
   );

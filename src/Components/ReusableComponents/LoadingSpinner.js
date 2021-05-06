@@ -55,17 +55,19 @@ let choice;
 const LoadingSpinner = ({ active, children }) => {
   useEffect(() => {
     if (active) return;
-    //console.log("changing...");
+    ////console.log("changing...");
     let c = Math.floor(Math.random() * loaders.length);
 
     choice = loaders[c];
-    //console.log(c);
+    ////console.log(c);
   }, [active]);
   return (
     <LoadingOverlay
       active={active}
       spinner={choice}
-      styles={{ overlay: (base) => ({ ...base, height: "100vh" }) }}
+      styles={{
+        overlay: (base) => ({ ...base, height: "100vh", position: "fixed" }),
+      }}
     >
       {children}
     </LoadingOverlay>

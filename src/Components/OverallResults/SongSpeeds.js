@@ -3,7 +3,7 @@ import { average, retrieveDataForSong } from "../../Common/CommonFunctions";
 import { split } from "../../Functions/MainApiCalls";
 import { Speed } from "./Graphs/Speed";
 const SongSpeeds = (props) => {
-  console.log(props.data);
+  //console.log(props.data);
   const [graphData, setGraphData] = useState([]);
   useEffect(() => {
     const graph_data = [];
@@ -31,12 +31,12 @@ const SongSpeeds = (props) => {
           data: quarter_avg_speeds,
           date: run.title,
         });
-        console.log(song.name);
-        console.log(props.data.fastestSongs);
+        //console.log(song.name);
+        //console.log(props.data.fastestSongs);
       });
     });
 
-    console.log(graph_data);
+    //console.log(graph_data);
     setGraphData(graph_data);
   }, [props.data]);
 

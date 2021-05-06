@@ -16,7 +16,7 @@ const DeleteRun = (props) => {
   const setStates = (vals) => {
     setRunIdList(vals[0]);
     let runData = vals[1][vals[1].length - 1];
-    //console.log(runData);
+    ////console.log(runData);
     setRun(runData);
   };
 

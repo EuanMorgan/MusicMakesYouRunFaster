@@ -5,7 +5,7 @@ import { Bar, defaults } from "react-chartjs-2";
 export const Frequency = (props) => {
   // defaults.global.maintainAspectRatio = false;
   //   defaults.global.responsive = true;
-  //console.log(props);
+  ////console.log(props);
 
   let labelArray = [];
   let dataArray = [];
@@ -17,8 +17,8 @@ export const Frequency = (props) => {
     labelArray = [...labelArray, ...Object.keys(props.nonFastest)];
     dataArray = [...dataArray, ...Object.values(props.nonFastest)];
   }
-  console.log(props.fastest, props.nonFastest);
-  console.log(labelArray);
+  //console.log(props.fastest, props.nonFastest);
+  //console.log(labelArray);
   const data = {
     // labels: Object.keys(props.data),
     labels: labelArray,
@@ -44,7 +44,7 @@ export const Frequency = (props) => {
       },
     ],
   };
-  console.log(data);
+  //console.log(data);
   const options = {
     maintainAspectRatio: false,
     tooltips: {

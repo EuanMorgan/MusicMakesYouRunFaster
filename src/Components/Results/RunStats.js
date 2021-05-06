@@ -9,7 +9,7 @@ import AllSongs from "./Components/AllSongs";
 export const RunStats = (props) => {
   let bpm_order = [...props.run.run_map].sort(sort("heart_rate_bpm"));
   let speed_order = [...props.run.run_map].sort(sort("pace"));
-  //console.log(props.run.songs);
+  ////console.log(props.run.songs);
 
   return (
     <div className="results">

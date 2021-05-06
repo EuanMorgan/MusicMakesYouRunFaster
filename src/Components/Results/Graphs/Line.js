@@ -5,7 +5,7 @@ import { Line, defaults } from "react-chartjs-2";
 export const LineGraph = (props) => {
   // defaults.global.maintainAspectRatio = false;
   defaults.global.responsive = true;
-  //console.log(props);
+  ////console.log(props);
   const data = {
     labels:
       props.labels == undefined
