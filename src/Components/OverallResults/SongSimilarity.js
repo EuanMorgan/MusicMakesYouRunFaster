@@ -27,7 +27,7 @@ export default function SongSimilarity(props) {
   const [radarData, setRadarData] = useState([]);
   const [avgFastestDiff, setAvgFastestDiff] = useState();
   const [avgNonFastestDiff, setAvgNonFastestDiff] = useState();
-  const [similarPlaylist, setSimilarPlaylist] = useState([]);
+  const [similarPlaylist, setSimilarPlaylist] = useState();
   const [spotifyToken, setSpotifyToken] = useState();
   //find similarities
   // Each song has a confidence score for cerain properties
@@ -243,7 +243,7 @@ export default function SongSimilarity(props) {
     });
     // //console.log(tempRadarData);
 
-    fetchSimilarSongs();
+    // fetchSimilarSongs();
     setRadarData(tempRadarData);
   }, []);
 
@@ -254,6 +254,7 @@ export default function SongSimilarity(props) {
     // //console.log(props.all.unqiueArtists);
     // //console.log(userData.spotifyRefreshToken);
 
+    props.setLoading(true);
     let uri = isProduction() ? SIMILAR.PRODUCTION : SIMILAR.DEBUG;
     const response = await fetch(uri, {
       method: "POST",
@@ -271,7 +272,13 @@ export default function SongSimilarity(props) {
     });
     let resp = await response.json();
 
-    let playlist_uri = resp.data;
+    let playlist_uri = resp.data[0];
+
+    if (resp.data[1]) {
+      props.toast(
+        "We only make 1 playlist per day to avoid flooding your library, come back tomorrow for another! 😎"
+      );
+    }
 
     let spotifyToken;
     ////console.log(userData.spotifyRefreshToken);
@@ -290,6 +297,7 @@ export default function SongSimilarity(props) {
     spotifyToken = await spotifyToken.text();
     setSpotifyToken(spotifyToken);
     setSimilarPlaylist(playlist_uri);
+    props.setLoading(false);
   };
 
   const PageContainer = styled.div`
@@ -431,17 +439,32 @@ export default function SongSimilarity(props) {
 
       <h1>Recommended Songs</h1>
 
-      <p>
-        Here is a playlist of songs similar to your fastest that you may enjoy!
-      </p>
-      <p>Good luck on your next run!</p>
-      {/* {//console.log(props.spotifyToken)} */}
+      {similarPlaylist ? (
+        <>
+          <p>
+            Here is a playlist of songs similar to your fastest that you may
+            enjoy!
+          </p>
+          <p>Good luck on your next run!</p>
+          <SpotifyPlaylistPlayer
+            uri={similarPlaylist}
+            token={spotifyToken}
+            play={true}
+          />
+        </>
+      ) : (
+        <>
+          <ParagraphContainer>
+            <ParagraphLarger>
+              Need some more motivation whilst running but tired of the same old
+              songs? Hit the button below and we will make you a playlist of
+              songs similar to those that got you moving the fastest.
+            </ParagraphLarger>
+          </ParagraphContainer>
 
-      <SpotifyPlaylistPlayer
-        uri={similarPlaylist}
-        token={spotifyToken}
-        play={true}
-      />
+          <button onClick={fetchSimilarSongs}>Generate playlist</button>
+        </>
+      )}
     </PageContainer>
   );
 }

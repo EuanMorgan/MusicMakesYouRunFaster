@@ -65,7 +65,9 @@ const LoadingSpinner = ({ active, children }) => {
     <LoadingOverlay
       active={active}
       spinner={choice}
-      styles={{ overlay: (base) => ({ ...base, height: "100vh" }) }}
+      styles={{
+        overlay: (base) => ({ ...base, height: "100vh", position: "fixed" }),
+      }}
     >
       {children}
     </LoadingOverlay>

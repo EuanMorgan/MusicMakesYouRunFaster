@@ -254,7 +254,6 @@ const OverallResults = (props) => {
   return (
     <div>
       <h1>Overall</h1>
-
       <p>
         Over the last <span className="red-text"> {runIdList.length} runs</span>{" "}
         you travelled{" "}
@@ -262,7 +261,6 @@ const OverallResults = (props) => {
         {msToHMS(combinedData.totalTime, true)}
       </p>
       <OverallStats combinedData={combinedData} />
-
       <AllSongs songs={combinedData.songs} />
       {showRepeatOccurences()}
 
@@ -272,6 +270,8 @@ const OverallResults = (props) => {
         non_fastest_songs={combinedData.nonFastestSongs}
         all={combinedData}
         spotifyToken={spotifyToken}
+        setLoading={props.setLoading}
+        toast={props.toast}
       />
     </div>
   );
