@@ -9,7 +9,7 @@ const OverallStats = (props) => {
           <p>
             <span className="data-list-title">You ran for:</span>{" "}
             {props.combinedData
-              ? props.combinedData.totalTime
+              ? msToHMS(props.combinedData.totalTime, true)
               : msToHMS(
                   props.run.run_map[props.run.run_map.length - 1].epoch_ms -
                     props.run.run_map[0].epoch_ms
@@ -18,11 +18,12 @@ const OverallStats = (props) => {
           <p>
             <span className="data-list-title">You travelled:</span>{" "}
             {props.combinedData
-              ? props.combinedData.totalDistance
-              : props.run.run_map[
-                  props.run.run_map.length - 2
-                ].distance_meters.toFixed(2)}{" "}
-            metres
+              ? (props.combinedData.totalDistance / 1609).toFixed(2)
+              : (
+                  props.run.run_map[props.run.run_map.length - 2]
+                    .distance_meters / 1609
+                ).toFixed(2)}{" "}
+            miles
           </p>
           <p>
             <span className="data-list-title">Average speed:</span>{" "}

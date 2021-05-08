@@ -146,7 +146,7 @@ const RunsMap = (props) => {
     setRunList(vals[1]);
     spotifyToken = vals[2];
     let runData = vals[1][vals[1].length - 1];
-    ////console.log(runData);
+    console.log(runData);
     if (props.location.state) {
       setRun(props.location.state.load_run);
       ////console.log("set run to desired choice");
