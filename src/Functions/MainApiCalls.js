@@ -25,7 +25,7 @@ export const pullRuns = async (refreshToken) => {
     return "oops";
   }
 
-  //console.log("MAPPYBOY", r);
+  console.log("MAPPYBOY", r);
   //TODO: -1 return
   return r.run_map;
 };
@@ -49,7 +49,7 @@ export const pullSongs = async (refreshToken) => {
   if (spotifySongs == "error") {
     alert("There has been an error fetching the map of your most recent run.");
   }
-  //console.log("SONGIES", spotifySongs);
+  console.log("SONGIES", spotifySongs);
   return spotifySongs;
 };
 
