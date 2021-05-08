@@ -21,12 +21,15 @@ import Heatmap from "./Graphs/Heatmap";
 import { LineGraph } from "../Results/Graphs/Line";
 import SongSpeeds from "./SongSpeeds";
 import SpotifyPlaylistPlayer from "../PlaylistPlayer/PlaylistPlayer";
+import { Tempo } from "./Graphs/Tempo";
 export default function SongSimilarity(props) {
   const { userData, currentUser } = useAuth();
   const [differences, setDifferences] = useState([]);
   const [radarData, setRadarData] = useState([]);
   const [avgFastestDiff, setAvgFastestDiff] = useState();
   const [avgNonFastestDiff, setAvgNonFastestDiff] = useState();
+  const [avgFastestTempo, setAvgFastestTempo] = useState();
+  const [avgNonFastestTempo, setAvgNonFastestTempo] = useState();
   const [similarPlaylist, setSimilarPlaylist] = useState();
   const [spotifyToken, setSpotifyToken] = useState();
   //find similarities
@@ -126,7 +129,7 @@ export default function SongSimilarity(props) {
     songAFeatures = songAFeatures[0];
     songBFeatures = songBFeatures[0];
 
-    console.log(songAFeatures, songBFeatures);
+    // console.log(songAFeatures, songBFeatures);
 
     Object.keys(songAFeatures).forEach((feature) => {
       //   //console.log(feature);
@@ -144,7 +147,7 @@ export default function SongSimilarity(props) {
     // //console.log(similarity_percent);
     similarity_percent = 100 - similarity_percent;
 
-    console.log(cosine, overall);
+    // console.log(cosine, overall);
     // //console.log(
     //   `Overall difference is ${overall}. Meaning they are ${similarity_percent}% similar`
     // );
@@ -220,6 +223,17 @@ export default function SongSimilarity(props) {
     setAvgFastestDiff(averageFastestSimilarity);
     let averageNonFastestSimilarity = average(non_fastest_percentages);
     setAvgNonFastestDiff(averageNonFastestSimilarity);
+
+    let fastestTempos = props.fastest_songs.map((song) =>
+      parseFloat(song.audio_features[0].tempo)
+    );
+    let averageFastestTempos = average(fastestTempos);
+    setAvgFastestTempo(averageFastestTempos);
+    let nonFastestTempos = props.non_fastest_songs.map((song) =>
+      parseFloat(song.audio_features[0].tempo)
+    );
+    let averageNonFastestTempos = average(nonFastestTempos);
+    setAvgNonFastestTempo(averageNonFastestTempos);
 
     setDifferences(all_differences);
 
@@ -436,6 +450,27 @@ export default function SongSimilarity(props) {
         ]}
         show={true}
       />
+
+      <h1>Tempos</h1>
+      <p>Songs that made you run faster</p>
+      <Tempo data={props.fastest_songs} />
+      <p>Other songs</p>
+      <Tempo data={props.non_fastest_songs} />
+
+      <ParagraphContainer>
+        <ParagraphLarger>
+          Average Tempo for songs that made you run faster:{" "}
+          <span className="red-text">
+            {avgFastestTempo && avgFastestTempo.toFixed(0)} BPM
+          </span>
+        </ParagraphLarger>
+        <ParagraphLarger>
+          Average tempo for other songs{" "}
+          <span className="red-text">
+            {avgNonFastestTempo && avgNonFastestTempo.toFixed(0)} BPM
+          </span>
+        </ParagraphLarger>
+      </ParagraphContainer>
 
       <h1>Recommended Songs</h1>
 
