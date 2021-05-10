@@ -43,9 +43,8 @@ const Home = (props) => {
       },
       body: JSON.stringify({ code: code }),
     });
-    ////console.log(response);
     let customToken = await response.text();
-    ////console.log(customToken);
+
     try {
       await signIn(customToken);
 

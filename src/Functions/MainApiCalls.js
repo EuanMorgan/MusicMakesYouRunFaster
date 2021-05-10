@@ -24,9 +24,6 @@ export const pullRuns = async (refreshToken) => {
   } catch {
     return "oops";
   }
-
-  console.log("MAPPYBOY", r);
-  //TODO: -1 return
   return r.run_map;
 };
 
@@ -446,7 +443,7 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
         );
     }
   } catch (error) {
-    //console.log(error);
+    console.log(error);
     return -1000;
   }
 
@@ -481,6 +478,41 @@ const findFastestPoints = async (points, uid, id, avg_pace, isTest) => {
   );
   //console.log(avg_pace);
   //console.log(pace_order);
+
+  let occurences = {};
+
+  pace_order.forEach((p) => {
+    if (!p.song_playing) {
+      return;
+    }
+    //The full song playing object is only on the first point at which the song occurs to reduce the data storage requirements
+    //Therefore, we need to extract the ID
+    //In all other cases, p.song_playing is only the ID so we can just take that value
+    let song_playing =
+      typeof p.song_playing == "string" ? p.song_playing : p.song_playing.id;
+
+    //increment or initialise count for the song
+    if (occurences[song_playing]) {
+      occurences[song_playing]++;
+    } else {
+      occurences[song_playing] = 1;
+    }
+  });
+  console.log(pace_order);
+  pace_order = pace_order.filter((p) => {
+    if (!p.song_playing) {
+      return p;
+    }
+    let song_playing =
+      typeof p.song_playing == "string" ? p.song_playing : p.song_playing.id;
+
+    if (occurences[song_playing] >= 20) {
+      return p;
+    }
+  });
+
+  console.log(occurences);
+  console.log(pace_order);
 
   try {
     if (!isTest) {
