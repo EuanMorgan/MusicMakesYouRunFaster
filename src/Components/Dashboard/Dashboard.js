@@ -52,6 +52,7 @@ const Dashboard = (props) => {
     ////console.log(songs);
     try {
       let x = await parseSongsAndRun(songs, map, currentUser.uid);
+      console.log(x);
       if (x === -255) {
         props.toast.info(
           "Most recent run not fetched because we already have it 😎"
