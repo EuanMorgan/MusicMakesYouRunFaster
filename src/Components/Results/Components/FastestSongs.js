@@ -3,6 +3,7 @@ import { sort } from "../../../Functions/MainApiCalls";
 import { CollapseMenu } from "../../ReusableComponents/Collapse";
 import { calcPercentIncDec } from "../../../Common/CommonFunctions";
 import { generateColor } from "../../../Common/CommonFunctions";
+import { LineGraph } from "../Graphs/Line";
 
 const FastestSongs = (props) => {
   let fastest_song_ids = [];
@@ -137,8 +138,48 @@ const FastestSongs = (props) => {
     };
   };
 
+  const speedGraph = (
+    <LineGraph
+      speeds={props.run.run_map.map((point) => point.pace)}
+      labels={labels}
+      legendTitle={"Speed (m/s)"}
+      show={true}
+    />
+  );
+
+  const bpmGraph = (
+    <LineGraph
+      speeds={props.run.run_map.map((point) => point.heart_rate_bpm)}
+      labels={labels}
+      legendTitle={"Heart Rate (BPM)"}
+      show={true}
+      isHeartrate={true}
+    />
+  );
+
+  if (fastest_song_ids.length === 0) {
+    return (
+      <div>
+        <p>
+          We found no songs during this run that had a major impact on your
+          speed
+        </p>
+        <h1>Overall Speed Graph</h1>
+        <div style={{ width: "69%", margin: "auto" }}>{speedGraph}</div>
+        <h1>Overall Heart Rate Graph</h1>
+        <div style={{ width: "69%", margin: "auto", paddingBottom: "3%" }}>
+          {bpmGraph}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
+      <h1>Overall Speed graph</h1>
+      <div style={{ width: "69%", margin: "auto", paddingBottom: "3%" }}>
+        {speedGraph}
+      </div>
       <h1>You ran the fastest whilst listening to these songs: </h1>
       {fastest_song_ids.map((id) => {
         let [

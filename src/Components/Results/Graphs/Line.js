@@ -5,7 +5,7 @@ import { Line, defaults } from "react-chartjs-2";
 export const LineGraph = (props) => {
   // defaults.global.maintainAspectRatio = false;
   defaults.global.responsive = true;
-  ////console.log(props);
+  console.log(props);
   const data = {
     labels:
       props.labels == undefined
@@ -15,17 +15,11 @@ export const LineGraph = (props) => {
       props.listeningData == undefined || props.listeningData == undefined
         ? [
             {
-              label: "First dataset",
-              data: [33, 53, 85, 41, 44, 65],
+              label: props.legendTitle,
+              data: props.speeds,
               fill: true,
               backgroundColor: "rgba(75,192,192,0.2)",
               borderColor: "rgba(75,192,192,1)",
-            },
-            {
-              label: "Second dataset",
-              data: [33, 25, 35, 51, 54, 76],
-              fill: false,
-              borderColor: "#742774",
             },
           ]
         : [
