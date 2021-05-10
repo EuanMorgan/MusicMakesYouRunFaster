@@ -5,6 +5,7 @@ import {
   pullSongs,
   parseSongsAndRun,
   DeleteAccount,
+  updateData,
 } from "../../Functions/MainApiCalls";
 import { confirmAlert } from "react-confirm-alert"; // Import
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
@@ -158,8 +159,10 @@ const Dashboard = (props) => {
       {/* <button
         onClick={async () => {
           ////console.log(
-            await parseSongsAndRun(songs, run.run_map, "7LZHNM", true)
-          );
+          // await parseSongsAndRun(songs, run.run_map, "7LZHNM", true)
+          // );
+
+          await updateData();
         }}
       >
         TEST

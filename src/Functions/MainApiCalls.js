@@ -466,6 +466,41 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
   ];
 };
 
+export const updateData = async () => {
+  // USED TO UPDATED DATA FROM OLD FASTEST POINTS LIST TO NEW
+
+  let runRef = await db
+    .collection("users")
+    .doc("7LZHNM")
+    .collection("runs")
+    .get();
+
+  for (let i = 0; i < runRef.docs.length; i++) {
+    console.log(runRef.docs[i].id);
+    console.log(runRef.docs[i].data());
+
+    let fastest = await findFastestPoints(
+      runRef.docs[i].data().run_map,
+      "7LZHNM",
+      runRef.docs[i].id,
+      runRef.docs[i].data().avg_pace,
+      true
+    );
+    console.log(fastest);
+    await db
+      .collection("users")
+      .doc("7LZHNM")
+      .collection("runs")
+      .doc(runRef.docs[i].id)
+      .set(
+        {
+          fastest_points: fastest,
+        },
+        { merge: true }
+      );
+  }
+};
+
 const findFastestPoints = async (points, uid, id, avg_pace, isTest) => {
   //sort points by pace, get top 10%, from these loop through and see if they are >30% higher than the average for the run
   let pace_order = points.sort(sort("pace"));
@@ -498,7 +533,7 @@ const findFastestPoints = async (points, uid, id, avg_pace, isTest) => {
       occurences[song_playing] = 1;
     }
   });
-  console.log(pace_order);
+  // console.log(pace_order);
   pace_order = pace_order.filter((p) => {
     if (!p.song_playing) {
       return p;
@@ -512,7 +547,7 @@ const findFastestPoints = async (points, uid, id, avg_pace, isTest) => {
   });
 
   console.log(occurences);
-  console.log(pace_order);
+  // console.log(pace_order);
 
   try {
     if (!isTest) {

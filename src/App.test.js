@@ -25,7 +25,7 @@ test("Creating,pulling,deleting", async () => {
     }
   );
   let data = await code.json();
-  ////console.log(data);
+  //console.log(data);
   ////console.log("created account");
   ////console.log(data.data.spotify);
   let songOutput = await pullSongs(data.data.spotify.refresh_token);

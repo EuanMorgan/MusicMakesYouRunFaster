@@ -181,11 +181,11 @@ const OverallResults = (props) => {
       return duplicateValues;
     }
 
-    return null;
+    return [];
   };
 
   const showRepeatOccurences = () => {
-    //console.log(combinedData.repeatOccurences);
+    console.log(combinedData);
     if (combinedData.repeatOccurences === null) {
       return;
     }
