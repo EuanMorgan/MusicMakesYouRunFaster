@@ -19,6 +19,7 @@ import {
   ParagraphContainer,
   ParagraphLarger,
 } from "../../Constants/Styled";
+import SongSpeeds from "./SongSpeeds";
 const OverallResults = (props) => {
   const { userData, fetchUserData, currentUser } = useAuth();
   const [runIdList, setRunIdList] = useState();
@@ -83,6 +84,10 @@ const OverallResults = (props) => {
 
     fastest_songs.forEach((song) => {
       nonFastestSongs.splice(nonFastestSongs.indexOf(song), 1);
+    });
+
+    nonFastestSongs = nonFastestSongs.map((song) => {
+      return { ...song, color: generateColor() };
     });
     let repeats = findRepeatOccurences(songs);
 

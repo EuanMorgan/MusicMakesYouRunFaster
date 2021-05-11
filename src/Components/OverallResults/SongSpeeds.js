@@ -42,7 +42,7 @@ const SongSpeeds = (props) => {
 
   return (
     <div>
-      <h1>Speed per song</h1>
+      <h1>Running Speed per song</h1>
 
       <Speed data={graphData} />
     </div>

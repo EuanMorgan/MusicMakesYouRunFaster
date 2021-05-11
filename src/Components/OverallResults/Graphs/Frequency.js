@@ -38,7 +38,7 @@ export const Frequency = (props) => {
           ...Object.values(props.nonFastest),
         ],
         backgroundColor: "rgba(89,255,255,0.2)",
-        borderColor: "rgba(5,55,132,1)",
+        borderColor: "rgba(116, 163, 232,1)",
         borderWidth: 1,
         labels: Object.keys(props.nonFastest),
       },
@@ -54,7 +54,7 @@ export const Frequency = (props) => {
       duration: 1500,
     },
     legend: {
-      display: false,
+      display: true,
     },
     title: {
       text: "Song frequency",
@@ -72,6 +72,7 @@ export const Frequency = (props) => {
         {
           ticks: {
             beginAtZero: true,
+            stepSize: 1,
           },
         },
       ],

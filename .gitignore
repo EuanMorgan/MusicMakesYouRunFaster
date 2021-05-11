@@ -87,3 +87,5 @@ build/Release
 
 # dotenv environment variables file
 .env
+
+.App.test.js

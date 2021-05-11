@@ -1,24 +1,26 @@
 import React from "react";
 
-import { HorizontalBar, Bar, defaults } from "react-chartjs-2";
+import { Polar } from "react-chartjs-2";
 import { useWindowSize } from "../../../Hooks/useWindowSize";
-export const Tempo = (props) => {
+export const PolarArea = (props) => {
   const size = useWindowSize();
 
-  let tempos = [];
+  let decibels = [];
   let labels = [];
-
+  let colors = [];
   console.log(props.data);
+
   props.data.forEach((song) => {
-    if (props.loudness) {
-      tempos.push(song.audio_features[0].loudness.toFixed(0));
-    } else {
-      tempos.push(song.audio_features[0].tempo.toFixed(0));
-    }
+    decibels.push(parseInt(song.audio_features[0].loudness.toFixed(0)));
+    colors.push(song.color);
     labels.push(song.name);
   });
 
-  // console.log(tempos, labels);
+  //Chart js for some reason doesn't show the lowest value in the polar chart?
+  //Crude hack to fix, simply add to the data a value lower than the lowest value
+  let lowest = Math.min(...decibels) - 5;
+
+  console.log(decibels, labels, colors);
 
   const data = {
     // labels: Object.keys(props.data),
@@ -26,12 +28,13 @@ export const Tempo = (props) => {
     datasets: [
       {
         label: "Songs",
-        data: tempos,
-        backgroundColor: "rgba(255,99,132,0.2)",
-        borderColor: "rgba(255,99,132,1)",
+        // backgroundColor: "rgba(255,99,132,0.2)",
+        // borderColor: "rgba(255,99,132,1)",
+        data: decibels,
         borderWidth: 1,
         labels: labels,
         hidden: false,
+        backgroundColor: colors,
       },
     ],
   };
@@ -44,23 +47,22 @@ export const Tempo = (props) => {
       duration: 1500,
     },
     legend: {
-      display: false,
+      display: true,
     },
     title: {
-      text: "Song Tempos",
+      text: "Song decibels",
       display: true,
       fontSize: 15,
     },
-    scales: {
-      xAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-          barThickness: tempos.length < 15 ? 25 : 15,
-          padding: 10,
-        },
-      ],
+    scale: {
+      gridLines: {
+        color: "rgba(200,200,200,0.18)",
+      },
+      ticks: {
+        showLabelBackdrop: false,
+        fontColor: "grey",
+        min: lowest,
+      },
     },
     tooltips: {
       callbacks: {
@@ -70,7 +72,7 @@ export const Tempo = (props) => {
 
           console.log(tooltipItem);
           console.log(data);
-          return "Tempo: " + tooltipItem.value + " BPM"; //+ ": " + dataset.data[index];
+          return "Loudness: " + tooltipItem.value + " DB"; //+ ": " + dataset.data[index];
         },
         //     title: function (tooltipItem, data) {
         //       //   //console.log(tooltipItem);
@@ -79,16 +81,9 @@ export const Tempo = (props) => {
       },
     },
   };
-  if (size.width < 1250) {
-    return (
-      <div className="chart-container bar-horizontal">
-        <HorizontalBar data={data} options={options} />
-      </div>
-    );
-  }
   return (
-    <div className="chart-container bar">
-      <Bar data={data} options={options} />
+    <div className="chart-container radar polar">
+      <Polar data={data} options={options} />
     </div>
   );
 };

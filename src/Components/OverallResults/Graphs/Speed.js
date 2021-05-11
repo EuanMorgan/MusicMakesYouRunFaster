@@ -84,8 +84,8 @@ export const Speed = (props) => {
     scales: {
       xAxes: [
         {
-          barThickness: 8,
-          padding: 10,
+          // dynamically change bar length based on number of plotted tracks
+          barThickness: q1.length < 10 ? 15 : 8,
         },
       ],
       yAxes: [
