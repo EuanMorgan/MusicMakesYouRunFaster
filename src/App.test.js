@@ -14,7 +14,7 @@ test("Parsing run function", async () => {
 });
 
 test("Creating,pulling,deleting", async () => {
-  // http://localhost:5000/musicmakesyourunfaster/europe-west2/app
+  //spin up headless browser in backend, create account and return the API access tokens
   let code = await fetch(
     "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/test-create-account",
     {
@@ -25,12 +25,12 @@ test("Creating,pulling,deleting", async () => {
     }
   );
   let data = await code.json();
-  //console.log(data);
-  ////console.log("created account");
-  ////console.log(data.data.spotify);
+
   let songOutput = await pullSongs(data.data.spotify.refresh_token);
   let mapOutput = await pullRuns(data.data.fitbit.refresh_token);
   let final = await parseSongsAndRun(songOutput, mapOutput, "99GN7F", true);
+
+  // expect(final).toEqual(mainTestShouldBe);
 
   await fetch(
     "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/test-delete",
@@ -41,6 +41,4 @@ test("Creating,pulling,deleting", async () => {
       },
     }
   );
-
-  expect(1).toEqual(1);
 }, 75000);

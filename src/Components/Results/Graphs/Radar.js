@@ -28,7 +28,10 @@ export const RadarChart = (props) => {
 
   const options = {
     maintainAspectRatio: false,
-
+    title: {
+      text: "Audio Features",
+      display: true,
+    },
     tooltips: {
       enabled: true,
       callbacks: {

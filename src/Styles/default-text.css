@@ -231,9 +231,15 @@ button,
   padding: 0.2vw 5vw;
   text-align: center;
 }
+
+.polar {
+  padding-bottom: 1%;
+}
+
 @media (max-width: 800px) {
   .heatmap {
     padding: 10px 5px;
+    width: 80vw;
   }
 }
 .radar {
@@ -249,6 +255,12 @@ button,
   .bar {
     width: 90vw;
     height: 30vh;
+  }
+}
+
+@media (max-width: 1700px) {
+  .polar {
+    height: 80vh;
   }
 }
 
