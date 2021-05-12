@@ -30,8 +30,6 @@ test("Creating,pulling,deleting", async () => {
   let mapOutput = await pullRuns(data.data.fitbit.refresh_token);
   let final = await parseSongsAndRun(songOutput, mapOutput, "99GN7F", true);
 
-  // expect(final).toEqual(mainTestShouldBe);
-
   await fetch(
     "https://europe-west2-musicmakesyourunfaster.cloudfunctions.net/app/test-delete",
     {
@@ -41,4 +39,6 @@ test("Creating,pulling,deleting", async () => {
       },
     }
   );
+
+  // expect(final).toEqual(mainTestShouldBe);
 }, 75000);

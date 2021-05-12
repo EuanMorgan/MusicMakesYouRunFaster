@@ -7,7 +7,7 @@ export const Tempo = (props) => {
 
   let tempos = [];
   let labels = [];
-
+  let colors = [];
   console.log(props.data);
   props.data.forEach((song) => {
     if (props.loudness) {
@@ -15,6 +15,7 @@ export const Tempo = (props) => {
     } else {
       tempos.push(song.audio_features[0].tempo.toFixed(0));
     }
+    colors.push(song.color);
     labels.push(song.name);
   });
 
@@ -27,8 +28,8 @@ export const Tempo = (props) => {
       {
         label: "Songs",
         data: tempos,
-        backgroundColor: "rgba(255,99,132,0.2)",
-        borderColor: "rgba(255,99,132,1)",
+        backgroundColor: colors,
+        borderColor: "white",
         borderWidth: 1,
         labels: labels,
         hidden: false,
