@@ -316,16 +316,26 @@ const RunsMap = (props) => {
         </div>
       </div>
       {replayToggle ? (
-        <button className="ReplayButton" onClick={stopRun} key={key}>
+        <button
+          className="ReplayButton btn btn-warning"
+          onClick={stopRun}
+          key={key}
+        >
           Stop replay
         </button>
       ) : (
-        <button className="ReplayButton" onClick={replayRun} key={key}>
+        <button
+          className="ReplayButton btn btn-primary"
+          style={{ fontSize: "1.5rem" }}
+          onClick={replayRun}
+          key={key}
+        >
           Replay run
         </button>
       )}
       <button
-        className="ReplayButton"
+        className="ReplayButton btn btn-secondary"
+        style={{ fontSize: "1.5rem" }}
         onClick={() => {
           stopRun();
           setIsFollowing(true);
