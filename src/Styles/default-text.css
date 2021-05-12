@@ -327,14 +327,14 @@ button,
 }
 
 .btn.btn-success {
-  width: 28vw;
+  width: 30vw;
 }
 
 /* https://colorlib.com/wp/template/bootstrap-buttons-12/ */
 .btn {
-  width: 12vw;
+  width: 14vw;
   padding: 2.2vh 2.2vw;
-  margin: 0 2vw 0 2vw;
+  margin: 0 1vw 0 1vw;
   cursor: pointer;
   border-width: 1px;
   border-radius: 0px;
@@ -353,7 +353,7 @@ button,
     width: 24vw;
   }
   .btn.btn-success {
-    width: 52vw;
+    width: 50vw;
   }
 }
 
@@ -365,6 +365,22 @@ button,
   }
   .btn.btn-success {
     width: 70vw;
+  }
+}
+
+@media(max-width: 859px){
+  .btn {
+    font-size: 80%;
+    padding:1.8vw 1.8vw;
+    width: 36vw;
+  }
+  .btn.btn-success {
+    width: 74vw;
+  }
+  .btn-row{
+  padding: 0.8vh 0.5vw;
+  margin: 0.8vh auto;
+    
   }
 }
 
