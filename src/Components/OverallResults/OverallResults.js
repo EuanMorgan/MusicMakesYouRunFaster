@@ -44,7 +44,9 @@ const OverallResults = (props) => {
         allHeartRates.push(p.heart_rate_bpm);
         allSpeeds.push(p.pace);
       });
-      songs.push(...i.songs);
+       try {
+         songs.push(...i.songs);
+       } catch (error) {}
 
       let fastest_song_ids = [];
       i.fastest_points.forEach((p) => {
