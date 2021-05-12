@@ -44,9 +44,9 @@ const OverallResults = (props) => {
         allHeartRates.push(p.heart_rate_bpm);
         allSpeeds.push(p.pace);
       });
-       try {
-         songs.push(...i.songs);
-       } catch (error) {}
+      try {
+        songs.push(...i.songs);
+      } catch (error) {}
 
       let fastest_song_ids = [];
       i.fastest_points.forEach((p) => {
@@ -54,11 +54,10 @@ const OverallResults = (props) => {
         if (p.song_playing === undefined) {
           return;
         }
-
-        if (fastest_songs.length == 15) {
-          //if overflowing song limit, remove oldest song
-          fastest_songs.splice(0, 1);
-        }
+        // if (fastest_songs.length == 15) {
+        //   //if overflowing song limit, remove oldest song
+        //   fastest_songs.splice(0, 1);
+        // }
 
         //console.log(fastest_songs);
         //console.log(fastest_songs.length, "didnt return");
@@ -78,6 +77,14 @@ const OverallResults = (props) => {
         }
       });
     });
+
+    if (fastest_songs.length <= 1) {
+      props.toast.error(
+        "Sorry, we don't have 'fastest' songs to provide you with cool insights 😢"
+      );
+      history.push("/results");
+      return;
+    }
 
     let sortedSpeeds = allSpeeds.sort(sortDescending);
     let sortedHeart = allHeartRates.sort(sortDescending);
@@ -267,7 +274,6 @@ const OverallResults = (props) => {
       </p>
       <OverallStats combinedData={combinedData} />
       <AllSongs songs={combinedData.songs} />
-      {showRepeatOccurences()}
 
       <SongSimilarity
         songs={combinedData.songs}
@@ -277,6 +283,7 @@ const OverallResults = (props) => {
         spotifyToken={spotifyToken}
         setLoading={props.setLoading}
         toast={props.toast}
+        repeats={showRepeatOccurences}
       />
     </div>
   );
