@@ -76,7 +76,7 @@ export const Speed = (props) => {
       enabled: true,
     },
     animation: {
-      duration: 25000,
+      duration: 2500,
     },
     legend: {
       display: true,
