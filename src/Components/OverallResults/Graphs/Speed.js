@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { HorizontalBar, Bar, defaults } from "react-chartjs-2";
 import { useWindowSize } from "../../../Hooks/useWindowSize";
+
+import ScrollTrigger from "react-scroll-trigger";
+
 export const Speed = (props) => {
+  const [visible, setVisible] = useState(false);
+
   const size = useWindowSize();
 
   //console.log(props.data);
@@ -30,8 +35,8 @@ export const Speed = (props) => {
       {
         label: "Q1",
         data: q1,
-        backgroundColor: "rgba(255,99,132,0.2)",
-        borderColor: "rgba(255,99,132,1)",
+        backgroundColor: "rgba(255,99,132,0.8)",
+        borderColor: "white",
         borderWidth: 1,
         labels: labels,
         hidden: false,
@@ -39,8 +44,8 @@ export const Speed = (props) => {
       {
         label: "Q2",
         data: q2,
-        backgroundColor: "rgba(99,255,132,0.2)",
-        borderColor: "rgba(99,255,132,1)",
+        backgroundColor: "rgba(99,255,132,0.8)",
+        borderColor: "black",
         borderWidth: 1,
         labels: labels,
         hidden: true,
@@ -48,8 +53,8 @@ export const Speed = (props) => {
       {
         label: "Q3",
         data: q3,
-        backgroundColor: "rgba(132,99,255,0.2)",
-        borderColor: "rgba(132,99,255,1)",
+        backgroundColor: "rgba(132,99,255,0.8)",
+        borderColor: "white",
         borderWidth: 1,
         labels: labels,
         hidden: true,
@@ -57,8 +62,8 @@ export const Speed = (props) => {
       {
         label: "Q4",
         data: q4,
-        backgroundColor: "rgba(200,150,99,0.2)",
-        borderColor: "rgba(200,150,99,1)",
+        backgroundColor: "rgba(200,150,99,0.8)",
+        borderColor: "black",
         borderWidth: 1,
         labels: labels,
         hidden: true,
@@ -71,7 +76,7 @@ export const Speed = (props) => {
       enabled: true,
     },
     animation: {
-      duration: 1500,
+      duration: 25000,
     },
     legend: {
       display: true,
@@ -122,14 +127,29 @@ export const Speed = (props) => {
   };
   if (size.width < 1250) {
     return (
-      <div className="chart-container bar-horizontal">
-        <HorizontalBar data={data} options={options} />
-      </div>
+      <ScrollTrigger
+        onEnter={() => {
+          setVisible(true);
+          // setAnimationDuration(2000);
+        }}
+      >
+        <div className="chart-container bar-horizontal">
+          {visible ? <HorizontalBar data={data} options={options} /> : null}
+        </div>
+      </ScrollTrigger>
     );
   }
   return (
-    <div className="chart-container bar">
-      <Bar data={data} options={options} />
-    </div>
+    <ScrollTrigger
+      onEnter={() => {
+        // setAnimationDuration(2000);
+
+        setVisible(true);
+      }}
+    >
+      <div className="chart-container bar">
+        {visible ? <Bar data={data} options={options} /> : null}
+      </div>
+    </ScrollTrigger>
   );
 };

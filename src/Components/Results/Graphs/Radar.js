@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Radar } from "react-chartjs-2";
 
+import ScrollTrigger from "react-scroll-trigger";
+
 export const RadarChart = (props) => {
+  const [visible, setVisible] = useState(false);
+
   const lbls = [
     "acousticness",
     "danceability",
@@ -62,7 +66,7 @@ export const RadarChart = (props) => {
       },
     },
     animation: {
-      duration: 1500,
+      duration: 3000,
     },
 
     scale: {
@@ -86,9 +90,15 @@ export const RadarChart = (props) => {
   };
   if (props.show) {
     return (
-      <div className="chart-container radar">
-        <Radar data={data} options={options} />
-      </div>
+      <ScrollTrigger
+        onEnter={() => {
+          setVisible(true);
+        }}
+      >
+        <div className="chart-container radar">
+          {visible ? <Radar data={data} options={options} /> : null}
+        </div>
+      </ScrollTrigger>
     );
   }
 
