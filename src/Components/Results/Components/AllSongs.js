@@ -79,6 +79,7 @@ const AllSongs = (props) => {
         onClick={() => {
           setShowChart(!showChart);
         }}
+        className="btn btn-secondary"
         style={{ marginTop: "2vh", marginBottom: "3vh" }}
       >
         {showChart ? "Hide bar charts" : "Show bar charts"}
