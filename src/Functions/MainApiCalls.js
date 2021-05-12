@@ -468,12 +468,8 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
 
 export const updateData = async () => {
   // USED TO UPDATED DATA FROM OLD FASTEST POINTS LIST TO NEW
-
-  let runRef = await db
-    .collection("users")
-    .doc("7LZHNM")
-    .collection("runs")
-    .get();
+  let id = "";
+  let runRef = await db.collection("users").doc(id).collection("runs").get();
 
   for (let i = 0; i < runRef.docs.length; i++) {
     console.log(runRef.docs[i].id);
@@ -481,7 +477,7 @@ export const updateData = async () => {
 
     let fastest = await findFastestPoints(
       runRef.docs[i].data().run_map,
-      "7LZHNM",
+      id,
       runRef.docs[i].id,
       runRef.docs[i].data().avg_pace,
       true
@@ -489,7 +485,7 @@ export const updateData = async () => {
     console.log(fastest);
     await db
       .collection("users")
-      .doc("7LZHNM")
+      .doc(id)
       .collection("runs")
       .doc(runRef.docs[i].id)
       .set(
@@ -502,14 +498,19 @@ export const updateData = async () => {
 };
 
 const findFastestPoints = async (points, uid, id, avg_pace, isTest) => {
-  //sort points by pace, get top 10%, from these loop through and see if they are >30% higher than the average for the run
+  //sort points by pace, get top 20%, from these loop through and see if they are >25% higher than the average for the run
   let pace_order = points.sort(sort("pace"));
-  let len = Math.ceil(pace_order.length / 10);
 
+  console.log(pace_order);
+  let len = Math.ceil(pace_order.length / 7.5);
+
+  console.log("top %");
   pace_order = pace_order.slice(0, len);
 
+  console.log(pace_order);
+
   pace_order = pace_order.filter(
-    (point) => calcPercentIncDec(avg_pace, point.pace) > 30
+    (point) => calcPercentIncDec(avg_pace, point.pace) > 25
   );
   //console.log(avg_pace);
   //console.log(pace_order);
