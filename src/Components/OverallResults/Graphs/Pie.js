@@ -51,6 +51,7 @@ export const PieChart = (props) => {
       display: true,
       fontSize: 15,
     },
+
     // scale: {
     //   gridLines: {
     //     color: "rgba(200,200,200,0.18)",

@@ -96,7 +96,7 @@ export const RadarChart = (props) => {
         }}
       >
         <div className="chart-container radar">
-          {visible ? <Radar data={data} options={options} /> : null}
+          <Radar data={visible ? data : []} options={options} />
         </div>
       </ScrollTrigger>
     );

@@ -75,6 +75,10 @@ export const Frequency = (props) => {
             beginAtZero: true,
             stepSize: 1,
           },
+          scaleLabel: {
+            display: true,
+            labelString: "Frequency",
+          },
         },
       ],
     },
