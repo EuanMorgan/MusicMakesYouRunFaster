@@ -370,7 +370,7 @@ export default function SongSimilarity(props) {
           </p>
         </div>
       </div>
-
+      {props.repeats()}
       <SongSpeeds data={props.all} />
 
       <h1>Detailed Song Data</h1>
