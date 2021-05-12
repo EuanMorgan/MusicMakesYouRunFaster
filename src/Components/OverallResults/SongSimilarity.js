@@ -28,6 +28,7 @@ export default function SongSimilarity(props) {
   const { userData, currentUser } = useAuth();
   const [differences, setDifferences] = useState([]);
   const [radarData, setRadarData] = useState([]);
+
   const [avgFastestDiff, setAvgFastestDiff] = useState();
   const [avgNonFastestDiff, setAvgNonFastestDiff] = useState();
   const [avgFastestTempo, setAvgFastestTempo] = useState();
@@ -94,7 +95,7 @@ export default function SongSimilarity(props) {
       fastest_all_scores[feature] = fastest_all_scores[feature] / songs.length;
     });
 
-    // //console.log(fastest_all_scores);
+    console.log(fastest_all_scores);
 
     return [
       fastest_all_scores.acousticness,
@@ -466,6 +467,25 @@ export default function SongSimilarity(props) {
 
       <h1>Audio features comparison</h1>
       <RadarChart songData={radarData} show={true} />
+      <RadarChart
+        songData={props.non_fastest_songs.map((song) => {
+          let features = song.audio_features[0];
+
+          return {
+            title: song.name,
+            color: song.color,
+            data: [
+              features.acousticness,
+              features.danceability,
+              features.energy,
+              features.valence,
+              features.speechiness,
+            ],
+          };
+        })}
+        show={true}
+      />
+
       <h1>Average Similarity</h1>
       <ParagraphContainer>
         <ParagraphLarger>

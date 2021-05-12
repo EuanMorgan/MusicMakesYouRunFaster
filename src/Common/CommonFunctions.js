@@ -55,8 +55,31 @@ export const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length;
 
 export const sortDescending = (a, b) => b - a;
 
+const hsv_to_rgb = (h, s, v) => {
+  // Adapted from https://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
+  let golden_ratio_conjugate = 0.618033988749895;
+  h += golden_ratio_conjugate;
+  h %= 1;
+  let h_i = parseInt(h * 6);
+  let f = h * 6 - h_i;
+  let p = v * (1 - s);
+  let q = v * (1 - f * s);
+  let t = v * (1 - (1 - f) * s);
+  let [r, g, b] = [0, 0, 0];
+  if (h_i === 0) [r, g, b] = [v, t, p];
+  if (h_i === 1) [r, g, b] = [q, v, p];
+  if (h_i === 2) [r, g, b] = [p, v, t];
+  if (h_i === 3) [r, g, b] = [p, q, v];
+  if (h_i === 4) [r, g, b] = [t, p, v];
+  if (h_i === 5) [r, g, b] = [v, p, q];
+
+  return `rgb(${parseInt(r * 256)}, ${parseInt(g * 256)}, ${parseInt(
+    b * 256
+  )})`;
+};
+
 export const generateColor = () => {
-  return "#" + Math.random().toString(16).substr(-6);
+  return hsv_to_rgb(Math.random(), 0.5, 0.95);
 };
 
 export const retrieveDataForSong = (songid, run_data, onlyFast) => {
