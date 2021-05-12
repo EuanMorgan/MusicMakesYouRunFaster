@@ -17,7 +17,7 @@ export const RadarChart = (props) => {
     data: d.data,
     backgroundColor: () => {
       let colour = d.color.toString();
-      console.log(colour);
+
       if (colour.startsWith("#")) return d.color + "65"; //return transparent hex codes
       // console.log(colour);
       let new_col = colour.replace(/rgb/i, "rgba");
@@ -48,7 +48,9 @@ export const RadarChart = (props) => {
         // Format label i.e. accousitcness 0.9w325238235 instead of just the number
         label: function (tooltipItems, data) {
           return (
-            data.datasets[tooltipItems.datasetIndex].data[tooltipItems.index] +
+            data.datasets[tooltipItems.datasetIndex].data[
+              tooltipItems.index
+            ].toFixed(3) +
             " " +
             lbls[tooltipItems.index]
           );

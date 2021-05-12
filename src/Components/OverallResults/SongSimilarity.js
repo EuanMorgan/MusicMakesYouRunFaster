@@ -95,7 +95,7 @@ export default function SongSimilarity(props) {
       fastest_all_scores[feature] = fastest_all_scores[feature] / songs.length;
     });
 
-    // //console.log(fastest_all_scores);
+    console.log(fastest_all_scores);
 
     return [
       fastest_all_scores.acousticness,
