@@ -21,7 +21,7 @@
   text-align: left;
 }
 .ReplayButton {
-  font-size: 2rem;
+  font-size: 1.5rem;
   border-radius: 50vw;
   padding: 0.3vw;
   margin-bottom: 2rem;
@@ -35,11 +35,18 @@
 
 @media (max-width: 800px) {
   .ReplayButton {
-    font-size: 4vw;
+    font-size: 1rem;
   }
   .Data {
     font-size: .8rem;
   }
+}
+
+@media (max-width: 799px){
+  .Data {
+    font-size:.5rem;
+  }
+    
 }
 
 .mapButtons {

@@ -326,7 +326,6 @@ const RunsMap = (props) => {
       ) : (
         <button
           className="ReplayButton btn btn-primary"
-          style={{ fontSize: "1.5rem" }}
           onClick={replayRun}
           key={key}
         >
@@ -335,7 +334,6 @@ const RunsMap = (props) => {
       )}
       <button
         className="ReplayButton btn btn-secondary"
-        style={{ fontSize: "1.5rem" }}
         onClick={() => {
           stopRun();
           setIsFollowing(true);
