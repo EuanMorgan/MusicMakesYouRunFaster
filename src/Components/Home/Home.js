@@ -112,6 +112,7 @@ const Home = (props) => {
               ////console.log(uri);
               openInNewTab(uri);
             }}
+            className="btn btn-primary"
           >
             Link FitBit Account
           </button>
