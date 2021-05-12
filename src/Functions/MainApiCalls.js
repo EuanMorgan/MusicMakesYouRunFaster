@@ -2,6 +2,7 @@ import {
   isProduction,
   average,
   calcPercentIncDec,
+  calcPercentInc
 } from "../Common/CommonFunctions";
 import app, { db } from "../firebase/firebase";
 // import { useAuth } from "../Contexts/Auth";
@@ -468,10 +469,10 @@ export const parseSongsAndRun = async (songs, run, uid, isTest) => {
 
 export const updateData = async () => {
   // USED TO UPDATED DATA FROM OLD FASTEST POINTS LIST TO NEW
-
+  let id = ""
   let runRef = await db
     .collection("users")
-    .doc("7LZHNM")
+    .doc(id)
     .collection("runs")
     .get();
 
@@ -481,7 +482,7 @@ export const updateData = async () => {
 
     let fastest = await findFastestPoints(
       runRef.docs[i].data().run_map,
-      "7LZHNM",
+      id,
       runRef.docs[i].id,
       runRef.docs[i].data().avg_pace,
       true
@@ -489,7 +490,7 @@ export const updateData = async () => {
     console.log(fastest);
     await db
       .collection("users")
-      .doc("7LZHNM")
+      .doc(id)
       .collection("runs")
       .doc(runRef.docs[i].id)
       .set(
@@ -504,12 +505,12 @@ export const updateData = async () => {
 const findFastestPoints = async (points, uid, id, avg_pace, isTest) => {
   //sort points by pace, get top 10%, from these loop through and see if they are >30% higher than the average for the run
   let pace_order = points.sort(sort("pace"));
-  let len = Math.ceil(pace_order.length / 10);
+  // let len = Math.ceil(pace_order.length / 30);
 
-  pace_order = pace_order.slice(0, len);
+  // pace_order = pace_order.slice(0, len);
 
   pace_order = pace_order.filter(
-    (point) => calcPercentIncDec(avg_pace, point.pace) > 30
+    (point) => calcPercentInc(avg_pace, point.pace) > 25
   );
   //console.log(avg_pace);
   //console.log(pace_order);

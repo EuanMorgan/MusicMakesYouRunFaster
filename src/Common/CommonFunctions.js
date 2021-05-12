@@ -20,6 +20,13 @@ export const isProduction = () => {
   }
 };
 
+export const calcPercentInc = (start,end) => {
+  if(start >= end){
+    return 0
+  }
+  return ((end - start) / start) * 100
+}
+
 export const calcPercentIncDec = (start, end) => {
   return start > end
     ? ((start - end) / start) * 100 //if decrease
