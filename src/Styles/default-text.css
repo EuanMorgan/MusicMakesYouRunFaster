@@ -262,6 +262,9 @@ button,
   .polar {
     height: 80vh;
   }
+  .radar {
+    height: 80vh;
+  }
 }
 
 .chart-container.scatter {

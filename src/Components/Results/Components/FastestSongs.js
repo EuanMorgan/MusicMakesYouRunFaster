@@ -4,8 +4,10 @@ import { CollapseMenu } from "../../ReusableComponents/Collapse";
 import { calcPercentIncDec } from "../../../Common/CommonFunctions";
 import { generateColor } from "../../../Common/CommonFunctions";
 import { LineGraph } from "../Graphs/Line";
+import { useWindowSize } from "../../../Hooks/useWindowSize";
 
 const FastestSongs = (props) => {
+  const size = useWindowSize();
   let fastest_song_ids = [];
   let fastest_speeds = {};
   let fastest_song_audio_features = [];
@@ -165,9 +167,22 @@ const FastestSongs = (props) => {
           speed
         </p>
         <h1>Overall Speed Graph</h1>
-        <div style={{ width: "69%", margin: "auto" }}>{speedGraph}</div>
+        <div
+          style={{
+            width: size.width < 1200 ? "100vw" : "69vw",
+            margin: "auto",
+          }}
+        >
+          {speedGraph}
+        </div>
         <h1>Overall Heart Rate Graph</h1>
-        <div style={{ width: "69%", margin: "auto", paddingBottom: "3%" }}>
+        <div
+          style={{
+            width: size.width < 1200 ? "100vw" : "69vw",
+            margin: "auto",
+            paddingBottom: "3%",
+          }}
+        >
           {bpmGraph}
         </div>
       </div>
