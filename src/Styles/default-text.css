@@ -332,8 +332,9 @@ button,
 
 /* https://colorlib.com/wp/template/bootstrap-buttons-12/ */
 .btn {
-  width: 14vw;
+  width: 12vw;
   padding: 2.2vh 2.2vw;
+  margin: 0 2vw 0 2vw;
   cursor: pointer;
   border-width: 1px;
   border-radius: 0px;
@@ -347,21 +348,23 @@ button,
   overflow: hidden !important;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
   .btn {
-    width: 30vw;
+    width: 24vw;
   }
   .btn.btn-success {
-    width: 60vw;
+    width: 52vw;
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1000px) {
   .btn {
-    width: 27vw;
+    margin: 0 1vw 0 1vw;
+
+    width: 34vw;
   }
   .btn.btn-success {
-    width: 54vw;
+    width: 70vw;
   }
 }
 
