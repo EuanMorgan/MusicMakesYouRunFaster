@@ -205,7 +205,7 @@ button,
 .chart-container {
   font-size: 2rem;
   background: #282828;
-  border-radius: 1rem;
+  /* border-radius: 1rem; */
   margin: auto;
   width: 80%;
   height: 20vw;
@@ -260,6 +260,9 @@ button,
 
 @media (max-width: 1700px) {
   .polar {
+    height: 80vh;
+  }
+  .radar {
     height: 80vh;
   }
 }

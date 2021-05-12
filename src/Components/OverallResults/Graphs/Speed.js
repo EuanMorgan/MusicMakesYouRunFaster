@@ -28,7 +28,7 @@ export const Speed = (props) => {
     labels: labels,
     datasets: [
       {
-        label: "Quarter 1",
+        label: "Q1",
         data: q1,
         backgroundColor: "rgba(255,99,132,0.2)",
         borderColor: "rgba(255,99,132,1)",
@@ -37,7 +37,7 @@ export const Speed = (props) => {
         hidden: false,
       },
       {
-        label: "Quarter 2",
+        label: "Q2",
         data: q2,
         backgroundColor: "rgba(99,255,132,0.2)",
         borderColor: "rgba(99,255,132,1)",
@@ -46,7 +46,7 @@ export const Speed = (props) => {
         hidden: true,
       },
       {
-        label: "Quarter 3",
+        label: "Q3",
         data: q3,
         backgroundColor: "rgba(132,99,255,0.2)",
         borderColor: "rgba(132,99,255,1)",
@@ -55,7 +55,7 @@ export const Speed = (props) => {
         hidden: true,
       },
       {
-        label: "Quarter 4",
+        label: "Q4",
         data: q4,
         backgroundColor: "rgba(200,150,99,0.2)",
         borderColor: "rgba(200,150,99,1)",
