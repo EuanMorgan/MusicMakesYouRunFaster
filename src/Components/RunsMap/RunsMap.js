@@ -335,10 +335,15 @@ const RunsMap = (props) => {
       <button
         className="ReplayButton btn btn-secondary"
         onClick={() => {
-          stopRun();
-          setIsFollowing(true);
-          setZoom(17.6);
-          replayRun();
+          if(replayToggle){
+            stopRun();
+            setIsFollowing(true);
+            setZoom(17.6);
+            replayRun();
+          }else{
+            setIsFollowing(true);
+            setZoom(17.6);
+          }
         }}
       >
         Center Map
