@@ -104,9 +104,9 @@ const StyledNav = styled.nav`
     position: relative;
   }
 
-  @media (max-width: 800px) {
+  @media (max-width: 1000px) {
     padding: 0.3rem 1rem;
-    max-height: 5vh;
+    max-height: 6vh;
     #logo {
       display: inline-block;
       margin: 0rem;
@@ -128,8 +128,8 @@ const Line = styled(motion.div)`
   position: absolute;
   bottom: -80%;
   left: 64%;
-  @media (max-width: 800px) {
-    left: 0%;
+  @media (max-width: 1000px) {
+    left: 20%;
   }
 `;
 export default Nav;

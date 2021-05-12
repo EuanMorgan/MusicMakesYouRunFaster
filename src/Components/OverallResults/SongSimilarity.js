@@ -375,7 +375,11 @@ export default function SongSimilarity(props) {
 
       <h1>Detailed Song Data</h1>
       <div style={{ padding: "5vh" }}>
-        <button onClick={() => setShowDetailed(!showDetailed)}>
+        <button
+          onClick={() => setShowDetailed(!showDetailed)}
+          className="btn btn-primary"
+          style={{ width: "fit-content" }}
+        >
           {showDetailed
             ? "Hide Detailed Song Charts"
             : "Show Detailed Song Charts"}
@@ -573,14 +577,20 @@ export default function SongSimilarity(props) {
       ) : (
         <>
           <ParagraphContainer>
-            <ParagraphLarger>
+            <Paragraph>
               Need some more motivation whilst running but tired of the same old
-              songs? Hit the button below and we will make you a playlist of
-              songs similar to those that got you moving the fastest.
-            </ParagraphLarger>
+              songs? <br /> <br /> Let us make you a custom playlist based of
+              the songs that get you moving
+            </Paragraph>
           </ParagraphContainer>
 
-          <button onClick={fetchSimilarSongs}>Generate playlist</button>
+          <button
+            onClick={fetchSimilarSongs}
+            className="btn btn-primary"
+            style={{ marginBottom: "3vh" }}
+          >
+            Generate playlist
+          </button>
         </>
       )}
     </PageContainer>

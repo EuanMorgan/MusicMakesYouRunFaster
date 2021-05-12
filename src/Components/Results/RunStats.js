@@ -32,7 +32,8 @@ export const RunStats = (props) => {
       />
       <div style={{ paddingTop: "5vh", paddingBottom: "5vh" }}>
         <Link
-          className="button"
+          style={{ textDecoration: "none" }}
+          className="btn btn-secondary"
           to={{
             pathname: "/runs",
 

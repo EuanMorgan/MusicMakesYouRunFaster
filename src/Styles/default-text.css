@@ -298,3 +298,342 @@ button,
 .red-text {
   color: #c41818;
 }
+
+.dashboard-buttons {
+  /* display: flex; */
+  /* flex-direction: column; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 100vw;
+}
+
+.tiny-text {
+  font-size: 80%;
+}
+
+@media (max-width: 1000px) {
+  .tiny-text {
+    font-size: 65%;
+  }
+}
+
+.btn-row {
+  /* display: flex; */
+  /* flex-direction: column; */
+  padding: 0.5vw 0.5vw;
+  margin: 0 50px;
+}
+
+.btn.btn-success {
+  width: 28vw;
+}
+
+/* https://colorlib.com/wp/template/bootstrap-buttons-12/ */
+.btn {
+  width: 14vw;
+  padding: 2.2vh 2.2vw;
+  cursor: pointer;
+  border-width: 1px;
+  border-radius: 0px;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  font-size: 100%;
+  font-weight: 400;
+  -webkit-box-shadow: 0px 10px 20px -6px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0px 10px 20px -6px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 10px 20px -6px rgba(0, 0, 0, 0.12);
+  overflow: hidden !important;
+}
+
+@media (max-width: 1000px) {
+  .btn {
+    width: 30vw;
+  }
+  .btn.btn-success {
+    width: 60vw;
+  }
+}
+
+@media (max-width: 1200px) {
+  .btn {
+    width: 27vw;
+  }
+  .btn.btn-success {
+    width: 54vw;
+  }
+}
+
+.btn:hover,
+.btn:active,
+.btn:focus {
+  outline: none !important;
+  -webkit-box-shadow: 0px 12px 20px -6px rgba(0, 0, 0, 0.21);
+  -moz-box-shadow: 0px 12px 20px -6px rgba(0, 0, 0, 0.21);
+  box-shadow: 0px 12px 20px -6px rgba(0, 0, 0, 0.21);
+}
+.btn.btn-link {
+  background: transparent;
+  color: #494ca2;
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  padding: 0;
+}
+.btn.btn-primary {
+  background: #494ca2;
+  border-color: #494ca2;
+  color: #fff;
+}
+.btn.btn-primary:focus {
+  border-color: #414490 !important;
+  background: #414490 !important;
+}
+.btn.btn-primary.btn-link {
+  background: transparent;
+  color: #494ca2;
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.btn.btn-white {
+  background: #fff;
+  border-color: #fff;
+  color: #000;
+}
+.btn.btn-round {
+  border-radius: 40px;
+}
+.btn.btn-link {
+  border: none;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+.btn.btn-secondary {
+  color: #fff;
+  border-color: #6c757d;
+  background: #6c757d;
+}
+.btn.btn-secondary:focus {
+  border-color: #60686f !important;
+  background: #60686f !important;
+}
+.btn.btn-secondary.btn-link {
+  color: #6c757d;
+  background: transparent;
+}
+.btn.btn-success {
+  color: #fff;
+  background: #94aa2a;
+  border-color: #94aa2a;
+}
+.btn.btn-success:focus {
+  border-color: #829625 !important;
+  background: #829625 !important;
+}
+.btn.btn-success.btn-link {
+  color: #94aa2a;
+  background: transparent;
+}
+.btn.btn-danger {
+  color: #fff;
+  border-color: #f0134d;
+  background: #f0134d;
+}
+.btn.btn-danger:focus {
+  border-color: #dc0e44 !important;
+  background: #dc0e44 !important;
+}
+.btn.btn-danger.btn-link {
+  color: #f0134d;
+  background: transparent;
+}
+.btn.btn-warning {
+  color: #fff;
+  border-color: #f1bc31;
+  background: #f1bc31;
+}
+.btn.btn-warning:focus {
+  border-color: #efb419 !important;
+  background: #efb419 !important;
+}
+.btn.btn-warning.btn-link {
+  color: #f1bc31;
+  background: transparent;
+}
+.btn.btn-info {
+  color: #fff;
+  border-color: #64c4ed;
+  background: #64c4ed;
+}
+.btn.btn-info:focus {
+  border-color: #4dbbea !important;
+  background: #4dbbea !important;
+}
+.btn.btn-info.btn-link {
+  color: #64c4ed;
+  background: transparent;
+}
+.btn.btn-dark {
+  color: #fff;
+  border-color: #343a40;
+  background: #343a40;
+}
+.btn.btn-dark:focus {
+  border-color: #292d32 !important;
+  background: #292d32 !important;
+}
+.btn.btn-dark.btn-link {
+  color: #343a40;
+  background: transparent;
+}
+.btn.btn-outline-primary {
+  color: #494ca2;
+  border-color: #494ca2;
+}
+.btn.btn-outline-primary:hover,
+.btn.btn-outline-primary:focus {
+  color: #fff;
+  background: #494ca2 !important;
+  border-color: #494ca2 !important;
+}
+.btn.btn-outline-success {
+  border-color: #94aa2a;
+  color: #94aa2a;
+}
+.btn.btn-outline-success:hover,
+.btn.btn-outline-success:focus {
+  color: #fff;
+  background: #94aa2a !important;
+  border-color: #94aa2a !important;
+}
+.btn.btn-outline-secondary {
+  border-color: #6c757d;
+  color: #6c757d;
+}
+.btn.btn-outline-secondary:hover,
+.btn.btn-outline-secondary:focus {
+  color: #fff;
+  background: #6c757d !important;
+  border-color: #6c757d !important;
+}
+.btn.btn-outline-info {
+  border-color: #64c4ed;
+  color: #64c4ed;
+}
+.btn.btn-outline-info:hover,
+.btn.btn-outline-info:focus {
+  color: #fff;
+  background: #64c4ed !important;
+  border-color: #64c4ed !important;
+}
+.btn.btn-outline-warning {
+  border-color: #f1bc31;
+  color: #f1bc31;
+}
+.btn.btn-outline-warning:hover,
+.btn.btn-outline-warning:focus {
+  color: #fff;
+  background: #f1bc31 !important;
+  border-color: #f1bc31 !important;
+}
+.btn.btn-outline-danger {
+  border-color: #f0134d;
+  color: #f0134d;
+}
+.btn.btn-outline-danger:hover,
+.btn.btn-outline-danger:focus {
+  color: #fff;
+  background: #f0134d !important;
+  border-color: #f0134d !important;
+}
+.btn.btn-outline-dark {
+  border-color: #343a40;
+  color: #343a40;
+}
+.btn.btn-outline-dark:hover,
+.btn.btn-outline-dark:focus {
+  color: #fff;
+  background: #343a40 !important;
+  border-color: #343a40 !important;
+}
+.btn.btn-outline-light {
+  border-color: #f8f9fa;
+}
+.btn.btn-sm,
+.btn-group-sm > .btn {
+  padding: 5px 10px;
+  font-size: 12px;
+}
+.btn.btn-lg,
+.btn-group-lg > .btn {
+  padding: 17px 24px;
+  font-size: 16px;
+  border-radius: 40px;
+}
+.btn.btn-fb {
+  background: #4f69a2;
+  border-color: #4f69a2;
+  color: #fff;
+}
+.btn.btn-outline-fb {
+  background: transparent;
+  border: 1px solid #4f69a2;
+  color: #4f69a2;
+}
+.btn.btn-link-fb {
+  color: #4f69a2;
+}
+.btn.btn-twitter {
+  background: #69b6f0;
+  border-color: #69b6f0;
+  color: #fff;
+}
+.btn.btn-outline-twitter {
+  background: transparent;
+  border: 1px solid #69b6f0;
+  color: #69b6f0;
+}
+.btn.btn-link-twitter {
+  color: #69b6f0;
+}
+.btn.btn-linkedin {
+  background: #2884ba;
+  border-color: #2884ba;
+  color: #fff;
+}
+.btn.btn-outline-linkedin {
+  background: transparent;
+  border: 1px solid #2884ba;
+  color: #2884ba;
+}
+.btn.btn-link-linkedin {
+  color: #2884ba;
+}
+.btn.btn-pinterest {
+  background: #d03940;
+  border-color: #d03940;
+  color: #fff;
+}
+.btn.btn-outline-pinterest {
+  background: transparent;
+  border: 1px solid #d03940;
+  color: #d03940;
+}
+.btn.btn-link-pinterest {
+  color: #d03940;
+}
+.btn.btn-dribbble {
+  background: #ea6294;
+  border-color: #ea6294;
+  color: #fff;
+}
+.btn.btn-outline-dribbble {
+  background: transparent;
+  border: 1px solid #ea6294;
+  color: #ea6294;
+}
+.btn.btn-link-dribbble {
+  color: #ea6294;
+}
