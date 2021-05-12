@@ -61,7 +61,7 @@ export const LineGraph = (props) => {
       enabled: true,
     },
     animation: {
-      duration: 1500,
+      duration: 2000,
     },
     scales: {
       yAxes: [

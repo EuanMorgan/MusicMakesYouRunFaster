@@ -27,7 +27,7 @@ export const BarChart = (props) => {
       enabled: true,
     },
     animation: {
-      duration: 1500,
+      duration: 2000,
     },
 
     scales: {

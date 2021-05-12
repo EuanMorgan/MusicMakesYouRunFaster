@@ -1,12 +1,11 @@
-import React from "react";
-
+import React, { useState } from "react";
 import { Bar, defaults } from "react-chartjs-2";
-
+import ScrollTrigger from "react-scroll-trigger";
 export const Frequency = (props) => {
   // defaults.global.maintainAspectRatio = false;
   //   defaults.global.responsive = true;
   ////console.log(props);
-
+  const [visible, setVisible] = useState(false);
   let labelArray = [];
   let dataArray = [];
   if (props.fastest != null) {
@@ -26,10 +25,11 @@ export const Frequency = (props) => {
       {
         label: "Running Fastest",
         data: Object.values(props.fastest),
-        backgroundColor: "rgba(255,99,132,0.2)",
+        backgroundColor: "rgba(255,99,132,.8)",
         borderColor: "rgba(255,99,132,1)",
         borderWidth: 1,
         labels: Object.keys(props.fastest),
+        hidden: Object.keys(props.fastest).length < 1,
       },
       {
         label: "Not running fastest",
@@ -37,10 +37,11 @@ export const Frequency = (props) => {
           ...Object.keys(props.fastest).map((i) => null),
           ...Object.values(props.nonFastest),
         ],
-        backgroundColor: "rgba(89,255,255,0.2)",
+        backgroundColor: "rgba(89,255,255,0.8)",
         borderColor: "rgba(116, 163, 232,1)",
         borderWidth: 1,
         labels: Object.keys(props.nonFastest),
+        hidden: Object.keys(props.nonFastest).length < 1,
       },
     ],
   };
@@ -51,7 +52,7 @@ export const Frequency = (props) => {
       enabled: true,
     },
     animation: {
-      duration: 1500,
+      duration: 2000,
     },
     legend: {
       display: true,
@@ -64,8 +65,8 @@ export const Frequency = (props) => {
     scales: {
       xAxes: [
         {
-          maxBarThickness: 20,
-          barThickness: 10,
+          maxBarThickness: 60,
+          // barThickness: 60,
         },
       ],
       yAxes: [
@@ -83,7 +84,7 @@ export const Frequency = (props) => {
           var dataset = data.datasets[tooltipItem.datasetIndex];
           var index = tooltipItem.index;
 
-          return labelArray[index] + "  |  " + dataset.data[index]; //+ ": " + dataset.data[index];
+          return labelArray[index] + "  |  Occurences: " + dataset.data[index]; //+ ": " + dataset.data[index];
         },
         title: function (tooltipItem, data) {
           var dataset = data.datasets[tooltipItem[0].datasetIndex];
@@ -95,8 +96,14 @@ export const Frequency = (props) => {
   };
 
   return (
-    <div className="chart-container bar">
-      <Bar data={data} options={options} />
-    </div>
+    <ScrollTrigger
+      onEnter={() => {
+        setVisible(true);
+      }}
+    >
+      <div className="chart-container bar">
+        {visible ? <Bar data={data} options={options} show={visible} /> : null}
+      </div>
+    </ScrollTrigger>
   );
 };

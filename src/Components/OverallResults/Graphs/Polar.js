@@ -1,10 +1,10 @@
-import React from "react";
-
+import React, { useState } from "react";
+import ScrollTrigger from "react-scroll-trigger";
 import { Polar } from "react-chartjs-2";
 import { useWindowSize } from "../../../Hooks/useWindowSize";
 export const PolarArea = (props) => {
   const size = useWindowSize();
-
+  const [visible, setVisible] = useState(false);
   let decibels = [];
   let labels = [];
   let colors = [];
@@ -44,7 +44,7 @@ export const PolarArea = (props) => {
       enabled: true,
     },
     animation: {
-      duration: 1500,
+      duration: 2000,
     },
     legend: {
       display: true,
@@ -72,7 +72,9 @@ export const PolarArea = (props) => {
 
           console.log(tooltipItem);
           console.log(data);
-          return "Loudness: " + tooltipItem.value + " DB"; //+ ": " + dataset.data[index];
+          return (
+            data.labels[index] + " | Loudness: " + tooltipItem.value + " DB"
+          ); //+ ": " + dataset.data[index];
         },
         //     title: function (tooltipItem, data) {
         //       //   //console.log(tooltipItem);
@@ -82,8 +84,14 @@ export const PolarArea = (props) => {
     },
   };
   return (
-    <div className="chart-container radar polar">
-      <Polar data={data} options={options} />
-    </div>
+    <ScrollTrigger
+      onEnter={() => {
+        setVisible(true);
+      }}
+    >
+      <div className="chart-container radar polar">
+        {visible ? <Polar data={data} options={options} /> : null}
+      </div>
+    </ScrollTrigger>
   );
 };

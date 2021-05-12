@@ -1,10 +1,10 @@
-import React from "react";
-
+import React, { useState } from "react";
+import ScrollTrigger from "react-scroll-trigger";
 import { HorizontalBar, Bar, defaults } from "react-chartjs-2";
 import { useWindowSize } from "../../../Hooks/useWindowSize";
 export const Tempo = (props) => {
   const size = useWindowSize();
-
+  const [visible, setVisible] = useState(false);
   let tempos = [];
   let labels = [];
   let colors = [];
@@ -42,7 +42,7 @@ export const Tempo = (props) => {
       enabled: true,
     },
     animation: {
-      duration: 1500,
+      duration: 2000,
     },
     legend: {
       display: false,
@@ -82,14 +82,32 @@ export const Tempo = (props) => {
   };
   if (size.width < 1250) {
     return (
-      <div className="chart-container bar-horizontal">
-        <HorizontalBar data={data} options={options} />
-      </div>
+      <ScrollTrigger
+        onEnter={() => {
+          setVisible(true);
+        }}
+        onExit={() => {
+          setVisible(false);
+        }}
+      >
+        <div className="chart-container bar-horizontal">
+          <HorizontalBar data={data} options={options} />
+        </div>
+      </ScrollTrigger>
     );
   }
   return (
-    <div className="chart-container bar">
-      <Bar data={data} options={options} />
-    </div>
+    <ScrollTrigger
+      onEnter={() => {
+        setVisible(true);
+      }}
+      // onExit={() => {
+      //   setVisible(false);
+      // }}
+    >
+      <div className="chart-container bar">
+        {visible ? <Bar data={data} options={options} /> : null}
+      </div>
+    </ScrollTrigger>
   );
 };

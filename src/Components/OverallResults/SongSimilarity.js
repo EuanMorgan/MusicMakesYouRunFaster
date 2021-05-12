@@ -24,6 +24,7 @@ import SpotifyPlaylistPlayer from "../PlaylistPlayer/PlaylistPlayer";
 import { Tempo } from "./Graphs/Tempo";
 import { Polar } from "react-chartjs-2";
 import { PolarArea } from "./Graphs/Polar";
+import { PieChart } from "./Graphs/Pie";
 export default function SongSimilarity(props) {
   const { userData, currentUser } = useAuth();
   const [differences, setDifferences] = useState([]);
@@ -35,6 +36,8 @@ export default function SongSimilarity(props) {
   const [avgNonFastestTempo, setAvgNonFastestTempo] = useState();
   const [similarPlaylist, setSimilarPlaylist] = useState();
   const [spotifyToken, setSpotifyToken] = useState();
+
+  const [showDetailed, setShowDetailed] = useState(false);
   //find similarities
   // Each song has a confidence score for cerain properties
   /*
@@ -370,59 +373,79 @@ export default function SongSimilarity(props) {
 
       <SongSpeeds data={props.all} />
 
-      <h1>How about tempos?</h1>
-      <p>Songs that made you run faster</p>
-      <Tempo data={props.fastest_songs} />
-      <p>Other songs</p>
-      <Tempo data={props.non_fastest_songs} />
+      <h1>Detailed Song Data</h1>
+      <div style={{ padding: "5vh" }}>
+        <button onClick={() => setShowDetailed(!showDetailed)}>
+          {showDetailed
+            ? "Hide Detailed Song Charts"
+            : "Show Detailed Song Charts"}
+        </button>
+      </div>
+      {showDetailed ? (
+        <>
+          <h1>How about tempos?</h1>
+          <p>Songs that made you run faster</p>
+          <Tempo data={props.fastest_songs} />
+          <p>Other songs</p>
+          <Tempo data={props.non_fastest_songs} />
 
-      <ParagraphContainer>
-        <ParagraphLarger>
-          Average Tempo for songs that made you run faster:{" "}
-          <span className="red-text">
-            {avgFastestTempo && avgFastestTempo.toFixed(0)} BPM
-          </span>
-        </ParagraphLarger>
-        <ParagraphLarger>
-          Average tempo for other songs{" "}
-          <span className="red-text">
-            {avgNonFastestTempo && avgNonFastestTempo.toFixed(0)} BPM
-          </span>
-        </ParagraphLarger>
-      </ParagraphContainer>
+          <ParagraphContainer>
+            <ParagraphLarger>
+              Average Tempo for songs that made you run faster:{" "}
+              <span className="red-text">
+                {avgFastestTempo && avgFastestTempo.toFixed(0)} BPM
+              </span>
+            </ParagraphLarger>
+            <ParagraphLarger>
+              Average tempo for other songs{" "}
+              <span className="red-text">
+                {avgNonFastestTempo && avgNonFastestTempo.toFixed(0)} BPM
+              </span>
+            </ParagraphLarger>
+          </ParagraphContainer>
 
-      <h1>Let's talk loudness</h1>
+          <h1>Let's talk loudness</h1>
 
-      <p>Songs that made you run faster</p>
+          <p>Songs that made you run faster</p>
 
-      <PolarArea data={props.fastest_songs} loudness={true} />
+          <PolarArea data={props.fastest_songs} loudness={true} />
 
-      <p>Other Songs</p>
+          <p>Other Songs</p>
 
-      <PolarArea data={props.non_fastest_songs} loudness={true} />
+          <PolarArea data={props.non_fastest_songs} loudness={true} />
 
-      <ParagraphContainer>
-        <ParagraphLarger>
-          Average loudness for songs that made you run faster:{" "}
-          <span className="red-text">
-            {average(
-              props.fastest_songs.map((song) => song.audio_features[0].loudness)
-            ).toFixed(2)}{" "}
-            DB
-          </span>
-        </ParagraphLarger>
-        <ParagraphLarger>
-          Average loudness for other songs:{" "}
-          <span className="red-text">
-            {average(
-              props.non_fastest_songs.map(
-                (song) => song.audio_features[0].loudness
-              )
-            ).toFixed(2)}{" "}
-            DB
-          </span>
-        </ParagraphLarger>
-      </ParagraphContainer>
+          <ParagraphContainer>
+            <ParagraphLarger>
+              Average loudness for songs that made you run faster:{" "}
+              <span className="red-text">
+                {average(
+                  props.fastest_songs.map(
+                    (song) => song.audio_features[0].loudness
+                  )
+                ).toFixed(2)}{" "}
+                DB
+              </span>
+            </ParagraphLarger>
+            <ParagraphLarger>
+              Average loudness for other songs:{" "}
+              <span className="red-text">
+                {average(
+                  props.non_fastest_songs.map(
+                    (song) => song.audio_features[0].loudness
+                  )
+                ).toFixed(2)}{" "}
+                DB
+              </span>
+            </ParagraphLarger>
+          </ParagraphContainer>
+
+          <h1>May I interest you in keys?</h1>
+          <p>Songs that made you run faster</p>
+          <PieChart data={props.fastest_songs} />
+          <p>Other songs</p>
+          <PieChart data={props.non_fastest_songs} />
+        </>
+      ) : null}
 
       <h1>How similar are your fastest songs?</h1>
       <ParagraphContainer>
@@ -466,7 +489,12 @@ export default function SongSimilarity(props) {
       </Collapser>
 
       <h1>Audio features comparison</h1>
+      <p>Songs that made you run faster</p>
+
       <RadarChart songData={radarData} show={true} />
+
+      <p>Other Songs</p>
+
       <RadarChart
         songData={props.non_fastest_songs.map((song) => {
           let features = song.audio_features[0];
