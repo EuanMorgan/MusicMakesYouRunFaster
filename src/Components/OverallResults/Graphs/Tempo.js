@@ -62,6 +62,14 @@ export const Tempo = (props) => {
           padding: 10,
         },
       ],
+      yAxes: [
+        {
+          scaleLabel: {
+            display: true,
+            labelString: "Tempo (BPM)",
+          },
+        },
+      ],
     },
     tooltips: {
       callbacks: {
