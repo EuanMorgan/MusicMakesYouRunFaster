@@ -88,19 +88,18 @@ export const RadarChart = (props) => {
       display: true,
     },
   };
-  if (props.show) {
-    return (
-      <ScrollTrigger
-        onEnter={() => {
-          setVisible(true);
-        }}
-      >
-        <div className="chart-container radar">
-          <Radar data={visible ? data : []} options={options} />
-        </div>
-      </ScrollTrigger>
-    );
-  }
+
+  return (
+    <ScrollTrigger
+      onEnter={() => {
+        setVisible(true);
+      }}
+    >
+      <div className="chart-container radar">
+        <Radar data={visible ? data : []} options={options} />
+      </div>
+    </ScrollTrigger>
+  );
 
   return <div></div>;
 };
